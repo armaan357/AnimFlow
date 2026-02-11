@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@config "@repo/tailwind-config";
+
+.scroll-box {
+  overflow-y: scroll; /* or 'auto' to only show when needed */
+  /* Firefox */
+  scrollbar-width: thin; /* 'auto' or 'thin' */
+  scrollbar-color: #565656 #232323; /* thumb color track color */
+}
+
+/* Chrome, Edge, and Safari */
+.scroll-box::-webkit-scrollbar {
+  width: 10px; /* width of the vertical scrollbar */
+}
+
+.scroll-box::-webkit-scrollbar-track {
+  background: #232323; /* color of the track */
+  border-radius: 5px;
+}
+
+.scroll-box::-webkit-scrollbar-thumb {
+  background-color: #565656; /* color of the scroll thumb */
+  border-radius: 5px;
+}
+
+.scroll-box::-webkit-scrollbar-thumb:hover {
+  background-color: #565656; /* color when hovered */
+}

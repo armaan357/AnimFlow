@@ -1,0 +1,30 @@
+{
+    "name": "@repo/db",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "db:generate": "prisma generate",
+        "db:migrate": "prisma migrate dev",
+        "db:deploy": "prisma migrate deploy",
+        "build": "tsc -b",
+        "dev": "tsx src/index.ts"
+    },
+    "devDependencies": {
+        "@types/node": "^22.15.3",
+        "@types/pg": "^8.16.0",
+        "prisma": "^7.3.0",
+        "tsx": "^4.21.0"
+    },
+    "dependencies": {
+        "@prisma/adapter-neon": "^7.3.0",
+        "@prisma/adapter-pg": "^7.3.0",
+        "@prisma/client": "^7.3.0",
+        "dotenv": "^17.2.4",
+        "pg": "^8.18.0"
+    },
+    "exports": {
+        ".": "./src/index.ts"
+    }
+}
