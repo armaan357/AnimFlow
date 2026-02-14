@@ -18,29 +18,74 @@ model user {
 }
 
 model animation {
-  id          String            @id @default(cuid())
-  title       String
-  firstPrompt String
-  isPublic    Boolean           @default(false)
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-  userId      String
-  user        user              @relation(fields: [userId], references: [id])
-  versions    animationVersion?
+  id                String              @id @default(cuid())
+  title             String
+  firstPrompt       String
+  isPublic          Boolean             @default(false)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  userId            String
+  user              user                @relation(fields: [userId], references: [id])
+  currentVersionId  String?
+  versions          animationVersion[]
+
+  @@index([userId])
+  @@index([id])
 }
 
 model animationVersion {
-  id           String    @id @default(cuid())
-  versionNo    Int       @unique
-  code         String
-  videoURL     String?
-  prompt       String
-  createdAt    DateTime  @default(now())
-  status       Status    @default(PENDING)
-  errorMessage String?
-  animationId  String    @unique
-  animation    animation @relation(fields: [animationId], references: [id])
+  id             String      @id @default(cuid())
+  versionNo      Int
+  prompt         String
+  code           String
+  taskId         String      @unique
+  videoURL       String?
+  status         Status      @default(PENDING)
+  errorMessage   String?
+  errorReason    String?
+  createdAt      DateTime    @default(now())
+  animationId    String
+  animation      animation   @relation(fields: [animationId], references: [id])
+  renderTimeMs    Int?
+  fileSizeBytes   Int?
+  durationSeconds Int?
+
+  @@unique([versionNo, animationId])
+  @@index([animationId])
+  @@index([taskId])
 }
+
+// model animation {
+//   id               String             @id @default(cuid())
+//   title            String
+//   firstPrompt      String
+//   isPublic         Boolean            @default(false)
+//   createdAt        DateTime           @default(now())
+//   updatedAt        DateTime           @updatedAt
+//   userId           String
+//   user             user               @relation(fields: [userId], references: [id])
+//   currentVersionId String?
+//   versions         animationVersion[]
+
+//   @@index([userId])
+// }
+
+// model animationVersion {
+//   id              String    @id @default(cuid())
+//   versionNo       Int
+//   code            String
+//   videoURL        String?
+//   prompt          String
+//   createdAt       DateTime  @default(now())
+//   status          Status    @default(PENDING)
+//   errorMessage    String?
+//   animationId     String
+//   animation       animation @relation(fields: [animationId], references: [id])
+
+
+//   @@unique([versionNo, animationId])
+//   @@index([animationId])
+// }
 
 enum Status {
   PENDING
@@ -49,6 +94,5 @@ enum Status {
   ERROR
 }
 
-
 // firstName  String?
-  // lastName   String?
+// lastName   String?
