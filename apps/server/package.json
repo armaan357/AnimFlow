@@ -1,0 +1,48 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -b",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/genai": "^1.23.0",
+    "@repo/common": "workspace:*",
+    "@repo/db": "workspace:*",
+    "axios": "^1.13.2",
+    "bcrypt": "^6.0.0",
+    "bullmq": "^5.63.2",
+    "celery-ts": "^1.2.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "dotenv-cli": "^10.0.0",
+    "dotenv-flow": "^4.1.0",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "passport": "^0.7.0",
+    "passport-google-oauth2": "^0.2.0",
+    "passport-local": "^1.0.0",
+    "typescript": "^5.9.3",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/express-session": "^1.18.2",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/passport": "^1.0.17",
+    "@types/passport-google-oauth2": "^0.1.10",
+    "@types/passport-local": "^1.0.38",
+    "tsx": "^4.21.0"
+  }
+}
