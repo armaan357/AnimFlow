@@ -7,11 +7,19 @@ import time
 import requests
 import json
 from dotenv import load_dotenv
+import cloudinary
+import cloudinary.uploader
 
 load_dotenv()
 
 serviceSecret = os.getenv("INTERNAL_SERVICE_SECRET")
 internalServiceURL = os.getenv("INTERNAL_SERVICE_URL")
+
+cloudinary.config(
+    cloud_name = os.getenv('CLOUD_NAME'),
+    api_key = os.getenv('API_KEY'),
+    api_secret = os.getenv('API_SECRET')
+)
 
 videoQualityToResolution = { "l": "480p15", "m": "720p30", "h": "1080p60" }
 
@@ -48,6 +56,28 @@ def cleanUpLogic(folderPath: str, videoResolution: str, filePath: str):
 
     except Exception as e:
         print(e)
+
+def upload_video(file_path, public_id_name=None):
+    """
+    Uploads a video to Cloudinary. Uses upload_large for files > 100 MB.
+    """
+    try:
+        # Determine the upload method based on file size if necessary, 
+        # or use upload_large by default for potential large video files.
+        # The upload_large method handles chunking automatically.
+        response = cloudinary.uploader.upload_large(
+            file_path,
+            resource_type="video", # Must specify resource_type="video"
+            public_id=public_id_name,
+        )
+        
+        print(f"Upload successful. Secure URL: {response['secure_url']}")
+        print(f"Public ID: {response['public_id']}")
+        return response
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
 
 @celeryApp.task(name="generateAnimation", bind=True, max_retries=5, time_limit=100)
 def generateAnimation(self, newJob: dict):
@@ -121,18 +151,20 @@ def generateAnimation(self, newJob: dict):
 
         if not isValidOutput["res"]:
             result = {
-                "id": self.request.id,
+                "id": jobId,
                 "animationId": animationId,
                 "status": "FAILED",
                 "Reason": isValidOutput["reason"],
                 "timeStamp": datetime.now().isoformat()
             }
         else:
+            upload_res = upload_video(animationFileAddress, f"{jobId}")
+            print(f"\n\n\nupload response = {upload_res}\n\n\n")
             result= {
-                "id": self.request.id,
+                "id": jobId,
                 "animationId": animationId,
                 "status": "COMPLETED",
-                "videoURL": animationFileAddress,
+                "videoURL": upload_res.get("secure_url"),
                 "timestamp": datetime.now().isoformat()
             }
 
@@ -142,7 +174,7 @@ def generateAnimation(self, newJob: dict):
     except subprocess.TimeoutExpired as t_err:
         print(f"[{jobId}] TIMEOUT after 240s")
         result = {
-                "id": self.request.id,
+                "id": jobId,
                 "animationId": animationId,
                 "status": "FAILED",
                 "Reason": "TIMEOUT",
@@ -154,7 +186,7 @@ def generateAnimation(self, newJob: dict):
     except subprocess.CalledProcessError as err:
         print(f"[{jobId}] Subprocess error")
         result = {
-            "id": self.request.id,
+            "id": jobId,
             "animationId": animationId,
             "status": "FAILED",
             "Reason": "subprocessError",
@@ -168,7 +200,7 @@ def generateAnimation(self, newJob: dict):
 
     except OSError as e:
         result = {
-            "id": self.request.id,
+            "id": jobId,
             "animationId": animationId,
             "status": "FAILED",
             "Reason": "OSError",

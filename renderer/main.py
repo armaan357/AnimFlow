@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from celery.result import AsyncResult
 from animationWorker import celeryApp
-from animationTasks import generateAnimation, storeAnimation
+from animationTasks import generateAnimation
 import ast
 
 ALLOWED_ROOT_MODULE = "manim"
@@ -22,7 +22,6 @@ FORBIDDEN_ATTRS = {
     "remove",
     "unlink"
 }
-
 
 class CustomCodeValidator(ast.NodeVisitor):
     def __init__(self):
@@ -200,7 +199,6 @@ def get_active_tasks():
     return {
         "active_tasks": active_tasks
     }
-
 
 # from manim import *
 
