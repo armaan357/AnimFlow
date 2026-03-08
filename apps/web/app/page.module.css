@@ -1,4 +1,33 @@
-.page {
+/* styles/custom-scrollbar.module.css */
+
+.scroll-box {
+  overflow-y: scroll; /* or 'auto' to only show when needed */
+  /* border: 1px solid #ccc;
+  padding: 10px; */
+  /* Firefox */
+  scrollbar-width: thin; /* 'auto' or 'thin' */
+  scrollbar-color: #4a4a4a #f1f1f1; /* thumb color track color */
+}
+
+/* Chrome, Edge, and Safari */
+.scroll-box::-webkit-scrollbar {
+  width: 10px; /* width of the vertical scrollbar */
+}
+
+.scroll-box::-webkit-scrollbar-track {
+  background: #f1f1f1; /* color of the track */
+  border-radius: 5px;
+}
+
+.scroll-box::-webkit-scrollbar-thumb {
+  background-color: #1a1a1a; /* color of the scroll thumb */
+  border-radius: 5px;
+}
+
+.scroll-box::-webkit-scrollbar-thumb:hover {
+  background-color: #333; /* color when hovered */
+}
+/* .page {
   --gray-rgb: 0, 0, 0;
   --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
   --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
@@ -128,7 +157,6 @@ button.secondary {
   flex-shrink: 0;
 }
 
-/* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   a.primary:hover {
     background: var(--button-primary-hover);
@@ -185,4 +213,4 @@ button.secondary {
   .logo {
     filter: invert();
   }
-}
+} */
