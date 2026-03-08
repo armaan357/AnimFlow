@@ -7,8 +7,7 @@ import {
 	requiredPollBody,
 	signUpSchema,
 } from "../zodTypes/index.ts";
-import { prisma } from "@repo/db";
-import z from "zod";
+import { Prisma, prisma } from "@repo/db";
 
 const userRouter: Router = express.Router();
 
@@ -20,9 +19,13 @@ userRouter.get("/email-exists", async (req: Request, res: Response) => {
 	}
 
 	try {
-		await prisma.user.findUnique({
+		const user = await prisma.user.findUnique({
 			where: { email: email! as string },
 		});
+		if (user) {
+			res.json({ exists: true });
+			return;
+		}
 		res.status(200).json({ exists: false });
 	} catch (e: any) {
 		res.status(500).json({ error: e.toString() });
@@ -103,9 +106,26 @@ userRouter.post(
 	},
 );
 
-userRouter.get("/logout", (req: Request, res: Response) => {
-	req.logout(() => {
-		res.json({ msg: "Logged out" });
+userRouter.get("/logout", (req: Request, res: Response, next: NextFunction) => {
+	req.logout(function (err) {
+		if (err) {
+			return next(err);
+		}
+		res.clearCookie("connect.sid", { path: "/" });
+		res.json({ message: "Logged Out successfully" });
+		// Destroy the session data on the server side
+		// req.session.destroy(function (err) {
+		//   if (err) { return next(err); }
+
+		//   // Clear the session cookie from the client's browser
+		//   // Replace 'connect.sid' with your actual cookie name,
+		//   // and ensure the options match those used when setting the cookie
+		//   res.clearCookie('connect.sid', { path: '/' });
+
+		//   // Send a response or redirect the user
+		//   res.redirect('/');
+		//   // or for a single page app: res.send('Logged out successfully');
+		// });
 	});
 });
 
@@ -116,6 +136,7 @@ userRouter.get("/chats", verifyUser, async (req: Request, res: Response) => {
 		const dbResp = await prisma.animation.findMany({
 			where: { userId: user.id },
 			orderBy: { updatedAt: "desc" },
+			select: { id: true, title: true },
 		});
 		res.status(200).json({ message: "User's animations", dbResp });
 	} catch (e: any) {
@@ -127,6 +148,11 @@ userRouter.get(
 	"/chats/:animationId",
 	verifyUser,
 	async (req: Request, res: Response) => {
+		const user = req.user as {
+			id: string;
+			email: string;
+			userName: string;
+		};
 		const parsed = requiredParams.safeParse(req.params);
 		if (!parsed.success) {
 			res.status(400).json({ error: "Invalid params" });
@@ -138,33 +164,82 @@ userRouter.get(
 			const animationMetadata = await prisma.animation.findUnique({
 				where: { id: animationId },
 			});
-			const latestAnimation = await prisma.animationVersion.findUnique({
-				where: { id: animationMetadata?.currentVersionId! },
-			});
-			const animationHistory = await prisma.animationVersion.findMany({
-				take: 11,
-				skip: 1,
-				where: { animationId: animationId },
-				orderBy: { createdAt: "desc" },
-			});
-
-			if (animationHistory.length == 11) {
-				res.json({
-					animation: animationMetadata,
-					currentVersion: latestAnimation,
-					versions: animationHistory.slice(0, 10),
-					hasMore: true,
+			if (!animationMetadata || !animationMetadata.currentVersionId) {
+				res.status(400).json({ error: "Invalid Parameters" });
+				return;
+			}
+			if (animationMetadata.userId !== user.id) {
+				res.status(402).json({
+					message: "You cannot access this animation",
 				});
 				return;
 			}
+			const currentVersion = await prisma.animationVersion.findUnique({
+				where: { id: animationMetadata?.currentVersionId },
+			});
+			const animationHistory = await prisma.animationVersion.findMany({
+				where: { animationId: animationId },
+				orderBy: { createdAt: "asc" },
+			});
+
 			res.json({
 				animation: animationMetadata,
-				currentVersion: latestAnimation,
+				currentVersion,
 				versions: animationHistory,
-				hasMore: false,
 			});
 		} catch (e: any) {
 			res.json({ error: e });
+		}
+	},
+);
+
+const deleteAnimationWithVersions = (animationId: string) => {
+	return prisma.$transaction(
+		async (tx) => {
+			await tx.animationVersion.deleteMany({
+				where: { animationId: animationId },
+			});
+			await tx.animation.delete({ where: { id: animationId } });
+		},
+		{
+			isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+		},
+	);
+};
+
+userRouter.delete(
+	"/chats/:animationId",
+	verifyUser,
+	async (req: Request, res: Response) => {
+		const user = req.user as {
+			id: string;
+			email: string;
+			userName: string;
+		};
+		const parsedParams = requiredParams.safeParse(req.params);
+		if (!parsedParams.success) {
+			res.status(400).json({ error: "Invalid parameter" });
+			return;
+		}
+		const { animationId } = parsedParams.data;
+		try {
+			const belongsToUser = await prisma.animation.findUnique({
+				where: { id: animationId },
+			});
+			if (!belongsToUser || belongsToUser.userId !== user.id) {
+				res.status(400).json({
+					error: "You cannot access this animation",
+				});
+				return;
+			}
+			const deleteAnimation = deleteAnimationWithVersions(animationId);
+			if (!deleteAnimation) {
+				res.json({ error: "Please try again later" });
+				return;
+			}
+			res.json({ message: "Animation deleted successfully" });
+		} catch (e: any) {
+			res.status(500).json({ error: e });
 		}
 	},
 );
@@ -173,6 +248,11 @@ userRouter.get(
 	"/chats/page/:animationId",
 	verifyUser,
 	async (req: Request, res: Response) => {
+		const user = req.user as {
+			id: string;
+			email: string;
+			userName: string;
+		};
 		const parsed = requiredParams.safeParse(req.params);
 		if (!parsed.success) {
 			res.status(400).json({ message: "Invalid parameters" });
@@ -187,6 +267,22 @@ userRouter.get(
 			return;
 		}
 		try {
+			const animationInfo = await prisma.animation.findUnique({
+				where: { id: animationId },
+			});
+			if (!animationInfo || !animationInfo.currentVersionId) {
+				res.status(400).json({ error: "Invalid Parameters" });
+				return;
+			}
+			if (animationInfo.userId !== user.id) {
+				res.status(400).json({
+					error: "You cannot access this animation",
+				});
+				return;
+			}
+			const currentVersion = await prisma.animationVersion.findFirst({
+				where: { id: animationInfo.currentVersionId },
+			});
 			const animationHistory = await prisma.animationVersion.findMany({
 				take: 11,
 				skip: 1,
@@ -201,7 +297,50 @@ userRouter.get(
 				});
 				return;
 			}
-			res.json({ versions: animationHistory, hasMore: false });
+			res.json({
+				currentVersion,
+				versions: animationHistory,
+				hasMore: false,
+			});
+		} catch (e: any) {
+			res.json({ error: e });
+		}
+	},
+);
+
+userRouter.patch(
+	"/chats/public-visibility/:animationId",
+	verifyUser,
+	async (req: Request, res: Response) => {
+		const user = req.user as {
+			id: string;
+			email: string;
+			userName: string;
+		};
+		const parsedParams = requiredParams.safeParse(req.params);
+		if (!parsedParams.success) {
+			res.status(400).json({ error: "Invalid parameters" });
+			return;
+		}
+		const { animationId } = parsedParams.data;
+		try {
+			const animation = await prisma.animation.findUnique({
+				where: { id: animationId },
+			});
+			if (!animation) {
+				res.status(400).json({ error: "Animation not found" });
+				return;
+			}
+			if (animation.userId !== user.id) {
+				res.status(400).json({
+					error: "You are not authorized to change the public visibility of this animation",
+				});
+				return;
+			}
+			await prisma.animation.update({
+				where: { id: animationId },
+				data: { isPublic: true },
+			});
 		} catch (e: any) {
 			res.json({ error: e });
 		}
@@ -209,41 +348,107 @@ userRouter.get(
 );
 
 userRouter.get(
-	"/chats/poll/:animationId",
-	verifyUser,
+	"/chats/public/:animationId",
 	async (req: Request, res: Response) => {
+		const user = req.user as {
+			id: string;
+			email: string;
+			userName: string;
+		};
 		const parsedParams = requiredParams.safeParse(req.params);
-		const parsedBody = requiredPollBody.safeParse(req.body);
 		if (!parsedParams.success) {
-			res.status(400).json({ error: parsedParams.error });
+			res.status(400).json({ error: "Invalid parameters" });
 			return;
 		}
+		const { animationId } = parsedParams.data;
+		try {
+			const animation = await prisma.animation.findUnique({
+				where: { id: animationId },
+			});
+			if (!animation || animation.isPublic == false) {
+				res.status(400).json({
+					error: "Either animation does not exist or is not public",
+				});
+				return;
+			}
+			const currentVersion = await prisma.animationVersion.findUnique({
+				where: { id: animation.currentVersionId! },
+			});
+			const animationHistory = await prisma.animationVersion.findMany({
+				where: { animationId: animationId },
+				orderBy: { createdAt: "asc" },
+			});
+
+			res.json({
+				animation: animation,
+				currentVersion,
+				versions: animationHistory,
+			});
+		} catch (e: any) {
+			res.json({ error: e });
+		}
+	},
+);
+
+userRouter.post(
+	"/chats/poll",
+	verifyUser,
+	async (req: Request, res: Response) => {
+		const user = req.user as {
+			id: string;
+			email: string;
+			userName: string;
+		};
+		const parsedBody = requiredPollBody.safeParse(req.body);
 		if (!parsedBody.success) {
 			res.status(400).json({ error: parsedBody.error });
 			return;
 		}
-		const { animationId } = parsedParams.data;
 		const { taskId } = parsedBody.data;
 		try {
 			const animationDetails = await prisma.animationVersion.findUnique({
 				where: { taskId: taskId },
+				select: {
+					id: true,
+					animationId: true,
+					taskId: true,
+					prompt: true,
+					videoURL: true,
+					status: true,
+					errorMessage: true,
+					errorReason: true,
+					renderTimeMs: true,
+					fileSizeBytes: true,
+					durationSeconds: true,
+				},
 			});
 			if (!animationDetails) {
 				res.status(400).json({ error: "Animation version not found" });
 				return;
 			}
+			const belongsToUser = await prisma.animation.findUnique({
+				where: { id: animationDetails.animationId },
+			});
+			if (!belongsToUser || belongsToUser.userId !== user.id) {
+				res.status(400).json({
+					error: "You cannot access this animation",
+				});
+				return;
+			}
 			if (animationDetails.status == "COMPLETED") {
 				res.json({
+					code: 0,
 					message: "Render completed successfully",
 					animationDetails,
 				});
 			} else if (animationDetails.status == "ERROR") {
 				res.json({
+					code: 1,
 					error: "Render process failed",
-					reason: animationDetails.errorMessage,
+					animationDetails,
 				});
 			} else {
-				res.json({ message: "Still processing" });
+				res.json({ code: 2, message: "Still processing" });
 			}
 		} catch (e: any) {
 			res.status(500).json({ error: e });
@@ -256,7 +461,7 @@ userRouter.get(
 	verifyUser,
 	async (req: Request, res: Response, next: NextFunction) => {
 		if (!req.user) {
-			res.status(401).json({ error: "Not authenticated" });
+			res.status(401).json({ code: 1, error: "Not authenticated" });
 			return;
 		}
 		const user = req.user as {
@@ -264,7 +469,8 @@ userRouter.get(
 			email: string;
 			userName: string;
 		};
-		res.json({
+		res.status(200).json({
+			code: 0,
 			message: "Authorized User!",
 			email: user.email,
 			userName: user.userName,

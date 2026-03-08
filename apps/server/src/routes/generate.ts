@@ -36,6 +36,7 @@ generateRouter.post("/new", verifyUser, async (req: Request, res: Response) => {
 	// if(!userId) {
 	//     res.status(401).json({ message: 'Please login and try again' });
 	// }
+	let dbResp;
 
 	try {
 		const enhancedPrompt = `
@@ -185,7 +186,7 @@ generateRouter.post("/new", verifyUser, async (req: Request, res: Response) => {
 		console.log("\nDBTimer start\n");
 		console.time("DBTimer");
 
-		const dbResp = await prisma.animation.create({
+		dbResp = await prisma.animation.create({
 			data: {
 				title: `${title}`,
 				firstPrompt: userPrompt,
@@ -222,13 +223,19 @@ generateRouter.post("/new", verifyUser, async (req: Request, res: Response) => {
 			1,
 		);
 		res.json({
+			code: 0,
 			result: "Task Submitted",
 			animationId: dbResp.id,
 			title: dbResp.title,
-			taskId: gatewayResp.data.id,
+			taskId: gatewayResp.data.taskId,
 		});
 	} catch (e: any) {
-		res.json({ error: e });
+		if (e.code === "ECONNREFUSED" && dbResp && dbResp.id) {
+			const resp = await prisma.animation.delete({
+				where: { id: dbResp.id },
+			});
+		}
+		res.status(500).json({ error: e, reason: "Internal Server Error" });
 		console.log("\n\n--------error caught-------\n\n");
 		console.log(e);
 		return;
@@ -452,7 +459,7 @@ generateRouter.post(
 			});
 
 			if (gatewayResp.data.status !== "Task Submitted") {
-				res.json({ result: "Please try again later" });
+				res.json({ code: 1, result: "Please try again later" });
 				return;
 			}
 
@@ -465,8 +472,9 @@ generateRouter.post(
 			);
 
 			res.json({
+				code: 0,
 				message: "Task submitted successfully!",
-				taskId: gatewayResp.data.id,
+				taskId: JSON.stringify(gatewayResp.data.taskId),
 			});
 		} catch (e: any) {
 			res.json({ error: e });

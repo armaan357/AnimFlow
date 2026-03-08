@@ -7,10 +7,12 @@ import { Button } from "./button";
 
 export const Modal = ({
 	isOpen,
+	header,
 	children,
 	onClose,
 }: {
 	isOpen: boolean;
+	header?: ReactNode;
 	children: ReactNode;
 	onClose: () => void;
 }) => {
@@ -41,13 +43,19 @@ export const Modal = ({
 
 	return mounted && isOpen
 		? createPortal(
-				<div className="fixed top-0 h-screen inset-0 bg-black/15 flex items-center justify-center z-5000 ">
-					<div className="bg-[#181818] p-6 rounded-lg shadow-2xl flex flex-col backdrop-blur-md sm:max-w-[95vw] md:max-w-sm max-h-[90vh] gap-3 pb-12">
+				<div
+					className="fixed top-0 h-screen inset-0 bg-black/65 backdrop-blur-[2px] flex items-center justify-center z-5000 "
+					onClick={() => onClose()}
+				>
+					<div
+						className="bg-[#181818] p-6 rounded-lg shadow-2xl flex flex-col backdrop-blur-md sm:max-w-[95vw] md:max-w-sm max-h-[90vh] gap-3 pb-12"
+						onClick={(e) => e.stopPropagation()}
+					>
 						<div className="absolute top-3 right-3">
 							<Button
 								variant="icon"
 								children={<X size={25} />}
-								size="sm"
+								size="icon"
 								onClick={() => onClose()}
 							/>
 						</div>

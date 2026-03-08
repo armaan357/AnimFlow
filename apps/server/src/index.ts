@@ -41,7 +41,7 @@ app.use(
 		secret: USER_SECRET || "kasbjvoaoslkgff57145g",
 		resave: false,
 		saveUninitialized: false,
-		cookie: { secure: false },
+		cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 },
 	}),
 );
 
