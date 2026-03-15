@@ -2,7 +2,7 @@ import axios from "axios";
 import { Header } from "../components/header";
 import { HeroSection } from "../components/heroSection";
 import { cookies } from "next/headers";
-import { permanentRedirect, redirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
