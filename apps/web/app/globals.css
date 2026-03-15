@@ -128,7 +128,62 @@
     background-color: #565656;
     /* color when hovered */
   }
-  
+
+/* Tool-tip styling */
+
+/* Tooltip.module.css */
+.container {
+  position: relative;
+  /* display: inline-block; */
+  /* ensures the container wraps the content */
+}
+
+.container div[data-tooltip] {
+  position: relative;
+}
+
+.container div[data-tooltip]::before,
+.container div[data-tooltip]::after {
+  --scale: 0;
+  position: absolute;
+  bottom: 0.25rem;
+  /* Adjust as needed */
+  left: 50%;
+  transform: translateX(0%) translateY(120%) scale(var(--scale));
+  transition: transform 0.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  z-index: 10;
+  pointer-events: none;
+  /* Allows hover events on element below tooltip */
+}
+
+/* Tooltip Bubble */
+.container div[data-tooltip]::before {
+  content: attr(data-tooltip);
+  padding: 0.325rem;
+  border-radius: 0.3rem;
+  background: #222222;
+  /* Your custom background color */
+  color: white;
+  /* Your custom text color */
+  font-size: 0.75rem;
+  /* Your custom font size */
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Tooltip Arrow */
+/* .container div[data-tooltip]::after {
+  content: '';
+  border: 5px solid transparent;
+  border-top-color: #333;
+  top: -0.25rem;
+} */
+
+/* Show tooltip on hover */
+.container div[data-tooltip]:hover::before,
+.container div[data-tooltip]:hover::after {
+  --scale: 1;
+}
   /* Hide scroll bar for IE, Edge and Firefox */
   /* .no-scrollbar {
                                                                               -ms-overflow-style: none;

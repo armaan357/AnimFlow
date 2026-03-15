@@ -267,7 +267,7 @@ export const SideBar = ({
 			</div>
 			<div className="p-4 border-t border-[#ffffff15]">
 				<div className="flex items-center gap-3 text-sm text-gray-400 cursor-pointer hover:text-white transition-colors">
-					<div className="w-8 h-8 rounded-full bg-linear-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
+					<div className="w-8 h-8 rounded-full bg-linear-to-tr from-[#488aed] to-[#a1c4fd] flex items-center justify-center text-white font-bold">
 						{userName[0]}
 					</div>
 					{isSideBarVisible && (

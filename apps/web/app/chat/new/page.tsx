@@ -1,14 +1,20 @@
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import NewChatAnimationPage from "../../../components/newChatPage";
-
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+import { isMobile } from "../../../hooks/useMobile";
 
 export default async function AnimationPage() {
 	try {
+		const agent = (await headers()).get("user-agent") || "";
+		const checkDevice = isMobile(agent);
 		const c = await cookies();
 		const userName = c.get("userName")?.value;
-		return <NewChatAnimationPage userName={userName!} />;
+		return (
+			<NewChatAnimationPage
+				userName={userName!}
+				checkMobileDevice={checkDevice}
+			/>
+		);
 	} catch (e: any) {
 		redirect("/signin");
 	}

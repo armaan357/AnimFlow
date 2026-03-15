@@ -1,18 +1,18 @@
 "use client";
 import { Button } from "@repo/ui/button";
-import { ChatPageHeader } from "./header";
+import { PublicChatPageHeader } from "./header";
 import "../app/page.module.css";
-import { ArrowUp, ChevronDown, ChevronUp, Copy } from "lucide-react";
+import { ChevronDown, ChevronUp, Copy, Download } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
-import { TextAreaComp } from "@repo/ui/textArea";
 import VideoPlayer from "./videoPlayer";
 import toast, { Toaster } from "react-hot-toast";
-import { ChatGreeting } from "@repo/ui/chatGreeting";
-import { SideBar } from "./sideBar";
+import { PublicChatGreeting } from "@repo/ui/chatGreeting";
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+const downloadURL = `https://res.cloudinary.com/${cloudName}/video/upload/fl_attachment/`;
 
 type MessageType = {
 	id: string;
@@ -166,13 +166,13 @@ export default function PublicAnimationPage({
 		<div className="bg-[#121212] flex w-full h-dvh">
 			<Toaster />
 			<div className="flex flex-col flex-1 w-full overflow-hidden">
-				<ChatPageHeader />
+				<PublicChatPageHeader />
 
 				<div className="flex flex-row justify-center flex-1 min-h-0 relative bg-[#121212] transition-transform duration-150 ease-in-out">
 					<div className=" flex-1 flex flex-col justify-center overflow-hidden transition-transform duration-150 ease-in-out">
 						{/* Messages Area */}
 						<div
-							className={`flex overflow-y-auto px-25 pb-2.5 version-scroll-box transition-transform duration-150 ease-in-out h-full ${isVersionTabVisible ? " relative " : ""}`}
+							className={`flex overflow-y-auto pl-25 pb-2.5 version-scroll-box transition-transform duration-150 ease-in-out h-full ${isVersionTabVisible ? " relative " : ""}`}
 						>
 							{/* {!isVersionTabVisible ? (
 								<div
@@ -194,12 +194,12 @@ export default function PublicAnimationPage({
 							/>
 							{/* } */}
 							<div className="flex flex-1 overflow-y-auto scroll-box pb-4 pr-4 md:pb-6 md:pr-6 lg:pb-8 lg:pr-8 pl-0.5 pt-0">
-								<div className="max-w-auto w-[70%] ml-20 flex flex-col gap-8 pb-4 pt-4 md:pt-6 lg:pt-8">
+								<div className="max-w-auto ml-20 w-full flex flex-col gap-8 pb-4 pt-4 md:pt-6 lg:pt-8">
 									{/* Placeholder welcome message or content */}
 									{!messages ? (
-										<ChatGreeting />
+										<PublicChatGreeting />
 									) : (
-										<div className="flex flex-col gap-1 items-end">
+										<div className="flex flex-col w-[70%] gap-1 items-end">
 											{messageToDisplay && (
 												<PromptAndResponseContainer
 													// key={mess}
@@ -456,10 +456,12 @@ const PromptAndResponseContainer = ({ m }: PromptAndResponseContainerProps) => {
 					<div className="px-2 py-1 sm:px-3 sm:py-1.5 w-fit max-w-lg self-end-safe bg-[#212121] border border-white/10 rounded-lg">
 						<p className="text-base">{m.prompt}</p>
 					</div>
-					<div className="hidden-buttons flex w-full justify-end pr-4">
+					<div className="hidden-buttons flex w-full justify-end pr-4 container">
 						<div
 							className="cursor-pointer text-white/70"
 							onClick={() => copyPromptAction(m.prompt)}
+							aria-label="Copy"
+							data-tooltip="Copy"
 						>
 							<Copy size={18} />
 						</div>
@@ -470,8 +472,25 @@ const PromptAndResponseContainer = ({ m }: PromptAndResponseContainerProps) => {
 					{m.animationId ? (
 						<div className=" w-auto">
 							{m?.videoURL && m.taskId ? (
-								<div className="border-2 border-white/25 rounded-lg overflow-hidden">
-									<VideoPlayer publicId={m.taskId} />
+								<div className="flex msg-container">
+									<div className="border-2 w-full border-white/25 rounded-lg overflow-hidden">
+										<VideoPlayer publicId={m.taskId} />
+									</div>
+									<div className="flex items-center justify-center px-1.5 transition-all duration-150 hidden-buttons">
+										<a
+											href={`${downloadURL}${m.taskId}.mp4`}
+											download={"video"}
+											className="container"
+										>
+											<div
+												className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#202020] transition-colors cursor-pointer"
+												aria-label="Download Video"
+												data-tooltip="Download"
+											>
+												<Download size={20} />
+											</div>
+										</a>
+									</div>
 								</div>
 							) : (
 								<p className="test-base">

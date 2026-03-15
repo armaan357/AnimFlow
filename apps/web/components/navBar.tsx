@@ -11,7 +11,7 @@ interface NavBarProps {
 export const NavBar = ({ children }: NavBarProps) => {
 	return (
 		<div className="md:flex gap-8 hidden">
-			<NavLink
+			{/* <NavLink
 				hrefString={"#features"}
 				children={"Features"}
 				target="_self"
@@ -20,7 +20,7 @@ export const NavBar = ({ children }: NavBarProps) => {
 				hrefString={"#gallery"}
 				children={"Gallery"}
 				target="_self"
-			/>
+			/> */}
 			<NavLink
 				hrefString={"https://github.com/armaan357/AnimFlow"}
 				children={

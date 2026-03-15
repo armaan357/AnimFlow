@@ -5,6 +5,7 @@ import { ArrowUp } from "lucide-react";
 import { TextAreaComp } from "@repo/ui/textArea";
 import { Modal } from "@repo/ui/modal";
 import Link from "next/link";
+import { BackgroundBeams } from "@repo/ui/components/ui/background-beams";
 
 export const HeroSection = () => {
 	const inpRef = useRef<HTMLTextAreaElement | null>(null);
@@ -82,6 +83,7 @@ export const HeroSection = () => {
 				children={<ModalContent />}
 				onClose={() => setModalOpen(false)}
 			/>
+			<BackgroundBeams />
 		</main>
 	);
 };

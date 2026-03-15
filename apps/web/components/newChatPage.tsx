@@ -2,23 +2,68 @@
 import { Button } from "@repo/ui/button";
 import { ChatPageHeader } from "./header";
 import "../app/page.module.css";
-import { ArrowUp, Copy } from "lucide-react";
+import { ArrowUp, Copy, MenuIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { TextAreaComp } from "@repo/ui/textArea";
 import toast, { Toaster } from "react-hot-toast";
 import { ChatGreeting } from "@repo/ui/chatGreeting";
-import { SideBar } from "./sideBar";
+import { Sidebar } from "./newSideBarComp/sidebar";
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+const deleteChat = async (chatId: string) => {
+	try {
+		const resp = await axios.delete(`${backendUrl}user/chats/${chatId}`, {
+			withCredentials: true,
+		});
+		if (!resp) {
+			toast("Error during chat deletion. Please try again later", {
+				style: {
+					background: "#343434",
+					color: "#ffffff",
+					paddingLeft: 35,
+					paddingRight: 35,
+					gap: 20,
+				},
+				position: "bottom-left",
+			});
+			return;
+		}
+		toast("Chat deleted successfully", {
+			style: {
+				background: "#343434",
+				color: "#ffffff",
+				paddingLeft: 35,
+				paddingRight: 35,
+				gap: 20,
+			},
+			position: "bottom-left",
+		});
+	} catch (e: any) {
+		toast("Error during chat deletion. Please try again later", {
+			style: {
+				background: "#343434",
+				color: "#ffffff",
+				paddingLeft: 35,
+				paddingRight: 35,
+				gap: 20,
+			},
+			position: "bottom-left",
+		});
+	}
+};
+
 export default function NewChatAnimationPage({
 	userName,
+	checkMobileDevice,
 }: {
 	userName: string;
+	checkMobileDevice: boolean;
 }) {
 	const [isSideBarVisible, setSideBarVisible] = useState<boolean>(true);
+	// const [isNewSideBarVisible, setNewSideBarVisible] = useState<boolean>(true);
 	const [chats, setChats] = useState<{ id: string; title: string }[] | null>(
 		null,
 	);
@@ -87,12 +132,28 @@ export default function NewChatAnimationPage({
 	return (
 		<div className="bg-[#121212] flex w-full h-dvh">
 			<Toaster />
-			<SideBar
+			{/* <SideBar
 				isSideBarVisible={isSideBarVisible}
 				onClose={() => setSideBarVisible(!isSideBarVisible)}
 				chats={chats}
 				userName={userName}
+			/> */}
+			<Sidebar
+				isSideBarVisible={isSideBarVisible}
+				isMobile={checkMobileDevice}
+				onClose={() => setSideBarVisible(!isSideBarVisible)}
+				onDeleteChat={(chatId) => deleteChat(chatId)}
+				chats={chats}
+				userName={userName}
 			/>
+			{checkMobileDevice && (
+				<div
+					className="sticky left-0 top-0 bg-[#0c0c0c] active:border-none border-none focus-within:border-none h-15 flex justify-center items-center pl-2.5 pr-1.5"
+					onClick={() => setSideBarVisible(!isSideBarVisible)}
+				>
+					<MenuIcon color="white" />
+				</div>
+			)}
 			<div className="flex flex-col flex-1 w-full overflow-hidden">
 				<ChatPageHeader />
 

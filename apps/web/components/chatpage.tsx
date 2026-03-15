@@ -2,7 +2,14 @@
 import { Button } from "@repo/ui/button";
 import { ChatPageHeader } from "./header";
 import "../app/page.module.css";
-import { ArrowUp, ChevronDown, ChevronUp, Copy } from "lucide-react";
+import {
+	ArrowUp,
+	ChevronDown,
+	ChevronUp,
+	Copy,
+	Download,
+	MenuIcon,
+} from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
@@ -10,9 +17,53 @@ import { TextAreaComp } from "@repo/ui/textArea";
 import VideoPlayer from "./videoPlayer";
 import toast, { Toaster } from "react-hot-toast";
 import { ChatGreeting } from "@repo/ui/chatGreeting";
-import { SideBar } from "./sideBar";
+import { Sidebar } from "./newSideBarComp/sidebar";
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+const downloadURL = `https://res.cloudinary.com/${cloudName}/video/upload/fl_attachment/`;
+
+const deleteChat = async (chatId: string) => {
+	try {
+		const resp = await axios.delete(`${backendUrl}user/chats/${chatId}`, {
+			withCredentials: true,
+		});
+		if (!resp) {
+			toast("Error during chat deletion. Please try again later", {
+				style: {
+					background: "#343434",
+					color: "#ffffff",
+					paddingLeft: 35,
+					paddingRight: 35,
+					gap: 20,
+				},
+				position: "bottom-left",
+			});
+			return;
+		}
+		toast("Chat deleted successfully", {
+			style: {
+				background: "#343434",
+				color: "#ffffff",
+				paddingLeft: 35,
+				paddingRight: 35,
+				gap: 20,
+			},
+			position: "bottom-left",
+		});
+	} catch (e: any) {
+		toast("Error during chat deletion. Please try again later", {
+			style: {
+				background: "#343434",
+				color: "#ffffff",
+				paddingLeft: 35,
+				paddingRight: 35,
+				gap: 20,
+			},
+			position: "bottom-left",
+		});
+	}
+};
 
 type MessageType = {
 	id: string;
@@ -32,9 +83,11 @@ type MessageType = {
 export default function ChatAnimationPage({
 	userName,
 	currentAnimationId,
+	checkMobileDevice,
 }: {
 	userName: string;
 	currentAnimationId: string;
+	checkMobileDevice: boolean;
 }) {
 	const [isSideBarVisible, setSideBarVisible] = useState<boolean>(true);
 	const [chats, setChats] = useState<{ id: string; title: string }[] | null>(
@@ -167,13 +220,30 @@ export default function ChatAnimationPage({
 	return (
 		<div className="bg-[#121212] flex w-full h-dvh">
 			<Toaster />
-			<SideBar
+			{/* <SideBar
 				isSideBarVisible={isSideBarVisible}
 				onClose={() => setSideBarVisible(!isSideBarVisible)}
 				chats={chats}
 				userName={userName}
 				currentAnimationId={currentAnimationId}
+			/> */}
+			<Sidebar
+				isSideBarVisible={isSideBarVisible}
+				isMobile={checkMobileDevice}
+				onClose={() => setSideBarVisible(!isSideBarVisible)}
+				onDeleteChat={(chatId) => deleteChat(chatId)}
+				chats={chats}
+				userName={userName}
+				currentAnimationId={currentAnimationId}
 			/>
+			{checkMobileDevice && (
+				<div
+					className="sticky left-0 top-0 bg-[#0c0c0c] active:border-none border-none focus-within:border-none h-15 flex justify-center items-center pl-2.5 pr-1.5"
+					onClick={() => setSideBarVisible(!isSideBarVisible)}
+				>
+					<MenuIcon color="white" />
+				</div>
+			)}
 			<div className="flex flex-col flex-1 w-full overflow-hidden">
 				<ChatPageHeader />
 
@@ -466,9 +536,12 @@ const PromptAndResponseContainer = ({ m }: PromptAndResponseContainerProps) => {
 					<div className="px-2 py-1 sm:px-3 sm:py-1.5 w-fit max-w-lg self-end-safe bg-[#212121] border border-white/10 rounded-lg">
 						<p className="text-base">{m.prompt}</p>
 					</div>
-					<div className="hidden-buttons flex w-full justify-end pr-4">
+					<div className="hidden-buttons flex w-full justify-end pr-4 container">
 						<div
-							className="cursor-pointer text-white/70"
+							className="cursor-pointer text-white/70 hover:bg-[#202020] transition-colors rounded-lg w-8 h-8 flex justify-center items-center"
+							aria-label="Copy"
+							// title="Copy"
+							data-tooltip="Copy"
 							onClick={() => copyPromptAction(m.prompt)}
 						>
 							<Copy size={18} />
@@ -480,8 +553,25 @@ const PromptAndResponseContainer = ({ m }: PromptAndResponseContainerProps) => {
 					{m.animationId ? (
 						<div className=" w-auto">
 							{m?.videoURL && m.taskId ? (
-								<div className="border-2 border-white/25 rounded-lg overflow-hidden">
-									<VideoPlayer publicId={m.taskId} />
+								<div className="flex msg-container">
+									<div className="border-2 w-full border-white/25 rounded-lg overflow-hidden">
+										<VideoPlayer publicId={m.taskId} />
+									</div>
+									<div className="flex items-center justify-center px-1.5 transition-all duration-150 hidden-buttons">
+										<a
+											href={`${downloadURL}${m.taskId}.mp4`}
+											download={"video"}
+											className="container"
+										>
+											<div
+												className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#202020] transition-colors cursor-pointer"
+												aria-label="Download Video"
+												data-tooltip="Download"
+											>
+												<Download size={20} />
+											</div>
+										</a>
+									</div>
 								</div>
 							) : (
 								<p className="test-base">

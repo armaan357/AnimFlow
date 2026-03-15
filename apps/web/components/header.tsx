@@ -68,3 +68,20 @@ export const ChatPageHeader = () => {
 		</header>
 	);
 };
+
+export const PublicChatPageHeader = () => {
+	return (
+		<header className="h-15 w-full sticky top-0 z-100 backdrop-blur-sm lg:backdrop-blur-none px-3 bg-[#0c0c0c] sm:px-8 md:px-12 justify-between flex items-center">
+			<div className="z-100 flex items-center gap-4">
+				<Link href={"/"} className="cursor-pointer">
+					<div className="w-fit cursor-pointer">
+						<span className="font-semibold text-xl text-[#e3e3e3] tracking-wide">
+							Anim<span className="text-[#488AED]/75">Flow</span>
+						</span>
+					</div>
+				</Link>
+			</div>
+			<div></div>
+		</header>
+	);
+};
