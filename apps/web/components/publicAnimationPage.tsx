@@ -29,11 +29,7 @@ type MessageType = {
 	durationSeconds?: number;
 };
 
-export default function PublicAnimationPage({
-	currentAnimationId,
-}: {
-	currentAnimationId: string;
-}) {
+export default function PublicAnimationPage() {
 	// const [isSideBarVisible, setSideBarVisible] = useState<boolean>(true);
 	// const [chats, setChats] = useState<{ id: string; title: string }[] | null>(
 	// 	null,
@@ -45,14 +41,14 @@ export default function PublicAnimationPage({
 	const [messageToDisplay, setMessageToDisplay] =
 		useState<MessageType | null>(null);
 
-	const animationId = useRef<string>("");
+	const currAnimationId = useRef<string>("");
 	// const inpRef = useRef<HTMLTextAreaElement>(null);
 	const scrollToBottomRef = useRef<HTMLDivElement>(null);
 	const taskIdRef = useRef<string | null>(null);
 
 	const params = useParams<{ animationId: string }>();
 
-	animationId.current = params.animationId;
+	currAnimationId.current = params.animationId;
 
 	useEffect(() => {
 		scrollToBottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -78,7 +74,7 @@ export default function PublicAnimationPage({
 		const fetchChat = async () => {
 			try {
 				const resp = await axios.get(
-					`${backendUrl}user/chats/public/${currentAnimationId}`,
+					`${backendUrl}user/chats/public/${currAnimationId.current}`,
 					{ withCredentials: true },
 				);
 				console.log("chat resp = ", resp.data);
@@ -139,7 +135,7 @@ export default function PublicAnimationPage({
 	// 		};
 	// 		try {
 	// 			const resp = await axios.post(
-	// 				`${backendUrl}generate/${animationId.current}`,
+	// 				`${backendUrl}generate/${currAnimationId.current}`,
 	// 				body,
 	// 				{ withCredentials: true },
 	// 			);

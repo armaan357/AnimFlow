@@ -1,9 +1,8 @@
 // middleware.ts
 import axios from "axios";
+import { NextRequest } from "next/dist/server/web/spec-extension/request";
+import { NextResponse } from "next/dist/server/web/spec-extension/response";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 

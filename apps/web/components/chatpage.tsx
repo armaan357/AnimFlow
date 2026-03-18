@@ -82,11 +82,9 @@ type MessageType = {
 
 export default function ChatAnimationPage({
 	userName,
-	currentAnimationId,
 	checkMobileDevice,
 }: {
 	userName: string;
-	currentAnimationId: string;
 	checkMobileDevice: boolean;
 }) {
 	const [isSideBarVisible, setSideBarVisible] = useState<boolean>(true);
@@ -100,14 +98,14 @@ export default function ChatAnimationPage({
 	const [messageToDisplay, setMessageToDisplay] =
 		useState<MessageType | null>(null);
 
-	const animationId = useRef<string>("");
+	const currAnimationId = useRef<string>("");
 	const inpRef = useRef<HTMLTextAreaElement>(null);
 	const scrollToBottomRef = useRef<HTMLDivElement>(null);
 	const taskIdRef = useRef<string | null>(null);
 
 	const params = useParams<{ animationId: string }>();
 
-	animationId.current = params.animationId;
+	currAnimationId.current = params.animationId;
 
 	useEffect(() => {
 		scrollToBottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -133,7 +131,7 @@ export default function ChatAnimationPage({
 		const fetchChat = async () => {
 			try {
 				const resp = await axios.get(
-					`${backendUrl}user/chats/${animationId.current}`,
+					`${backendUrl}user/chats/${currAnimationId.current}`,
 					{ withCredentials: true },
 				);
 				console.log("chat resp = ", resp.data);
@@ -194,7 +192,7 @@ export default function ChatAnimationPage({
 			};
 			try {
 				const resp = await axios.post(
-					`${backendUrl}generate/${animationId.current}`,
+					`${backendUrl}generate/${currAnimationId.current}`,
 					body,
 					{ withCredentials: true },
 				);
@@ -225,7 +223,7 @@ export default function ChatAnimationPage({
 				onClose={() => setSideBarVisible(!isSideBarVisible)}
 				chats={chats}
 				userName={userName}
-				currentAnimationId={currentAnimationId}
+				currentAnimationId={currAnimationId.current}
 			/> */}
 			<Sidebar
 				isSideBarVisible={isSideBarVisible}
@@ -234,7 +232,7 @@ export default function ChatAnimationPage({
 				onDeleteChat={(chatId) => deleteChat(chatId)}
 				chats={chats}
 				userName={userName}
-				currentAnimationId={currentAnimationId}
+				currentAnimationId={currAnimationId.current}
 			/>
 			{checkMobileDevice && (
 				<div
