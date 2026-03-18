@@ -32,48 +32,93 @@ userRouter.get("/email-exists", async (req: Request, res: Response) => {
 	}
 });
 
-userRouter.post("/signup", async (req: Request, res: Response) => {
-	const parsed = signUpSchema.safeParse(req.body);
+userRouter.post(
+	"/signup",
+	async (req: Request, res: Response, next: NextFunction) => {
+		const parsed = signUpSchema.safeParse(req.body);
 
-	if (!parsed.success) {
-		console.log("Parse error: \n\n", req.body);
-		res.json({ error: parsed.error });
-		return;
-	}
-
-	const { email, password, userName } = parsed.data;
-
-	try {
-		const hashed = await bcrypt.hash(password, 10);
-		// const resp = await prisma.user.create({ data: { userName, password: hashed } });
-		const resp = await prisma.user.create({
-			data: { email, password: hashed, userName },
-		});
-		res.status(201).json({ message: "Signed Up Successfully" });
-		console.log("signup successful, DBresp = ", resp);
-	} catch (e: any) {
-		if (e.code && e.code === "P2002") {
-			console.log("user already exists");
-			res.status(400).json({ error: "User already exists" });
+		if (!parsed.success) {
+			console.log("Parse error: \n\n", req.body);
+			res.json({ error: parsed.error });
 			return;
 		}
-		res.status(500).json({ error: e });
-		console.log("\n\nerror = ", e);
-	}
-});
+
+		const { email, password, userName } = parsed.data;
+
+		try {
+			const hashed = await bcrypt.hash(password, 10);
+			// const resp = await prisma.user.create({ data: { userName, password: hashed } });
+			const resp = await prisma.user.create({
+				data: { email, password: hashed, userName },
+			});
+			console.log("signup successful, DBresp = ", resp);
+			// req.login(resp, (err) => {
+			// 	if (err) {
+			// 		return res
+			// 			.status(500)
+			// 			.json({ message: "Auto-login failed." });
+			// 	}
+
+			// 	return res.status(201).json({
+			// 		message: "Registration successful.",
+			// 		user: {
+			// 			id: resp.id,
+			// 			email: resp.email,
+			// 			username: resp.userName,
+			// 		},
+			// 	});
+			// });
+			passport.authenticate(
+				"local",
+				(
+					err: any,
+					user: {
+						id: number;
+						email: string;
+						password: string;
+						userName: string;
+					},
+					info: any,
+				) => {
+					if (err) {
+						return next(err);
+					}
+					// if (!resp) return res.status(400).json(info);
+
+					req.logIn(resp, (err) => {
+						if (err) return next(err);
+						const { id, email, userName } = resp;
+						return res.json({
+							message: "Registration Successful",
+							user: { id, email, userName },
+						});
+					});
+				},
+			)(req, res, next);
+			// res.status(201).json({ message: "Signed Up Successfully" });
+		} catch (e: any) {
+			if (e.code && e.code === "P2002") {
+				console.log("user already exists");
+				res.status(400).json({ error: "User already exists" });
+				return;
+			}
+			res.status(500).json({ error: e });
+			console.log("\n\nerror = ", e);
+		}
+	},
+);
 
 userRouter.get(
 	"/auth/google",
-	passport.authenticate("google", { scope: ["profile"] }),
+	passport.authenticate("google", { scope: ["profile", "email"] }),
 );
 
 userRouter.get(
 	"/auth/google/callback",
-	passport.authenticate("google", { failureRedirect: "/login" }),
-	(req, res) => {
-		// Successful authentication, redirect home.
-		res.redirect("/");
-	},
+	passport.authenticate("google", {
+		failureRedirect: "/signin",
+		successRedirect: "/",
+	}),
 );
 
 userRouter.post(

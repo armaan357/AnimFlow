@@ -11,6 +11,12 @@ import userRouter from "./routes/user";
 const app = express();
 const USER_SECRET = process.env.USER_SECRET;
 console.log("user secret = ", USER_SECRET);
+console.log("\n\n\ngoogle client id = ", process.env.GOOGLE_CLIENT_ID);
+console.log(
+	"\n\n\ngoogle client secret secret = ",
+	process.env.GOOGLE_CLIENT_SECRET,
+);
+console.log("\n\n\n");
 
 const allowedOrigins = [
 	"http://localhost:5173",
@@ -20,8 +26,10 @@ const allowedOrigins = [
 app.use(
 	cors({
 		origin: (origin, callback) => {
+			console.log("\n\nOrigin = ", origin);
 			if (!origin) return callback(null, true);
 			if (allowedOrigins.indexOf(origin) === -1) {
+				console.log("\n\nCORS Error occured!\n\n");
 				let message =
 					"The CORS policy for this application doesn't allow access from origin " +
 					origin;

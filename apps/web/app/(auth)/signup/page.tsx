@@ -91,9 +91,10 @@ export default function SignUp() {
 			const signupResp = await axios.post(
 				`${backendUrl}user/signup`,
 				userInfo,
+				{ withCredentials: true },
 			);
 			if (!signupResp) return;
-			navigate.push("/signin");
+			navigate.push("/chat/new");
 		} catch (e: any) {
 			console.log("error = ", e);
 		}

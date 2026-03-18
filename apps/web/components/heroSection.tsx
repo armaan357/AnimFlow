@@ -28,7 +28,8 @@ export const HeroSection = () => {
 	}, []);
 
 	return (
-		<main className="min-h-dvh flex flex-col justify-center items-center bg-[#121212]">
+		<main className="min-h-dvh flex flex-col z-100 justify-center items-center bg-[#121212]">
+			<BackgroundBeams />
 			<div className="flex flex-col items-center justify-center px-4 mb-4 md:mb-6 gap-5">
 				<h1 className="text-3xl md:text-5xl font-bold text-white mb-2 md:mb-3">
 					What will you animate today?
@@ -37,14 +38,14 @@ export const HeroSection = () => {
 					Create 2D animations by chatting with AI
 				</h2>
 			</div>
-			<div className="w-full p-4 bg-[#121212] ">
-				<div className="max-w-3xl mx-auto">
+			<div className="w-full p-4 bg-transparent z-110 ">
+				<div className="max-w-3xl mx-auto z-115 ">
 					<form
-						className="relative flex flex-col bg-[#181818] border border-[#ffffff15] rounded-xl overflow-hidden focus-within:border-[#488AED]/15 transition-colors"
+						className="relative flex flex-col bg-[#181818] border border-[#ffffff15] rounded-xl overflow-hidden focus-within:border-[#488AED]/15 transition-colors z-120 "
 						onSubmit={(e) => {
 							e.preventDefault();
 							if (inpRef.current && inpRef.current.value.trim()) {
-								alert(`Prompt sent: ${inpRef.current.value}`);
+								setModalOpen(true);
 								inpRef.current.value = "";
 							}
 						}}
@@ -57,11 +58,11 @@ export const HeroSection = () => {
 							}
 						}}
 					>
-						<div className="p-2">
+						<div className="p-2 z-121 ">
 							<TextAreaComp
 								ref={inpRef}
 								placeholder="Describe your animation..."
-								className="min-h-15 bg-transparent resize-none"
+								className="min-h-15 bg-transparent resize-none z-122 "
 							/>
 						</div>
 						<div className="flex justify-between items-center px-4 py-2 bg-[#181818]">
@@ -83,7 +84,6 @@ export const HeroSection = () => {
 				children={<ModalContent />}
 				onClose={() => setModalOpen(false)}
 			/>
-			<BackgroundBeams />
 		</main>
 	);
 };
