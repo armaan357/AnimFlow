@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "exports": {
-    "./postcss": "./postcss.config.js"
+    "./postcss": "./postcss.config.js",
+    ".": "./postcss.config.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
