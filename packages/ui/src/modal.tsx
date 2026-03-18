@@ -48,7 +48,7 @@ export const Modal = ({
 					onClick={() => onClose()}
 				>
 					<div
-						className="bg-[#181818] p-6 rounded-lg shadow-2xl flex flex-col backdrop-blur-md sm:max-w-[95vw] md:max-w-sm max-h-[90vh] gap-3 pb-12"
+						className="bg-[#181818] p-6 rounded-lg shadow-2xl flex flex-col backdrop-blur-md max-w-75 sm:max-w-sm max-h-[90vh] gap-3 pb-12"
 						onClick={(e) => e.stopPropagation()}
 					>
 						<div className="absolute top-3 right-3">

@@ -94,12 +94,12 @@ const ModalContent = () => {
 			<div className="w-full pt-7 pb-8 flex flex-col gap-3">
 				<div className="w-auto flex justify-start">
 					<div className="w-fit">
-						<span className="font-bold text-3xl text-[#e3e3e3]">
+						<span className="font-bold text-2xl text-[#e3e3e3]">
 							AnimFlow
 						</span>
 					</div>
 				</div>
-				<div className="text-lg text-[#ffffff80]">
+				<div className="text-base sm:text-lg text-[#ffffff80]">
 					To use AnimFlow, create a new account or log into an
 					existing one.
 				</div>
