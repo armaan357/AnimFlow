@@ -31,7 +31,7 @@ export const HeroSection = () => {
 		<main className="min-h-dvh flex flex-col z-100 justify-center items-center bg-[#121212]">
 			<BackgroundBeams />
 			<div className="flex flex-col items-center justify-center px-4 mb-4 md:mb-6 gap-5">
-				<h1 className="text-3xl md:text-5xl font-bold text-white mb-2 md:mb-3">
+				<h1 className="text-3xl md:text-5xl text-center font-bold text-white mb-2 md:mb-3">
 					What will you animate today?
 				</h1>
 				<h2 className="mb-6 text-center text-lg md:text-xl max-w-[25ch] md:max-w-full font-medium text-[#ffffff80]">
