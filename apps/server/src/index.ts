@@ -17,11 +17,13 @@ console.log(
 	process.env.GOOGLE_CLIENT_SECRET,
 );
 console.log("\n\n\n");
+const feURL = process.env.FE_URL;
 
 const allowedOrigins = [
 	"http://localhost:5173",
 	"http://localhost:3000",
 	"http://localhost:8000",
+	feURL,
 ];
 app.use(
 	cors({
