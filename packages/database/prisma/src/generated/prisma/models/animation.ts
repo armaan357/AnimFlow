@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.ts"
-import type * as Prisma from "../internal/prismaNamespace.ts"
+import type * as $Enums from "../enums"
+import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model animation
@@ -32,6 +32,7 @@ export type AnimationMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   userId: string | null
+  currentVersionId: string | null
 }
 
 export type AnimationMaxAggregateOutputType = {
@@ -42,6 +43,7 @@ export type AnimationMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   userId: string | null
+  currentVersionId: string | null
 }
 
 export type AnimationCountAggregateOutputType = {
@@ -52,6 +54,7 @@ export type AnimationCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   userId: number
+  currentVersionId: number
   _all: number
 }
 
@@ -64,6 +67,7 @@ export type AnimationMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   userId?: true
+  currentVersionId?: true
 }
 
 export type AnimationMaxAggregateInputType = {
@@ -74,6 +78,7 @@ export type AnimationMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   userId?: true
+  currentVersionId?: true
 }
 
 export type AnimationCountAggregateInputType = {
@@ -84,6 +89,7 @@ export type AnimationCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   userId?: true
+  currentVersionId?: true
   _all?: true
 }
 
@@ -167,6 +173,7 @@ export type AnimationGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   userId: string
+  currentVersionId: string | null
   _count: AnimationCountAggregateOutputType | null
   _min: AnimationMinAggregateOutputType | null
   _max: AnimationMaxAggregateOutputType | null
@@ -198,8 +205,9 @@ export type animationWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"animation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"animation"> | Date | string
   userId?: Prisma.StringFilter<"animation"> | string
+  currentVersionId?: Prisma.StringNullableFilter<"animation"> | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.userWhereInput>
-  versions?: Prisma.XOR<Prisma.AnimationVersionNullableScalarRelationFilter, Prisma.animationVersionWhereInput> | null
+  versions?: Prisma.AnimationVersionListRelationFilter
 }
 
 export type animationOrderByWithRelationInput = {
@@ -210,8 +218,9 @@ export type animationOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  currentVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.userOrderByWithRelationInput
-  versions?: Prisma.animationVersionOrderByWithRelationInput
+  versions?: Prisma.animationVersionOrderByRelationAggregateInput
 }
 
 export type animationWhereUniqueInput = Prisma.AtLeast<{
@@ -225,8 +234,9 @@ export type animationWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"animation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"animation"> | Date | string
   userId?: Prisma.StringFilter<"animation"> | string
+  currentVersionId?: Prisma.StringNullableFilter<"animation"> | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.userWhereInput>
-  versions?: Prisma.XOR<Prisma.AnimationVersionNullableScalarRelationFilter, Prisma.animationVersionWhereInput> | null
+  versions?: Prisma.AnimationVersionListRelationFilter
 }, "id">
 
 export type animationOrderByWithAggregationInput = {
@@ -237,6 +247,7 @@ export type animationOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  currentVersionId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.animationCountOrderByAggregateInput
   _max?: Prisma.animationMaxOrderByAggregateInput
   _min?: Prisma.animationMinOrderByAggregateInput
@@ -253,6 +264,7 @@ export type animationScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"animation"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"animation"> | Date | string
   userId?: Prisma.StringWithAggregatesFilter<"animation"> | string
+  currentVersionId?: Prisma.StringNullableWithAggregatesFilter<"animation"> | string | null
 }
 
 export type animationCreateInput = {
@@ -262,8 +274,9 @@ export type animationCreateInput = {
   isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  currentVersionId?: string | null
   user: Prisma.userCreateNestedOneWithoutAnimationsInput
-  versions?: Prisma.animationVersionCreateNestedOneWithoutAnimationInput
+  versions?: Prisma.animationVersionCreateNestedManyWithoutAnimationInput
 }
 
 export type animationUncheckedCreateInput = {
@@ -274,7 +287,8 @@ export type animationUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: string
-  versions?: Prisma.animationVersionUncheckedCreateNestedOneWithoutAnimationInput
+  currentVersionId?: string | null
+  versions?: Prisma.animationVersionUncheckedCreateNestedManyWithoutAnimationInput
 }
 
 export type animationUpdateInput = {
@@ -284,8 +298,9 @@ export type animationUpdateInput = {
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.userUpdateOneRequiredWithoutAnimationsNestedInput
-  versions?: Prisma.animationVersionUpdateOneWithoutAnimationNestedInput
+  versions?: Prisma.animationVersionUpdateManyWithoutAnimationNestedInput
 }
 
 export type animationUncheckedUpdateInput = {
@@ -296,7 +311,8 @@ export type animationUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  versions?: Prisma.animationVersionUncheckedUpdateOneWithoutAnimationNestedInput
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versions?: Prisma.animationVersionUncheckedUpdateManyWithoutAnimationNestedInput
 }
 
 export type animationCreateManyInput = {
@@ -307,6 +323,7 @@ export type animationCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: string
+  currentVersionId?: string | null
 }
 
 export type animationUpdateManyMutationInput = {
@@ -316,6 +333,7 @@ export type animationUpdateManyMutationInput = {
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type animationUncheckedUpdateManyInput = {
@@ -326,6 +344,7 @@ export type animationUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AnimationListRelationFilter = {
@@ -346,6 +365,7 @@ export type animationCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  currentVersionId?: Prisma.SortOrder
 }
 
 export type animationMaxOrderByAggregateInput = {
@@ -356,6 +376,7 @@ export type animationMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  currentVersionId?: Prisma.SortOrder
 }
 
 export type animationMinOrderByAggregateInput = {
@@ -366,6 +387,7 @@ export type animationMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  currentVersionId?: Prisma.SortOrder
 }
 
 export type AnimationScalarRelationFilter = {
@@ -440,7 +462,8 @@ export type animationCreateWithoutUserInput = {
   isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  versions?: Prisma.animationVersionCreateNestedOneWithoutAnimationInput
+  currentVersionId?: string | null
+  versions?: Prisma.animationVersionCreateNestedManyWithoutAnimationInput
 }
 
 export type animationUncheckedCreateWithoutUserInput = {
@@ -450,7 +473,8 @@ export type animationUncheckedCreateWithoutUserInput = {
   isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  versions?: Prisma.animationVersionUncheckedCreateNestedOneWithoutAnimationInput
+  currentVersionId?: string | null
+  versions?: Prisma.animationVersionUncheckedCreateNestedManyWithoutAnimationInput
 }
 
 export type animationCreateOrConnectWithoutUserInput = {
@@ -490,6 +514,7 @@ export type animationScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"animation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"animation"> | Date | string
   userId?: Prisma.StringFilter<"animation"> | string
+  currentVersionId?: Prisma.StringNullableFilter<"animation"> | string | null
 }
 
 export type animationCreateWithoutVersionsInput = {
@@ -499,6 +524,7 @@ export type animationCreateWithoutVersionsInput = {
   isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  currentVersionId?: string | null
   user: Prisma.userCreateNestedOneWithoutAnimationsInput
 }
 
@@ -510,6 +536,7 @@ export type animationUncheckedCreateWithoutVersionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: string
+  currentVersionId?: string | null
 }
 
 export type animationCreateOrConnectWithoutVersionsInput = {
@@ -535,6 +562,7 @@ export type animationUpdateWithoutVersionsInput = {
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.userUpdateOneRequiredWithoutAnimationsNestedInput
 }
 
@@ -546,6 +574,7 @@ export type animationUncheckedUpdateWithoutVersionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type animationCreateManyUserInput = {
@@ -555,6 +584,7 @@ export type animationCreateManyUserInput = {
   isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  currentVersionId?: string | null
 }
 
 export type animationUpdateWithoutUserInput = {
@@ -564,7 +594,8 @@ export type animationUpdateWithoutUserInput = {
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  versions?: Prisma.animationVersionUpdateOneWithoutAnimationNestedInput
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versions?: Prisma.animationVersionUpdateManyWithoutAnimationNestedInput
 }
 
 export type animationUncheckedUpdateWithoutUserInput = {
@@ -574,7 +605,8 @@ export type animationUncheckedUpdateWithoutUserInput = {
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  versions?: Prisma.animationVersionUncheckedUpdateOneWithoutAnimationNestedInput
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versions?: Prisma.animationVersionUncheckedUpdateManyWithoutAnimationNestedInput
 }
 
 export type animationUncheckedUpdateManyWithoutUserInput = {
@@ -584,8 +616,38 @@ export type animationUncheckedUpdateManyWithoutUserInput = {
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  currentVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
+
+/**
+ * Count Type AnimationCountOutputType
+ */
+
+export type AnimationCountOutputType = {
+  versions: number
+}
+
+export type AnimationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  versions?: boolean | AnimationCountOutputTypeCountVersionsArgs
+}
+
+/**
+ * AnimationCountOutputType without action
+ */
+export type AnimationCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AnimationCountOutputType
+   */
+  select?: Prisma.AnimationCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * AnimationCountOutputType without action
+ */
+export type AnimationCountOutputTypeCountVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.animationVersionWhereInput
+}
 
 
 export type animationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -596,8 +658,10 @@ export type animationSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  currentVersionId?: boolean
   user?: boolean | Prisma.userDefaultArgs<ExtArgs>
   versions?: boolean | Prisma.animation$versionsArgs<ExtArgs>
+  _count?: boolean | Prisma.AnimationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["animation"]>
 
 export type animationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -608,6 +672,7 @@ export type animationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  currentVersionId?: boolean
   user?: boolean | Prisma.userDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["animation"]>
 
@@ -619,6 +684,7 @@ export type animationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  currentVersionId?: boolean
   user?: boolean | Prisma.userDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["animation"]>
 
@@ -630,12 +696,14 @@ export type animationSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  currentVersionId?: boolean
 }
 
-export type animationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "firstPrompt" | "isPublic" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["animation"]>
+export type animationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "firstPrompt" | "isPublic" | "createdAt" | "updatedAt" | "userId" | "currentVersionId", ExtArgs["result"]["animation"]>
 export type animationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.userDefaultArgs<ExtArgs>
   versions?: boolean | Prisma.animation$versionsArgs<ExtArgs>
+  _count?: boolean | Prisma.AnimationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type animationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.userDefaultArgs<ExtArgs>
@@ -648,7 +716,7 @@ export type $animationPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   name: "animation"
   objects: {
     user: Prisma.$userPayload<ExtArgs>
-    versions: Prisma.$animationVersionPayload<ExtArgs> | null
+    versions: Prisma.$animationVersionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -658,6 +726,7 @@ export type $animationPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     createdAt: Date
     updatedAt: Date
     userId: string
+    currentVersionId: string | null
   }, ExtArgs["result"]["animation"]>
   composites: {}
 }
@@ -1053,7 +1122,7 @@ readonly fields: animationFieldRefs;
 export interface Prisma__animationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.userDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.userDefaultArgs<ExtArgs>>): Prisma.Prisma__userClient<runtime.Types.Result.GetResult<Prisma.$userPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  versions<T extends Prisma.animation$versionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.animation$versionsArgs<ExtArgs>>): Prisma.Prisma__animationVersionClient<runtime.Types.Result.GetResult<Prisma.$animationVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  versions<T extends Prisma.animation$versionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.animation$versionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$animationVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1090,6 +1159,7 @@ export interface animationFieldRefs {
   readonly createdAt: Prisma.FieldRef<"animation", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"animation", 'DateTime'>
   readonly userId: Prisma.FieldRef<"animation", 'String'>
+  readonly currentVersionId: Prisma.FieldRef<"animation", 'String'>
 }
     
 
@@ -1502,6 +1572,11 @@ export type animation$versionsArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   include?: Prisma.animationVersionInclude<ExtArgs> | null
   where?: Prisma.animationVersionWhereInput
+  orderBy?: Prisma.animationVersionOrderByWithRelationInput | Prisma.animationVersionOrderByWithRelationInput[]
+  cursor?: Prisma.animationVersionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AnimationVersionScalarFieldEnum | Prisma.AnimationVersionScalarFieldEnum[]
 }
 
 /**

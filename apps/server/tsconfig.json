@@ -10,8 +10,8 @@
             "./node_modules/@types",
             "./@types"
         ],
-        "noEmit": true,
+        // "noEmit": true,
         "esModuleInterop": true,
-        "allowImportingTsExtensions": true,
+        // "allowImportingTsExtensions": true,
     }
 }

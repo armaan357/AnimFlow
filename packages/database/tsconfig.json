@@ -8,7 +8,8 @@
     "esModuleInterop": true,
     "types": ["node"],
     "skipLibCheck": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
+    "outDir": "./dist"
+    // "allowImportingTsExtensions": true,
+    // "noEmit": true,
   }
 }

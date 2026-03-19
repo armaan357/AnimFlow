@@ -2,13 +2,13 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import { GoogleGenAI } from "@google/genai";
 import express, { NextFunction, Request, Response, Router } from "express";
-import verifyUser from "../middleware/middleware.ts";
+import verifyUser from "../middleware/middleware";
 import axios from "axios";
 import { Prisma, prisma } from "@repo/db";
 import {
 	animationGenerateSchema,
 	animationVersionUpdateSchema,
-} from "../zodTypes/index.ts";
+} from "../zodTypes/index";
 
 const generateRouter: Router = express.Router();
 

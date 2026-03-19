@@ -17,8 +17,8 @@
 
 import * as runtime from "@prisma/client/runtime/index-browser"
 
-export type * from '../models.ts'
-export type * from './prismaNamespace.ts'
+export type * from '../models'
+export type * from './prismaNamespace'
 
 export const Decimal = runtime.Decimal
 
@@ -74,9 +74,11 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const UserScalarFieldEnum = {
   id: 'id',
+  email: 'email',
   password: 'password',
-  firstName: 'firstName',
-  lastName: 'lastName',
+  googleId: 'googleId',
+  providerURL: 'providerURL',
+  refreshToken: 'refreshToken',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userName: 'userName'
@@ -92,7 +94,8 @@ export const AnimationScalarFieldEnum = {
   isPublic: 'isPublic',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  userId: 'userId'
+  userId: 'userId',
+  currentVersionId: 'currentVersionId'
 } as const
 
 export type AnimationScalarFieldEnum = (typeof AnimationScalarFieldEnum)[keyof typeof AnimationScalarFieldEnum]
@@ -101,13 +104,18 @@ export type AnimationScalarFieldEnum = (typeof AnimationScalarFieldEnum)[keyof t
 export const AnimationVersionScalarFieldEnum = {
   id: 'id',
   versionNo: 'versionNo',
-  code: 'code',
-  videoURL: 'videoURL',
   prompt: 'prompt',
-  createdAt: 'createdAt',
+  code: 'code',
+  taskId: 'taskId',
+  videoURL: 'videoURL',
   status: 'status',
   errorMessage: 'errorMessage',
-  animationId: 'animationId'
+  errorReason: 'errorReason',
+  createdAt: 'createdAt',
+  animationId: 'animationId',
+  renderTimeMs: 'renderTimeMs',
+  fileSizeBytes: 'fileSizeBytes',
+  durationSeconds: 'durationSeconds'
 } as const
 
 export type AnimationVersionScalarFieldEnum = (typeof AnimationVersionScalarFieldEnum)[keyof typeof AnimationVersionScalarFieldEnum]

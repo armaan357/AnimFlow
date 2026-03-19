@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.ts"
-import type * as Prisma from "../internal/prismaNamespace.ts"
+import type * as $Enums from "../enums"
+import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model animationVersion
@@ -28,92 +28,134 @@ export type AggregateAnimationVersion = {
 
 export type AnimationVersionAvgAggregateOutputType = {
   versionNo: number | null
+  renderTimeMs: number | null
+  fileSizeBytes: number | null
+  durationSeconds: number | null
 }
 
 export type AnimationVersionSumAggregateOutputType = {
   versionNo: number | null
+  renderTimeMs: number | null
+  fileSizeBytes: number | null
+  durationSeconds: number | null
 }
 
 export type AnimationVersionMinAggregateOutputType = {
   id: string | null
   versionNo: number | null
-  code: string | null
-  videoURL: string | null
   prompt: string | null
-  createdAt: Date | null
+  code: string | null
+  taskId: string | null
+  videoURL: string | null
   status: $Enums.Status | null
   errorMessage: string | null
+  errorReason: string | null
+  createdAt: Date | null
   animationId: string | null
+  renderTimeMs: number | null
+  fileSizeBytes: number | null
+  durationSeconds: number | null
 }
 
 export type AnimationVersionMaxAggregateOutputType = {
   id: string | null
   versionNo: number | null
-  code: string | null
-  videoURL: string | null
   prompt: string | null
-  createdAt: Date | null
+  code: string | null
+  taskId: string | null
+  videoURL: string | null
   status: $Enums.Status | null
   errorMessage: string | null
+  errorReason: string | null
+  createdAt: Date | null
   animationId: string | null
+  renderTimeMs: number | null
+  fileSizeBytes: number | null
+  durationSeconds: number | null
 }
 
 export type AnimationVersionCountAggregateOutputType = {
   id: number
   versionNo: number
-  code: number
-  videoURL: number
   prompt: number
-  createdAt: number
+  code: number
+  taskId: number
+  videoURL: number
   status: number
   errorMessage: number
+  errorReason: number
+  createdAt: number
   animationId: number
+  renderTimeMs: number
+  fileSizeBytes: number
+  durationSeconds: number
   _all: number
 }
 
 
 export type AnimationVersionAvgAggregateInputType = {
   versionNo?: true
+  renderTimeMs?: true
+  fileSizeBytes?: true
+  durationSeconds?: true
 }
 
 export type AnimationVersionSumAggregateInputType = {
   versionNo?: true
+  renderTimeMs?: true
+  fileSizeBytes?: true
+  durationSeconds?: true
 }
 
 export type AnimationVersionMinAggregateInputType = {
   id?: true
   versionNo?: true
-  code?: true
-  videoURL?: true
   prompt?: true
-  createdAt?: true
+  code?: true
+  taskId?: true
+  videoURL?: true
   status?: true
   errorMessage?: true
+  errorReason?: true
+  createdAt?: true
   animationId?: true
+  renderTimeMs?: true
+  fileSizeBytes?: true
+  durationSeconds?: true
 }
 
 export type AnimationVersionMaxAggregateInputType = {
   id?: true
   versionNo?: true
-  code?: true
-  videoURL?: true
   prompt?: true
-  createdAt?: true
+  code?: true
+  taskId?: true
+  videoURL?: true
   status?: true
   errorMessage?: true
+  errorReason?: true
+  createdAt?: true
   animationId?: true
+  renderTimeMs?: true
+  fileSizeBytes?: true
+  durationSeconds?: true
 }
 
 export type AnimationVersionCountAggregateInputType = {
   id?: true
   versionNo?: true
-  code?: true
-  videoURL?: true
   prompt?: true
-  createdAt?: true
+  code?: true
+  taskId?: true
+  videoURL?: true
   status?: true
   errorMessage?: true
+  errorReason?: true
+  createdAt?: true
   animationId?: true
+  renderTimeMs?: true
+  fileSizeBytes?: true
+  durationSeconds?: true
   _all?: true
 }
 
@@ -206,13 +248,18 @@ export type animationVersionGroupByArgs<ExtArgs extends runtime.Types.Extensions
 export type AnimationVersionGroupByOutputType = {
   id: string
   versionNo: number
-  code: string
-  videoURL: string | null
   prompt: string
-  createdAt: Date
+  code: string
+  taskId: string
+  videoURL: string | null
   status: $Enums.Status
   errorMessage: string | null
+  errorReason: string | null
+  createdAt: Date
   animationId: string
+  renderTimeMs: number | null
+  fileSizeBytes: number | null
+  durationSeconds: number | null
   _count: AnimationVersionCountAggregateOutputType | null
   _avg: AnimationVersionAvgAggregateOutputType | null
   _sum: AnimationVersionSumAggregateOutputType | null
@@ -241,55 +288,76 @@ export type animationVersionWhereInput = {
   NOT?: Prisma.animationVersionWhereInput | Prisma.animationVersionWhereInput[]
   id?: Prisma.StringFilter<"animationVersion"> | string
   versionNo?: Prisma.IntFilter<"animationVersion"> | number
-  code?: Prisma.StringFilter<"animationVersion"> | string
-  videoURL?: Prisma.StringNullableFilter<"animationVersion"> | string | null
   prompt?: Prisma.StringFilter<"animationVersion"> | string
-  createdAt?: Prisma.DateTimeFilter<"animationVersion"> | Date | string
+  code?: Prisma.StringFilter<"animationVersion"> | string
+  taskId?: Prisma.StringFilter<"animationVersion"> | string
+  videoURL?: Prisma.StringNullableFilter<"animationVersion"> | string | null
   status?: Prisma.EnumStatusFilter<"animationVersion"> | $Enums.Status
   errorMessage?: Prisma.StringNullableFilter<"animationVersion"> | string | null
+  errorReason?: Prisma.StringNullableFilter<"animationVersion"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"animationVersion"> | Date | string
   animationId?: Prisma.StringFilter<"animationVersion"> | string
+  renderTimeMs?: Prisma.IntNullableFilter<"animationVersion"> | number | null
+  fileSizeBytes?: Prisma.IntNullableFilter<"animationVersion"> | number | null
+  durationSeconds?: Prisma.IntNullableFilter<"animationVersion"> | number | null
   animation?: Prisma.XOR<Prisma.AnimationScalarRelationFilter, Prisma.animationWhereInput>
 }
 
 export type animationVersionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   versionNo?: Prisma.SortOrder
-  code?: Prisma.SortOrder
-  videoURL?: Prisma.SortOrderInput | Prisma.SortOrder
   prompt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  code?: Prisma.SortOrder
+  taskId?: Prisma.SortOrder
+  videoURL?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  errorReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   animationId?: Prisma.SortOrder
+  renderTimeMs?: Prisma.SortOrderInput | Prisma.SortOrder
+  fileSizeBytes?: Prisma.SortOrderInput | Prisma.SortOrder
+  durationSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
   animation?: Prisma.animationOrderByWithRelationInput
 }
 
 export type animationVersionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  versionNo?: number
-  animationId?: string
+  taskId?: string
+  versionNo_animationId?: Prisma.animationVersionVersionNoAnimationIdCompoundUniqueInput
   AND?: Prisma.animationVersionWhereInput | Prisma.animationVersionWhereInput[]
   OR?: Prisma.animationVersionWhereInput[]
   NOT?: Prisma.animationVersionWhereInput | Prisma.animationVersionWhereInput[]
+  versionNo?: Prisma.IntFilter<"animationVersion"> | number
+  prompt?: Prisma.StringFilter<"animationVersion"> | string
   code?: Prisma.StringFilter<"animationVersion"> | string
   videoURL?: Prisma.StringNullableFilter<"animationVersion"> | string | null
-  prompt?: Prisma.StringFilter<"animationVersion"> | string
-  createdAt?: Prisma.DateTimeFilter<"animationVersion"> | Date | string
   status?: Prisma.EnumStatusFilter<"animationVersion"> | $Enums.Status
   errorMessage?: Prisma.StringNullableFilter<"animationVersion"> | string | null
+  errorReason?: Prisma.StringNullableFilter<"animationVersion"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"animationVersion"> | Date | string
+  animationId?: Prisma.StringFilter<"animationVersion"> | string
+  renderTimeMs?: Prisma.IntNullableFilter<"animationVersion"> | number | null
+  fileSizeBytes?: Prisma.IntNullableFilter<"animationVersion"> | number | null
+  durationSeconds?: Prisma.IntNullableFilter<"animationVersion"> | number | null
   animation?: Prisma.XOR<Prisma.AnimationScalarRelationFilter, Prisma.animationWhereInput>
-}, "id" | "versionNo" | "animationId">
+}, "id" | "taskId" | "versionNo_animationId">
 
 export type animationVersionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   versionNo?: Prisma.SortOrder
-  code?: Prisma.SortOrder
-  videoURL?: Prisma.SortOrderInput | Prisma.SortOrder
   prompt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  code?: Prisma.SortOrder
+  taskId?: Prisma.SortOrder
+  videoURL?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  errorReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   animationId?: Prisma.SortOrder
+  renderTimeMs?: Prisma.SortOrderInput | Prisma.SortOrder
+  fileSizeBytes?: Prisma.SortOrderInput | Prisma.SortOrder
+  durationSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.animationVersionCountOrderByAggregateInput
   _avg?: Prisma.animationVersionAvgOrderByAggregateInput
   _max?: Prisma.animationVersionMaxOrderByAggregateInput
@@ -303,177 +371,258 @@ export type animationVersionScalarWhereWithAggregatesInput = {
   NOT?: Prisma.animationVersionScalarWhereWithAggregatesInput | Prisma.animationVersionScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"animationVersion"> | string
   versionNo?: Prisma.IntWithAggregatesFilter<"animationVersion"> | number
-  code?: Prisma.StringWithAggregatesFilter<"animationVersion"> | string
-  videoURL?: Prisma.StringNullableWithAggregatesFilter<"animationVersion"> | string | null
   prompt?: Prisma.StringWithAggregatesFilter<"animationVersion"> | string
-  createdAt?: Prisma.DateTimeWithAggregatesFilter<"animationVersion"> | Date | string
+  code?: Prisma.StringWithAggregatesFilter<"animationVersion"> | string
+  taskId?: Prisma.StringWithAggregatesFilter<"animationVersion"> | string
+  videoURL?: Prisma.StringNullableWithAggregatesFilter<"animationVersion"> | string | null
   status?: Prisma.EnumStatusWithAggregatesFilter<"animationVersion"> | $Enums.Status
   errorMessage?: Prisma.StringNullableWithAggregatesFilter<"animationVersion"> | string | null
+  errorReason?: Prisma.StringNullableWithAggregatesFilter<"animationVersion"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"animationVersion"> | Date | string
   animationId?: Prisma.StringWithAggregatesFilter<"animationVersion"> | string
+  renderTimeMs?: Prisma.IntNullableWithAggregatesFilter<"animationVersion"> | number | null
+  fileSizeBytes?: Prisma.IntNullableWithAggregatesFilter<"animationVersion"> | number | null
+  durationSeconds?: Prisma.IntNullableWithAggregatesFilter<"animationVersion"> | number | null
 }
 
 export type animationVersionCreateInput = {
   id?: string
   versionNo: number
-  code: string
-  videoURL?: string | null
   prompt: string
-  createdAt?: Date | string
+  code: string
+  taskId: string
+  videoURL?: string | null
   status?: $Enums.Status
   errorMessage?: string | null
+  errorReason?: string | null
+  createdAt?: Date | string
+  renderTimeMs?: number | null
+  fileSizeBytes?: number | null
+  durationSeconds?: number | null
   animation: Prisma.animationCreateNestedOneWithoutVersionsInput
 }
 
 export type animationVersionUncheckedCreateInput = {
   id?: string
   versionNo: number
-  code: string
-  videoURL?: string | null
   prompt: string
-  createdAt?: Date | string
+  code: string
+  taskId: string
+  videoURL?: string | null
   status?: $Enums.Status
   errorMessage?: string | null
+  errorReason?: string | null
+  createdAt?: Date | string
   animationId: string
+  renderTimeMs?: number | null
+  fileSizeBytes?: number | null
+  durationSeconds?: number | null
 }
 
 export type animationVersionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   versionNo?: Prisma.IntFieldUpdateOperationsInput | number
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  videoURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  taskId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  renderTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileSizeBytes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   animation?: Prisma.animationUpdateOneRequiredWithoutVersionsNestedInput
 }
 
 export type animationVersionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   versionNo?: Prisma.IntFieldUpdateOperationsInput | number
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  videoURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  taskId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   animationId?: Prisma.StringFieldUpdateOperationsInput | string
+  renderTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileSizeBytes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type animationVersionCreateManyInput = {
   id?: string
   versionNo: number
-  code: string
-  videoURL?: string | null
   prompt: string
-  createdAt?: Date | string
+  code: string
+  taskId: string
+  videoURL?: string | null
   status?: $Enums.Status
   errorMessage?: string | null
+  errorReason?: string | null
+  createdAt?: Date | string
   animationId: string
+  renderTimeMs?: number | null
+  fileSizeBytes?: number | null
+  durationSeconds?: number | null
 }
 
 export type animationVersionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   versionNo?: Prisma.IntFieldUpdateOperationsInput | number
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  videoURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  taskId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  renderTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileSizeBytes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type animationVersionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   versionNo?: Prisma.IntFieldUpdateOperationsInput | number
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  videoURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  taskId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   animationId?: Prisma.StringFieldUpdateOperationsInput | string
+  renderTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileSizeBytes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
-export type AnimationVersionNullableScalarRelationFilter = {
-  is?: Prisma.animationVersionWhereInput | null
-  isNot?: Prisma.animationVersionWhereInput | null
+export type AnimationVersionListRelationFilter = {
+  every?: Prisma.animationVersionWhereInput
+  some?: Prisma.animationVersionWhereInput
+  none?: Prisma.animationVersionWhereInput
+}
+
+export type animationVersionOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type animationVersionVersionNoAnimationIdCompoundUniqueInput = {
+  versionNo: number
+  animationId: string
 }
 
 export type animationVersionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   versionNo?: Prisma.SortOrder
-  code?: Prisma.SortOrder
-  videoURL?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  code?: Prisma.SortOrder
+  taskId?: Prisma.SortOrder
+  videoURL?: Prisma.SortOrder
   status?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
+  errorReason?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   animationId?: Prisma.SortOrder
+  renderTimeMs?: Prisma.SortOrder
+  fileSizeBytes?: Prisma.SortOrder
+  durationSeconds?: Prisma.SortOrder
 }
 
 export type animationVersionAvgOrderByAggregateInput = {
   versionNo?: Prisma.SortOrder
+  renderTimeMs?: Prisma.SortOrder
+  fileSizeBytes?: Prisma.SortOrder
+  durationSeconds?: Prisma.SortOrder
 }
 
 export type animationVersionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   versionNo?: Prisma.SortOrder
-  code?: Prisma.SortOrder
-  videoURL?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  code?: Prisma.SortOrder
+  taskId?: Prisma.SortOrder
+  videoURL?: Prisma.SortOrder
   status?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
+  errorReason?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   animationId?: Prisma.SortOrder
+  renderTimeMs?: Prisma.SortOrder
+  fileSizeBytes?: Prisma.SortOrder
+  durationSeconds?: Prisma.SortOrder
 }
 
 export type animationVersionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   versionNo?: Prisma.SortOrder
-  code?: Prisma.SortOrder
-  videoURL?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
+  code?: Prisma.SortOrder
+  taskId?: Prisma.SortOrder
+  videoURL?: Prisma.SortOrder
   status?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
+  errorReason?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   animationId?: Prisma.SortOrder
+  renderTimeMs?: Prisma.SortOrder
+  fileSizeBytes?: Prisma.SortOrder
+  durationSeconds?: Prisma.SortOrder
 }
 
 export type animationVersionSumOrderByAggregateInput = {
   versionNo?: Prisma.SortOrder
+  renderTimeMs?: Prisma.SortOrder
+  fileSizeBytes?: Prisma.SortOrder
+  durationSeconds?: Prisma.SortOrder
 }
 
-export type animationVersionCreateNestedOneWithoutAnimationInput = {
-  create?: Prisma.XOR<Prisma.animationVersionCreateWithoutAnimationInput, Prisma.animationVersionUncheckedCreateWithoutAnimationInput>
-  connectOrCreate?: Prisma.animationVersionCreateOrConnectWithoutAnimationInput
-  connect?: Prisma.animationVersionWhereUniqueInput
+export type animationVersionCreateNestedManyWithoutAnimationInput = {
+  create?: Prisma.XOR<Prisma.animationVersionCreateWithoutAnimationInput, Prisma.animationVersionUncheckedCreateWithoutAnimationInput> | Prisma.animationVersionCreateWithoutAnimationInput[] | Prisma.animationVersionUncheckedCreateWithoutAnimationInput[]
+  connectOrCreate?: Prisma.animationVersionCreateOrConnectWithoutAnimationInput | Prisma.animationVersionCreateOrConnectWithoutAnimationInput[]
+  createMany?: Prisma.animationVersionCreateManyAnimationInputEnvelope
+  connect?: Prisma.animationVersionWhereUniqueInput | Prisma.animationVersionWhereUniqueInput[]
 }
 
-export type animationVersionUncheckedCreateNestedOneWithoutAnimationInput = {
-  create?: Prisma.XOR<Prisma.animationVersionCreateWithoutAnimationInput, Prisma.animationVersionUncheckedCreateWithoutAnimationInput>
-  connectOrCreate?: Prisma.animationVersionCreateOrConnectWithoutAnimationInput
-  connect?: Prisma.animationVersionWhereUniqueInput
+export type animationVersionUncheckedCreateNestedManyWithoutAnimationInput = {
+  create?: Prisma.XOR<Prisma.animationVersionCreateWithoutAnimationInput, Prisma.animationVersionUncheckedCreateWithoutAnimationInput> | Prisma.animationVersionCreateWithoutAnimationInput[] | Prisma.animationVersionUncheckedCreateWithoutAnimationInput[]
+  connectOrCreate?: Prisma.animationVersionCreateOrConnectWithoutAnimationInput | Prisma.animationVersionCreateOrConnectWithoutAnimationInput[]
+  createMany?: Prisma.animationVersionCreateManyAnimationInputEnvelope
+  connect?: Prisma.animationVersionWhereUniqueInput | Prisma.animationVersionWhereUniqueInput[]
 }
 
-export type animationVersionUpdateOneWithoutAnimationNestedInput = {
-  create?: Prisma.XOR<Prisma.animationVersionCreateWithoutAnimationInput, Prisma.animationVersionUncheckedCreateWithoutAnimationInput>
-  connectOrCreate?: Prisma.animationVersionCreateOrConnectWithoutAnimationInput
-  upsert?: Prisma.animationVersionUpsertWithoutAnimationInput
-  disconnect?: Prisma.animationVersionWhereInput | boolean
-  delete?: Prisma.animationVersionWhereInput | boolean
-  connect?: Prisma.animationVersionWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.animationVersionUpdateToOneWithWhereWithoutAnimationInput, Prisma.animationVersionUpdateWithoutAnimationInput>, Prisma.animationVersionUncheckedUpdateWithoutAnimationInput>
+export type animationVersionUpdateManyWithoutAnimationNestedInput = {
+  create?: Prisma.XOR<Prisma.animationVersionCreateWithoutAnimationInput, Prisma.animationVersionUncheckedCreateWithoutAnimationInput> | Prisma.animationVersionCreateWithoutAnimationInput[] | Prisma.animationVersionUncheckedCreateWithoutAnimationInput[]
+  connectOrCreate?: Prisma.animationVersionCreateOrConnectWithoutAnimationInput | Prisma.animationVersionCreateOrConnectWithoutAnimationInput[]
+  upsert?: Prisma.animationVersionUpsertWithWhereUniqueWithoutAnimationInput | Prisma.animationVersionUpsertWithWhereUniqueWithoutAnimationInput[]
+  createMany?: Prisma.animationVersionCreateManyAnimationInputEnvelope
+  set?: Prisma.animationVersionWhereUniqueInput | Prisma.animationVersionWhereUniqueInput[]
+  disconnect?: Prisma.animationVersionWhereUniqueInput | Prisma.animationVersionWhereUniqueInput[]
+  delete?: Prisma.animationVersionWhereUniqueInput | Prisma.animationVersionWhereUniqueInput[]
+  connect?: Prisma.animationVersionWhereUniqueInput | Prisma.animationVersionWhereUniqueInput[]
+  update?: Prisma.animationVersionUpdateWithWhereUniqueWithoutAnimationInput | Prisma.animationVersionUpdateWithWhereUniqueWithoutAnimationInput[]
+  updateMany?: Prisma.animationVersionUpdateManyWithWhereWithoutAnimationInput | Prisma.animationVersionUpdateManyWithWhereWithoutAnimationInput[]
+  deleteMany?: Prisma.animationVersionScalarWhereInput | Prisma.animationVersionScalarWhereInput[]
 }
 
-export type animationVersionUncheckedUpdateOneWithoutAnimationNestedInput = {
-  create?: Prisma.XOR<Prisma.animationVersionCreateWithoutAnimationInput, Prisma.animationVersionUncheckedCreateWithoutAnimationInput>
-  connectOrCreate?: Prisma.animationVersionCreateOrConnectWithoutAnimationInput
-  upsert?: Prisma.animationVersionUpsertWithoutAnimationInput
-  disconnect?: Prisma.animationVersionWhereInput | boolean
-  delete?: Prisma.animationVersionWhereInput | boolean
-  connect?: Prisma.animationVersionWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.animationVersionUpdateToOneWithWhereWithoutAnimationInput, Prisma.animationVersionUpdateWithoutAnimationInput>, Prisma.animationVersionUncheckedUpdateWithoutAnimationInput>
+export type animationVersionUncheckedUpdateManyWithoutAnimationNestedInput = {
+  create?: Prisma.XOR<Prisma.animationVersionCreateWithoutAnimationInput, Prisma.animationVersionUncheckedCreateWithoutAnimationInput> | Prisma.animationVersionCreateWithoutAnimationInput[] | Prisma.animationVersionUncheckedCreateWithoutAnimationInput[]
+  connectOrCreate?: Prisma.animationVersionCreateOrConnectWithoutAnimationInput | Prisma.animationVersionCreateOrConnectWithoutAnimationInput[]
+  upsert?: Prisma.animationVersionUpsertWithWhereUniqueWithoutAnimationInput | Prisma.animationVersionUpsertWithWhereUniqueWithoutAnimationInput[]
+  createMany?: Prisma.animationVersionCreateManyAnimationInputEnvelope
+  set?: Prisma.animationVersionWhereUniqueInput | Prisma.animationVersionWhereUniqueInput[]
+  disconnect?: Prisma.animationVersionWhereUniqueInput | Prisma.animationVersionWhereUniqueInput[]
+  delete?: Prisma.animationVersionWhereUniqueInput | Prisma.animationVersionWhereUniqueInput[]
+  connect?: Prisma.animationVersionWhereUniqueInput | Prisma.animationVersionWhereUniqueInput[]
+  update?: Prisma.animationVersionUpdateWithWhereUniqueWithoutAnimationInput | Prisma.animationVersionUpdateWithWhereUniqueWithoutAnimationInput[]
+  updateMany?: Prisma.animationVersionUpdateManyWithWhereWithoutAnimationInput | Prisma.animationVersionUpdateManyWithWhereWithoutAnimationInput[]
+  deleteMany?: Prisma.animationVersionScalarWhereInput | Prisma.animationVersionScalarWhereInput[]
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -484,34 +633,48 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type EnumStatusFieldUpdateOperationsInput = {
   set?: $Enums.Status
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type animationVersionCreateWithoutAnimationInput = {
   id?: string
   versionNo: number
-  code: string
-  videoURL?: string | null
   prompt: string
-  createdAt?: Date | string
+  code: string
+  taskId: string
+  videoURL?: string | null
   status?: $Enums.Status
   errorMessage?: string | null
+  errorReason?: string | null
+  createdAt?: Date | string
+  renderTimeMs?: number | null
+  fileSizeBytes?: number | null
+  durationSeconds?: number | null
 }
 
 export type animationVersionUncheckedCreateWithoutAnimationInput = {
   id?: string
   versionNo: number
-  code: string
-  videoURL?: string | null
   prompt: string
-  createdAt?: Date | string
+  code: string
+  taskId: string
+  videoURL?: string | null
   status?: $Enums.Status
   errorMessage?: string | null
+  errorReason?: string | null
+  createdAt?: Date | string
+  renderTimeMs?: number | null
+  fileSizeBytes?: number | null
+  durationSeconds?: number | null
 }
 
 export type animationVersionCreateOrConnectWithoutAnimationInput = {
@@ -519,37 +682,109 @@ export type animationVersionCreateOrConnectWithoutAnimationInput = {
   create: Prisma.XOR<Prisma.animationVersionCreateWithoutAnimationInput, Prisma.animationVersionUncheckedCreateWithoutAnimationInput>
 }
 
-export type animationVersionUpsertWithoutAnimationInput = {
-  update: Prisma.XOR<Prisma.animationVersionUpdateWithoutAnimationInput, Prisma.animationVersionUncheckedUpdateWithoutAnimationInput>
-  create: Prisma.XOR<Prisma.animationVersionCreateWithoutAnimationInput, Prisma.animationVersionUncheckedCreateWithoutAnimationInput>
-  where?: Prisma.animationVersionWhereInput
+export type animationVersionCreateManyAnimationInputEnvelope = {
+  data: Prisma.animationVersionCreateManyAnimationInput | Prisma.animationVersionCreateManyAnimationInput[]
+  skipDuplicates?: boolean
 }
 
-export type animationVersionUpdateToOneWithWhereWithoutAnimationInput = {
-  where?: Prisma.animationVersionWhereInput
+export type animationVersionUpsertWithWhereUniqueWithoutAnimationInput = {
+  where: Prisma.animationVersionWhereUniqueInput
+  update: Prisma.XOR<Prisma.animationVersionUpdateWithoutAnimationInput, Prisma.animationVersionUncheckedUpdateWithoutAnimationInput>
+  create: Prisma.XOR<Prisma.animationVersionCreateWithoutAnimationInput, Prisma.animationVersionUncheckedCreateWithoutAnimationInput>
+}
+
+export type animationVersionUpdateWithWhereUniqueWithoutAnimationInput = {
+  where: Prisma.animationVersionWhereUniqueInput
   data: Prisma.XOR<Prisma.animationVersionUpdateWithoutAnimationInput, Prisma.animationVersionUncheckedUpdateWithoutAnimationInput>
+}
+
+export type animationVersionUpdateManyWithWhereWithoutAnimationInput = {
+  where: Prisma.animationVersionScalarWhereInput
+  data: Prisma.XOR<Prisma.animationVersionUpdateManyMutationInput, Prisma.animationVersionUncheckedUpdateManyWithoutAnimationInput>
+}
+
+export type animationVersionScalarWhereInput = {
+  AND?: Prisma.animationVersionScalarWhereInput | Prisma.animationVersionScalarWhereInput[]
+  OR?: Prisma.animationVersionScalarWhereInput[]
+  NOT?: Prisma.animationVersionScalarWhereInput | Prisma.animationVersionScalarWhereInput[]
+  id?: Prisma.StringFilter<"animationVersion"> | string
+  versionNo?: Prisma.IntFilter<"animationVersion"> | number
+  prompt?: Prisma.StringFilter<"animationVersion"> | string
+  code?: Prisma.StringFilter<"animationVersion"> | string
+  taskId?: Prisma.StringFilter<"animationVersion"> | string
+  videoURL?: Prisma.StringNullableFilter<"animationVersion"> | string | null
+  status?: Prisma.EnumStatusFilter<"animationVersion"> | $Enums.Status
+  errorMessage?: Prisma.StringNullableFilter<"animationVersion"> | string | null
+  errorReason?: Prisma.StringNullableFilter<"animationVersion"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"animationVersion"> | Date | string
+  animationId?: Prisma.StringFilter<"animationVersion"> | string
+  renderTimeMs?: Prisma.IntNullableFilter<"animationVersion"> | number | null
+  fileSizeBytes?: Prisma.IntNullableFilter<"animationVersion"> | number | null
+  durationSeconds?: Prisma.IntNullableFilter<"animationVersion"> | number | null
+}
+
+export type animationVersionCreateManyAnimationInput = {
+  id?: string
+  versionNo: number
+  prompt: string
+  code: string
+  taskId: string
+  videoURL?: string | null
+  status?: $Enums.Status
+  errorMessage?: string | null
+  errorReason?: string | null
+  createdAt?: Date | string
+  renderTimeMs?: number | null
+  fileSizeBytes?: number | null
+  durationSeconds?: number | null
 }
 
 export type animationVersionUpdateWithoutAnimationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   versionNo?: Prisma.IntFieldUpdateOperationsInput | number
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  videoURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  taskId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  renderTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileSizeBytes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type animationVersionUncheckedUpdateWithoutAnimationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   versionNo?: Prisma.IntFieldUpdateOperationsInput | number
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  videoURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  taskId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  renderTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileSizeBytes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type animationVersionUncheckedUpdateManyWithoutAnimationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  versionNo?: Prisma.IntFieldUpdateOperationsInput | number
+  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  taskId?: Prisma.StringFieldUpdateOperationsInput | string
+  videoURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  renderTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fileSizeBytes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 
@@ -557,55 +792,75 @@ export type animationVersionUncheckedUpdateWithoutAnimationInput = {
 export type animationVersionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   versionNo?: boolean
-  code?: boolean
-  videoURL?: boolean
   prompt?: boolean
-  createdAt?: boolean
+  code?: boolean
+  taskId?: boolean
+  videoURL?: boolean
   status?: boolean
   errorMessage?: boolean
+  errorReason?: boolean
+  createdAt?: boolean
   animationId?: boolean
+  renderTimeMs?: boolean
+  fileSizeBytes?: boolean
+  durationSeconds?: boolean
   animation?: boolean | Prisma.animationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["animationVersion"]>
 
 export type animationVersionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   versionNo?: boolean
-  code?: boolean
-  videoURL?: boolean
   prompt?: boolean
-  createdAt?: boolean
+  code?: boolean
+  taskId?: boolean
+  videoURL?: boolean
   status?: boolean
   errorMessage?: boolean
+  errorReason?: boolean
+  createdAt?: boolean
   animationId?: boolean
+  renderTimeMs?: boolean
+  fileSizeBytes?: boolean
+  durationSeconds?: boolean
   animation?: boolean | Prisma.animationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["animationVersion"]>
 
 export type animationVersionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   versionNo?: boolean
-  code?: boolean
-  videoURL?: boolean
   prompt?: boolean
-  createdAt?: boolean
+  code?: boolean
+  taskId?: boolean
+  videoURL?: boolean
   status?: boolean
   errorMessage?: boolean
+  errorReason?: boolean
+  createdAt?: boolean
   animationId?: boolean
+  renderTimeMs?: boolean
+  fileSizeBytes?: boolean
+  durationSeconds?: boolean
   animation?: boolean | Prisma.animationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["animationVersion"]>
 
 export type animationVersionSelectScalar = {
   id?: boolean
   versionNo?: boolean
-  code?: boolean
-  videoURL?: boolean
   prompt?: boolean
-  createdAt?: boolean
+  code?: boolean
+  taskId?: boolean
+  videoURL?: boolean
   status?: boolean
   errorMessage?: boolean
+  errorReason?: boolean
+  createdAt?: boolean
   animationId?: boolean
+  renderTimeMs?: boolean
+  fileSizeBytes?: boolean
+  durationSeconds?: boolean
 }
 
-export type animationVersionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "versionNo" | "code" | "videoURL" | "prompt" | "createdAt" | "status" | "errorMessage" | "animationId", ExtArgs["result"]["animationVersion"]>
+export type animationVersionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "versionNo" | "prompt" | "code" | "taskId" | "videoURL" | "status" | "errorMessage" | "errorReason" | "createdAt" | "animationId" | "renderTimeMs" | "fileSizeBytes" | "durationSeconds", ExtArgs["result"]["animationVersion"]>
 export type animationVersionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   animation?: boolean | Prisma.animationDefaultArgs<ExtArgs>
 }
@@ -624,13 +879,18 @@ export type $animationVersionPayload<ExtArgs extends runtime.Types.Extensions.In
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     versionNo: number
-    code: string
-    videoURL: string | null
     prompt: string
-    createdAt: Date
+    code: string
+    taskId: string
+    videoURL: string | null
     status: $Enums.Status
     errorMessage: string | null
+    errorReason: string | null
+    createdAt: Date
     animationId: string
+    renderTimeMs: number | null
+    fileSizeBytes: number | null
+    durationSeconds: number | null
   }, ExtArgs["result"]["animationVersion"]>
   composites: {}
 }
@@ -1057,13 +1317,18 @@ export interface Prisma__animationVersionClient<T, Null = never, ExtArgs extends
 export interface animationVersionFieldRefs {
   readonly id: Prisma.FieldRef<"animationVersion", 'String'>
   readonly versionNo: Prisma.FieldRef<"animationVersion", 'Int'>
-  readonly code: Prisma.FieldRef<"animationVersion", 'String'>
-  readonly videoURL: Prisma.FieldRef<"animationVersion", 'String'>
   readonly prompt: Prisma.FieldRef<"animationVersion", 'String'>
-  readonly createdAt: Prisma.FieldRef<"animationVersion", 'DateTime'>
+  readonly code: Prisma.FieldRef<"animationVersion", 'String'>
+  readonly taskId: Prisma.FieldRef<"animationVersion", 'String'>
+  readonly videoURL: Prisma.FieldRef<"animationVersion", 'String'>
   readonly status: Prisma.FieldRef<"animationVersion", 'Status'>
   readonly errorMessage: Prisma.FieldRef<"animationVersion", 'String'>
+  readonly errorReason: Prisma.FieldRef<"animationVersion", 'String'>
+  readonly createdAt: Prisma.FieldRef<"animationVersion", 'DateTime'>
   readonly animationId: Prisma.FieldRef<"animationVersion", 'String'>
+  readonly renderTimeMs: Prisma.FieldRef<"animationVersion", 'Int'>
+  readonly fileSizeBytes: Prisma.FieldRef<"animationVersion", 'Int'>
+  readonly durationSeconds: Prisma.FieldRef<"animationVersion", 'Int'>
 }
     
 

@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/user.ts'
-export type * from './models/animation.ts'
-export type * from './models/animationVersion.ts'
-export type * from './commonInputTypes.ts'
+export type * from './models/user'
+export type * from './models/animation'
+export type * from './models/animationVersion'
+export type * from './commonInputTypes'

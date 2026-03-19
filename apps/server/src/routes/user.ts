@@ -1,12 +1,12 @@
 import express, { NextFunction, Request, Response, Router } from "express";
-import verifyUser from "../middleware/middleware.ts";
+import verifyUser from "../middleware/middleware";
 import passport from "passport";
 import bcrypt from "bcrypt";
 import {
 	requiredParams,
 	requiredPollBody,
 	signUpSchema,
-} from "../zodTypes/index.ts";
+} from "../zodTypes/index";
 import { Prisma, prisma } from "@repo/db";
 
 const userRouter: Router = express.Router();
