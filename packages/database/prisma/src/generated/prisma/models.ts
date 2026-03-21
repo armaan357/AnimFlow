@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/user'
-export type * from './models/animation'
-export type * from './models/animationVersion'
-export type * from './commonInputTypes'
+export type * from './models/user.js'
+export type * from './models/animation.js'
+export type * from './models/animationVersion.js'
+export type * from './commonInputTypes.js'

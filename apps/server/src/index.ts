@@ -10,13 +10,6 @@ import userRouter from "./routes/user.js";
 
 const app: Express = express();
 const USER_SECRET = process.env.USER_SECRET;
-console.log("user secret = ", USER_SECRET);
-console.log("\n\n\ngoogle client id = ", process.env.GOOGLE_CLIENT_ID);
-console.log(
-	"\n\n\ngoogle client secret secret = ",
-	process.env.GOOGLE_CLIENT_SECRET,
-);
-console.log("\n\n\n");
 const feURL = process.env.FE_URL;
 
 const allowedOrigins = [
@@ -28,10 +21,8 @@ const allowedOrigins = [
 app.use(
 	cors({
 		origin: (origin, callback) => {
-			console.log("\n\nOrigin = ", origin);
 			if (!origin) return callback(null, true);
 			if (allowedOrigins.indexOf(origin) === -1) {
-				console.log("\n\nCORS Error occured!\n\n");
 				let message =
 					"The CORS policy for this application doesn't allow access from origin " +
 					origin;
@@ -48,10 +39,10 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(
 	session({
-		secret: USER_SECRET || "kasbjvoaoslkgff57145g",
+		secret: USER_SECRET!,
 		resave: false,
 		saveUninitialized: false,
-		cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 },
+		cookie: { secure: process.env.NODE_ENV == "production", sameSite: "none", maxAge: 1000 * 60 * 60 * 24 * 7 },
 	}),
 );
 
@@ -60,7 +51,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get("/", async (req, res) => {
-	res.json({ message: "Working Fine!"})
+	res.json({ message: "Working Fine!" });
 });
 
 app.use("/api/v1/user", userRouter);
@@ -68,4 +59,8 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/generate", generateRouter);
 
 export default app;
-// app.listen(3001);
+
+// if (process.env.NODE_ENV !== "production") {
+// 	const PORT = process.env.PORT || 3000;
+// 	app.listen(PORT, () => console.log(`Server ready on port ${PORT}.`));
+// }

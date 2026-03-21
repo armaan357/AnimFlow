@@ -1,17 +1,14 @@
 {
     "extends": "@repo/typescript-config/base.json",
     "compilerOptions": {
-        "module": "ESNext",
-        "moduleResolution": "bundler",
-        "target": "ES2023",
-        "rootDir": "./src",
-        "outDir": "./dist",
-        "typeRoots": [
-            "./node_modules/@types",
-            "./@types"
-        ],
-        // "noEmit": true,
-        "esModuleInterop": true,
-        // "allowImportingTsExtensions": true,
-    }
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"target": "ES2023",
+		// "rootDir": ,
+		"outDir": "./dist",
+		"typeRoots": ["./node_modules/@types", "./@types"],
+		// "noEmit": true,
+		"esModuleInterop": true
+		// "allowImportingTsExtensions": true,
+	}
 }

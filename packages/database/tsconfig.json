@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     
     "target": "ES2023",
     "strict": true,
     "esModuleInterop": true,
     "types": ["node"],
     "skipLibCheck": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true
     // "allowImportingTsExtensions": true,
     // "noEmit": true,
   }

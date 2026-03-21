@@ -2,13 +2,13 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import { GoogleGenAI } from "@google/genai";
 import express, { NextFunction, Request, Response, Router } from "express";
-import verifyUser from "../middleware/middleware";
+import verifyUser from "../middleware/middleware.js";
 import axios from "axios";
 import { Prisma, prisma } from "@repo/db";
 import {
 	animationGenerateSchema,
 	animationVersionUpdateSchema,
-} from "../zodTypes/index";
+} from "../zodTypes/index.js";
 
 const generateRouter: Router = express.Router();
 
@@ -250,7 +250,7 @@ function createNewAnimationVersion(
 	versionNo: number,
 ) {
 	return prisma.$transaction(
-		async (tx) => {
+		async (tx: Prisma.TransactionClient) => {
 			const newAnimationVersion = await tx.animationVersion.create({
 				data: {
 					prompt: userPrompt,

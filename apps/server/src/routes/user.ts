@@ -1,12 +1,12 @@
 import express, { NextFunction, Request, Response, Router } from "express";
-import verifyUser from "../middleware/middleware";
+import verifyUser from "../middleware/middleware.js";
 import passport from "passport";
 import bcrypt from "bcrypt";
 import {
 	requiredParams,
 	requiredPollBody,
 	signUpSchema,
-} from "../zodTypes/index";
+} from "../zodTypes/index.js";
 import { Prisma, prisma } from "@repo/db";
 
 const userRouter: Router = express.Router();
@@ -240,7 +240,7 @@ userRouter.get(
 
 const deleteAnimationWithVersions = (animationId: string) => {
 	return prisma.$transaction(
-		async (tx) => {
+		async (tx: Prisma.TransactionClient) => {
 			await tx.animationVersion.deleteMany({
 				where: { animationId: animationId },
 			});
