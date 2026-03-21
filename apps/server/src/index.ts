@@ -1,14 +1,14 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import express from "express";
+import express, { Express } from "express";
 import cors from "cors";
-import passport from "./passport/passportConfig";
+import passport from "./passport/passportConfig.js";
 import session from "express-session";
-import generateRouter from "./routes/generate";
-import userRouter from "./routes/user";
+import generateRouter from "./routes/generate.js";
+import userRouter from "./routes/user.js";
 
-const app = express();
+const app: Express = express();
 const USER_SECRET = process.env.USER_SECRET;
 console.log("user secret = ", USER_SECRET);
 console.log("\n\n\ngoogle client id = ", process.env.GOOGLE_CLIENT_ID);
@@ -59,8 +59,13 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get("/", async (req, res) => {
+	res.json({ message: "Working Fine!"})
+});
+
 app.use("/api/v1/user", userRouter);
 
 app.use("/api/v1/generate", generateRouter);
 
-app.listen(3001);
+export default app;
+// app.listen(3001);
