@@ -13,9 +13,7 @@ const checkEmailExists = async (
 	setPasswordInputVisible: Dispatch<SetStateAction<boolean>>,
 	setErrorMsgVisible: Dispatch<SetStateAction<boolean>>,
 ) => {
-	console.log("function started!!\n\n\n");
 	if (!backendUrl) {
-		console.log("Backend URL not found");
 		return;
 	}
 	if (!emailRef.current || emailRef.current.value === "") {
@@ -27,10 +25,8 @@ const checkEmailExists = async (
 			`${backendUrl}user/email-exists?email=${emailRef.current.value!}`,
 		);
 		if (!resp) {
-			console.log("No response from server");
 			return;
 		}
-		console.log("resp = ", resp.data);
 		if (resp.data.exists) {
 			setErrorMsgVisible(true);
 		} else {
@@ -38,18 +34,13 @@ const checkEmailExists = async (
 			console.log(resp.data.error);
 		}
 	} catch (e: any) {
-		console.log("error = ", e.toString());
+		return;
 	}
 };
 
 const loginWithGoogle = async () => {
 	try {
-		const resp = await axios.get(`${backendUrl}user/auth/google`);
-		if (!resp) {
-			console.log("No response from server");
-			return;
-		}
-		console.log("resp in login with google = ", resp.data);
+		window.location.href = `${backendUrl}user/auth/google`;
 	} catch (e: any) {
 		console.log("error = ", e.toString());
 	}

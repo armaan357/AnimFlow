@@ -5,6 +5,8 @@ import { Button } from "@repo/ui/button";
 import { Modal } from "@repo/ui/modal";
 import Link from "next/link";
 
+const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 export const LoginButtonAndModal = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	return (
@@ -47,9 +49,13 @@ const ModalHeader = () => {
 						variant="secondary"
 						children={"Continue With Google"}
 						size="full"
-						onClick={() =>
-							alert("Continue with Google will be triggered")
-						}
+						onClick={() => {
+							try {
+								window.location.href = `${backendUrl}user/auth/google`;
+							} catch (e: any) {
+								console.log("error = ", e.toString());
+							}
+						}}
 					/>
 				</div>
 				<div className="w-full">

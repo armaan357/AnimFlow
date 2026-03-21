@@ -42,7 +42,11 @@ app.use(
 		secret: USER_SECRET!,
 		resave: false,
 		saveUninitialized: false,
-		cookie: { secure: process.env.NODE_ENV == "production", sameSite: "none", maxAge: 1000 * 60 * 60 * 24 * 7 },
+		cookie: {
+			secure: process.env.NODE_ENV == "production",
+			sameSite: process.env.NODE_ENV == "production" ? "none" : "lax",
+			maxAge: 1000 * 60 * 60 * 24 * 7,
+		},
 	}),
 );
 
@@ -60,7 +64,7 @@ app.use("/api/v1/generate", generateRouter);
 
 export default app;
 
-// if (process.env.NODE_ENV !== "production") {
-// 	const PORT = process.env.PORT || 3000;
-// 	app.listen(PORT, () => console.log(`Server ready on port ${PORT}.`));
-// }
+if (process.env.NODE_ENV !== "production") {
+	const PORT = process.env.PORT || 3001;
+	app.listen(PORT, () => console.log(`Server ready on port ${PORT}.`));
+}

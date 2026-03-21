@@ -112,11 +112,13 @@ export default function Signin() {
 								variant="secondary"
 								children={"Continue With Google"}
 								size="full"
-								onClick={() =>
-									alert(
-										"Continue with Google will be triggered",
-									)
-								}
+								onClick={() => {
+									try {
+										window.location.href = `${backendUrl}user/auth/google`;
+									} catch (e: any) {
+										console.log("error = ", e.toString());
+									}
+								}}
 							/>
 						</div>
 						<div className="w-full">

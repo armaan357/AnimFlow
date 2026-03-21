@@ -1,3 +1,5 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import express, { NextFunction, Request, Response, Router } from "express";
 import verifyUser from "../middleware/middleware.js";
 import passport from "passport";
@@ -10,6 +12,7 @@ import {
 import { Prisma, prisma } from "@repo/db";
 
 const userRouter: Router = express.Router();
+const feURL = process.env.FE_URL;
 
 userRouter.get("/email-exists", async (req: Request, res: Response) => {
 	const email = req.query.email;
@@ -116,8 +119,8 @@ userRouter.get(
 userRouter.get(
 	"/auth/google/callback",
 	passport.authenticate("google", {
-		failureRedirect: "/signin",
-		successRedirect: "/",
+		failureRedirect: `${feURL}/signup`,
+		successRedirect: `${feURL}/chat/new`,
 	}),
 );
 
