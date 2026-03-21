@@ -2,7 +2,7 @@
 	"version": 2,
 	"functions": {
 		"api/index.ts": {
-			"runtime": "@vercel/node@22.14.0"
+			"runtime": "@vercel/node@22.x"
 		}
 	},
 	"rewrites": [{ "source": "/(.*)", "destination": "/api/index" }]
