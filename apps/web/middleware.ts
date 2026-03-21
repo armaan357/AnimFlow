@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export async function middleware(req: NextRequest) {
-	const sessionCookie = req.cookies.get("connect.sid")?.value;
+	// const sessionCookie = req.cookies.get("connect.sid")?.value;
 
 	// if (!sessionCookie) {
 	// 	return NextResponse.redirect(new URL("/signin", req.url));
