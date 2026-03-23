@@ -2,6 +2,20 @@
 	"$schema": "https://turborepo.com/schema.json",
 	"ui": "tui",
 	"globalDependencies": [".env"],
+	"globalEnv": [
+		"FE_URL",
+		"GOOGLE_CALLBACK_URL",
+		"GEMINI_API_KEY",
+		"USER_SECRET",
+		"DATABASE_URL",
+		"DIRECT_URL",
+		"GOOGLE_CLIENT_ID",
+		"GOOGLE_CLIENT_SECRET",
+		"INTERNAL_SERVICE_SECRET",
+		"NEXT_PUBLIC_BACKEND_URL",
+		"NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME",
+		"BACKEND_ORIGIN"
+	],
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
