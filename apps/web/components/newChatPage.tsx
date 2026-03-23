@@ -60,7 +60,8 @@ export default function NewChatAnimationPage({
 	userName: string;
 	checkMobileDevice: boolean;
 }) {
-	const [isSideBarVisible, setSideBarVisible] = useState<boolean>(true);
+	const [isSideBarVisible, setSideBarVisible] =
+		useState<boolean>(!checkMobileDevice);
 	// const [isNewSideBarVisible, setNewSideBarVisible] = useState<boolean>(true);
 	const [chats, setChats] = useState<{ id: string; title: string }[] | null>(
 		null,
@@ -71,7 +72,6 @@ export default function NewChatAnimationPage({
 	const animationId = useRef<string>("");
 	const inpRef = useRef<HTMLTextAreaElement>(null);
 	const scrollToBottomRef = useRef<HTMLDivElement>(null);
-	const taskIdRef = useRef<string | null>(null);
 
 	const params = useParams<{ animationId: string }>();
 
@@ -130,12 +130,6 @@ export default function NewChatAnimationPage({
 	return (
 		<div className="bg-[#121212] flex w-full h-dvh">
 			<Toaster />
-			{/* <SideBar
-				isSideBarVisible={isSideBarVisible}
-				onClose={() => setSideBarVisible(!isSideBarVisible)}
-				chats={chats}
-				userName={userName}
-			/> */}
 			<Sidebar
 				isSideBarVisible={isSideBarVisible}
 				isMobile={checkMobileDevice}
@@ -144,23 +138,23 @@ export default function NewChatAnimationPage({
 				chats={chats}
 				userName={userName}
 			/>
-			{checkMobileDevice && (
-				<div
-					className="sticky left-0 top-0 bg-[#0c0c0c] active:border-none border-none focus-within:border-none h-15 flex justify-center items-center pl-2.5 pr-1.5"
-					onClick={() => setSideBarVisible(!isSideBarVisible)}
-				>
-					<MenuIcon color="white" />
-				</div>
-			)}
 			<div className="flex flex-col flex-1 w-full overflow-hidden">
-				<ChatPageHeader />
+				<div className="w-full flex">
+					{checkMobileDevice && (
+						<div
+							className="sticky left-0 top-0 bg-[#0c0c0c] active:border-none border-none focus-within:border-none h-15 flex justify-center items-center pl-2.5 pr-1.5"
+							onClick={() => setSideBarVisible(!isSideBarVisible)}
+						>
+							<MenuIcon color="white" />
+						</div>
+					)}
+					<ChatPageHeader />
+				</div>
 
 				{/* Main Content - Chat Interface */}
 				<div className="flex flex-col flex-1 min-h-0 relative bg-[#121212]">
-					{/* Messages Area */}
 					<div className="flex-1 overflow-y-auto scroll-box p-4 sm:p-8">
 						<div className="max-w-3xl mx-auto flex flex-col gap-8 py-4">
-							{/* Placeholder welcome message or content */}
 							{!promptMsg ? (
 								<ChatGreeting />
 							) : (
