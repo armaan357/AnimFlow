@@ -18,6 +18,9 @@ const allowedOrigins = [
 	"http://localhost:8000",
 	feURL,
 ];
+
+app.set("trust proxy", 1);
+
 app.use(
 	cors({
 		origin: (origin, callback) => {
@@ -45,6 +48,7 @@ app.use(
 		cookie: {
 			secure: process.env.NODE_ENV == "production",
 			sameSite: process.env.NODE_ENV == "production" ? "none" : "lax",
+			httpOnly: true,
 			maxAge: 1000 * 60 * 60 * 24 * 7,
 		},
 	}),
