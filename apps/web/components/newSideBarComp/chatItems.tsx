@@ -8,9 +8,16 @@ interface ChatItemProps {
 	title: string;
 	isActive: boolean;
 	onOpenMenu: (position: { top: number; right: number }) => void;
+	isMobile: boolean;
 }
 
-export function ChatItem({ id, title, isActive, onOpenMenu }: ChatItemProps) {
+export function ChatItem({
+	id,
+	title,
+	isActive,
+	onOpenMenu,
+	isMobile,
+}: ChatItemProps) {
 	const moreButtonRef = useRef<HTMLButtonElement>(null);
 
 	const handleMenuClick = (e: React.MouseEvent) => {
@@ -48,7 +55,7 @@ export function ChatItem({ id, title, isActive, onOpenMenu }: ChatItemProps) {
 				<button
 					ref={moreButtonRef}
 					onClick={handleMenuClick}
-					className="opacity-0 group-hover:opacity-100 transition-opacity duration-150 p-1.5 hover:bg-[#27272A] rounded-md shrink-0"
+					className={`${isMobile ? " " : " opacity-0 group-hover:opacity-100 "} transition-opacity duration-150 p-1.5 hover:bg-[#27272A] rounded-md shrink-0`}
 					aria-label="Chat options"
 					aria-haspopup="true"
 				>

@@ -203,6 +203,7 @@ export function Sidebar({
 						onClose={onClose}
 						onMenuOpen={handleMenuOpen}
 						openMenuId={openMenuId}
+						isMobile={isMobile}
 					/>
 				</aside>
 
@@ -240,6 +241,7 @@ export function Sidebar({
 						onClose={onClose}
 						onMenuOpen={handleMenuOpen}
 						openMenuId={openMenuId}
+						isMobile={isMobile}
 					/>
 				</aside>
 
@@ -278,6 +280,7 @@ interface SidebarContentProps {
 		position: { top: number; right: number },
 	) => void;
 	openMenuId: string | null;
+	isMobile: boolean;
 }
 
 function SidebarContent({
@@ -287,6 +290,7 @@ function SidebarContent({
 	onClose,
 	onMenuOpen,
 	openMenuId,
+	isMobile,
 }: SidebarContentProps) {
 	return (
 		<div className="flex flex-col h-full">
@@ -359,6 +363,7 @@ function SidebarContent({
 									onOpenMenu={(position) =>
 										onMenuOpen(chat.id, position)
 									}
+									isMobile={isMobile}
 								/>
 							))}
 						</div>
