@@ -11,11 +11,9 @@ import toast, { Toaster } from "react-hot-toast";
 import { ChatGreeting } from "@repo/ui/chatGreeting";
 import { Sidebar } from "./newSideBarComp/sidebar";
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
 const deleteChat = async (chatId: string) => {
 	try {
-		const resp = await axios.delete(`${backendUrl}user/chats/${chatId}`, {
+		const resp = await axios.delete(`/api/backend/user/chats/${chatId}`, {
 			withCredentials: true,
 		});
 		if (!resp) {
@@ -92,7 +90,7 @@ export default function NewChatAnimationPage({
 			setPromptMsg(userPrompt);
 			try {
 				const resp = await axios.post(
-					`${backendUrl}generate/new`,
+					`/api/backend/generate/new`,
 					body,
 					{
 						withCredentials: true,
@@ -116,7 +114,7 @@ export default function NewChatAnimationPage({
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const resp = await axios.get(`${backendUrl}user/chats`, {
+				const resp = await axios.get(`/api/backend/user/chats`, {
 					withCredentials: true,
 				});
 				const allChats: { id: string; title: string }[] =

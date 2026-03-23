@@ -6,24 +6,18 @@ import { Dispatch, RefObject, SetStateAction, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
 const checkEmailExists = async (
 	emailRef: RefObject<HTMLInputElement | null>,
 	setPasswordInputVisible: Dispatch<SetStateAction<boolean>>,
 	setErrorMsgVisible: Dispatch<SetStateAction<boolean>>,
 ) => {
-	if (!backendUrl) {
-		console.log("Backend URL not found");
-		return;
-	}
 	if (!emailRef.current || emailRef.current.value === "") {
 		return;
 	}
 
 	try {
 		const resp = await axios.get(
-			`${backendUrl}user/email-exists?email=${emailRef.current.value!}`,
+			`/api/backend/user/email-exists?email=${emailRef.current.value!}`,
 		);
 		if (!resp) {
 			console.log("No response from server");
@@ -58,7 +52,7 @@ export default function Signin() {
 			if (userInfo.email.length === 0 || userInfo.password.length === 0)
 				return;
 			const signinResp = await axios.post(
-				`${backendUrl}user/signin`,
+				`/api/backend/user/signin`,
 				userInfo,
 				{ withCredentials: true },
 			);
@@ -114,7 +108,7 @@ export default function Signin() {
 								size="full"
 								onClick={() => {
 									try {
-										window.location.href = `${backendUrl}user/auth/google`;
+										window.location.href = `/api/backend/user/auth/google`;
 									} catch (e: any) {
 										console.log("error = ", e.toString());
 									}

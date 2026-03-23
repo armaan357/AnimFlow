@@ -4,13 +4,11 @@ import { HeroSection } from "../components/heroSection";
 import { cookies } from "next/headers";
 import { permanentRedirect } from "next/navigation";
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
 export default async function Home() {
 	let returnCode;
 	try {
 		const cookie = await cookies();
-		const authenticatedUser = await axios.get(`${backendUrl}user/auth-me`, {
+		const authenticatedUser = await axios.get(`/api/backend/user/auth-me`, {
 			headers: { Cookie: cookie.toString() },
 			withCredentials: true,
 		});

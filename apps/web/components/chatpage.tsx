@@ -19,13 +19,12 @@ import toast, { Toaster } from "react-hot-toast";
 import { ChatGreeting } from "@repo/ui/chatGreeting";
 import { Sidebar } from "./newSideBarComp/sidebar";
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 const downloadURL = `https://res.cloudinary.com/${cloudName}/video/upload/fl_attachment/`;
 
 const deleteChat = async (chatId: string) => {
 	try {
-		const resp = await axios.delete(`${backendUrl}user/chats/${chatId}`, {
+		const resp = await axios.delete(`/api/backend/user/chats/${chatId}`, {
 			withCredentials: true,
 		});
 		if (!resp) {
@@ -114,7 +113,7 @@ export default function ChatAnimationPage({
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const resp = await axios.get(`${backendUrl}user/chats`, {
+				const resp = await axios.get(`/api/backend/user/chats`, {
 					withCredentials: true,
 				});
 				const allChats: { id: string; title: string }[] =
@@ -131,7 +130,7 @@ export default function ChatAnimationPage({
 		const fetchChat = async () => {
 			try {
 				const resp = await axios.get(
-					`${backendUrl}user/chats/${currAnimationId.current}`,
+					`/api/backend/user/chats/${currAnimationId.current}`,
 					{ withCredentials: true },
 				);
 				console.log("chat resp = ", resp.data);
@@ -161,7 +160,7 @@ export default function ChatAnimationPage({
 			try {
 				const taskId = taskIdRef.current?.split('"')[1];
 				const status = await axios.post(
-					`${backendUrl}user/chats/poll`,
+					`/api/backend/user/chats/poll`,
 					{ taskId },
 					{ withCredentials: true },
 				);
@@ -192,7 +191,7 @@ export default function ChatAnimationPage({
 			};
 			try {
 				const resp = await axios.post(
-					`${backendUrl}generate/${currAnimationId.current}`,
+					`/api/backend/generate/${currAnimationId.current}`,
 					body,
 					{ withCredentials: true },
 				);

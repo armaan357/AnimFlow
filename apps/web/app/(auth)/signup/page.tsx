@@ -6,23 +6,18 @@ import { Dispatch, RefObject, SetStateAction, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
 const checkEmailExists = async (
 	emailRef: RefObject<HTMLInputElement | null>,
 	setPasswordInputVisible: Dispatch<SetStateAction<boolean>>,
 	setErrorMsgVisible: Dispatch<SetStateAction<boolean>>,
 ) => {
-	if (!backendUrl) {
-		return;
-	}
 	if (!emailRef.current || emailRef.current.value === "") {
 		return;
 	}
 
 	try {
 		const resp = await axios.get(
-			`${backendUrl}user/email-exists?email=${emailRef.current.value!}`,
+			`/api/backend/user/email-exists?email=${emailRef.current.value!}`,
 		);
 		if (!resp) {
 			return;
@@ -40,7 +35,7 @@ const checkEmailExists = async (
 
 const loginWithGoogle = async () => {
 	try {
-		window.location.href = `${backendUrl}user/auth/google`;
+		window.location.href = `/api/backend/user/auth/google`;
 	} catch (e: any) {
 		console.log("error = ", e.toString());
 	}
@@ -80,7 +75,7 @@ export default function SignUp() {
 			)
 				return;
 			const signupResp = await axios.post(
-				`${backendUrl}user/signup`,
+				`/api/backend/user/signup`,
 				userInfo,
 				{ withCredentials: true },
 			);

@@ -21,8 +21,6 @@ interface SideBarProps {
 	currentAnimationId?: string;
 }
 
-const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
-
 export const SideBar = ({
 	isSideBarVisible,
 	onClose,
@@ -367,7 +365,7 @@ const DeleteModal = ({
 									chatId,
 								);
 								const resp = await axios.delete(
-									`${backendURL}user/chats/${chatId}`,
+									`/api/backend/user/chats/${chatId}`,
 									{ withCredentials: true },
 								);
 							}}

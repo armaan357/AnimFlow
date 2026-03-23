@@ -6,8 +6,6 @@ import { redirect } from "next/navigation";
 import { LoginButtonAndModal } from "./loginModal";
 import { SignUpButtonAndModal } from "./signUpModal";
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
 export const Header = () => {
 	return (
 		<header className="h-15 w-full sticky top-0 z-100 backdrop-blur-sm px-3 sm:px-8 md:px-12 bg-[#0c0c0c] justify-between flex items-center">
@@ -34,7 +32,7 @@ export const Header = () => {
 export const ChatPageHeader = () => {
 	const logout = async () => {
 		try {
-			const resp = await axios.get(`${backendUrl}user/logout`, {
+			const resp = await axios.get(`/api/backend/user/logout`, {
 				withCredentials: true,
 			});
 		} catch (e: any) {
