@@ -200,21 +200,13 @@ generateRouter.post("/new", verifyUser, async (req: Request, res: Response) => {
 		console.log("\nPython Timer Start:\n");
 		console.time("pythonGateway");
 
-		const gatewayResp = await axios.post(
-			"http://localhost:8000/job",
-			{
-				id: dbResp.id,
-				prompt: userPrompt,
-				code: code,
-				fps: 15,
-				resolution: videoResolution,
-			},
-			{
-				headers: {
-					service_secret: process.env.INTERNAL_SERVICE_SECRET,
-				},
-			},
-		);
+		const gatewayResp = await axios.post("http://localhost:8000/job", {
+			id: dbResp.id,
+			prompt: userPrompt,
+			code: code,
+			fps: 15,
+			resolution: videoResolution,
+		});
 		console.log("\nResponse from python gateway: ", gatewayResp.data, "\n");
 		console.timeEnd("pythonGateway");
 		const respData = gatewayResp.data;
@@ -475,21 +467,13 @@ Rotate, MoveAlongPath
 
 			const parsed: { code: string } = JSON.parse(AIResp);
 			const code = parsed.code;
-			const gatewayResp = await axios.post(
-				"http://localhost:8000/job",
-				{
-					id: animationId,
-					prompt: userPrompt,
-					code: code,
-					fps: 15,
-					resolution: videoResolution,
-				},
-				{
-					headers: {
-						service_secret: process.env.INTERNAL_SERVICE_SECRET,
-					},
-				},
-			);
+			const gatewayResp = await axios.post("http://localhost:8000/job", {
+				id: animationId,
+				prompt: userPrompt,
+				code: code,
+				fps: 15,
+				resolution: videoResolution,
+			});
 
 			if (gatewayResp.data.status !== "Task Submitted") {
 				res.json({ code: 1, result: "Please try again later" });
