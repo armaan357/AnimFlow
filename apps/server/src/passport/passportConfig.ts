@@ -42,7 +42,7 @@ passport.use(
 				} else if (!user.googleId) {
 					user = await prisma.user.update({
 						where: {
-							email: profile.emails[0].value,
+							email: profile.emails[0].value!,
 						},
 						data: {
 							googleId: profile.id,
