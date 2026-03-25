@@ -138,11 +138,13 @@ export default function SignUp() {
 								variant="secondary"
 								children={"Continue With GitHub"}
 								size="full"
-								onClick={() =>
-									alert(
-										"Continue with GitHub will be triggered",
-									)
-								}
+								onClick={() => {
+									try {
+										window.location.href = `/api/backend/user/auth/github`;
+									} catch (e: any) {
+										console.log("error = ", e.toString());
+									}
+								}}
 							/>
 						</div>
 						<div className="relative w-full">

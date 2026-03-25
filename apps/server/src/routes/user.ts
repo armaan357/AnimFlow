@@ -124,6 +124,21 @@ userRouter.get(
 	}),
 );
 
+userRouter.get(
+	"/auth/github",
+	passport.authenticate("github", { scope: ["user:email"] }),
+);
+
+userRouter.get(
+	"/auth/github/callback",
+	passport.authenticate("github", {
+		failureRedirect: `${feURL}/signup`,
+	}),
+	function (req, res) {
+		res.redirect(`${feURL}/chat/new`);
+	},
+);
+
 userRouter.post(
 	"/signin",
 	async (req: Request, res: Response, next: NextFunction) => {

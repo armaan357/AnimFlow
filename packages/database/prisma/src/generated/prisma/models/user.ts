@@ -29,6 +29,7 @@ export type UserMinAggregateOutputType = {
   email: string | null
   password: string | null
   googleId: string | null
+  githubId: string | null
   providerURL: string | null
   refreshToken: string | null
   createdAt: Date | null
@@ -41,6 +42,7 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   password: string | null
   googleId: string | null
+  githubId: string | null
   providerURL: string | null
   refreshToken: string | null
   createdAt: Date | null
@@ -53,6 +55,7 @@ export type UserCountAggregateOutputType = {
   email: number
   password: number
   googleId: number
+  githubId: number
   providerURL: number
   refreshToken: number
   createdAt: number
@@ -67,6 +70,7 @@ export type UserMinAggregateInputType = {
   email?: true
   password?: true
   googleId?: true
+  githubId?: true
   providerURL?: true
   refreshToken?: true
   createdAt?: true
@@ -79,6 +83,7 @@ export type UserMaxAggregateInputType = {
   email?: true
   password?: true
   googleId?: true
+  githubId?: true
   providerURL?: true
   refreshToken?: true
   createdAt?: true
@@ -91,6 +96,7 @@ export type UserCountAggregateInputType = {
   email?: true
   password?: true
   googleId?: true
+  githubId?: true
   providerURL?: true
   refreshToken?: true
   createdAt?: true
@@ -176,6 +182,7 @@ export type UserGroupByOutputType = {
   email: string
   password: string | null
   googleId: string | null
+  githubId: string | null
   providerURL: string | null
   refreshToken: string | null
   createdAt: Date
@@ -209,6 +216,7 @@ export type userWhereInput = {
   email?: Prisma.StringFilter<"user"> | string
   password?: Prisma.StringNullableFilter<"user"> | string | null
   googleId?: Prisma.StringNullableFilter<"user"> | string | null
+  githubId?: Prisma.StringNullableFilter<"user"> | string | null
   providerURL?: Prisma.StringNullableFilter<"user"> | string | null
   refreshToken?: Prisma.StringNullableFilter<"user"> | string | null
   createdAt?: Prisma.DateTimeFilter<"user"> | Date | string
@@ -222,6 +230,7 @@ export type userOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   googleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  githubId?: Prisma.SortOrderInput | Prisma.SortOrder
   providerURL?: Prisma.SortOrderInput | Prisma.SortOrder
   refreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -234,6 +243,7 @@ export type userWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
   googleId?: string
+  githubId?: string
   AND?: Prisma.userWhereInput | Prisma.userWhereInput[]
   OR?: Prisma.userWhereInput[]
   NOT?: Prisma.userWhereInput | Prisma.userWhereInput[]
@@ -244,13 +254,14 @@ export type userWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"user"> | Date | string
   userName?: Prisma.StringFilter<"user"> | string
   animations?: Prisma.AnimationListRelationFilter
-}, "id" | "email" | "googleId">
+}, "id" | "email" | "googleId" | "githubId">
 
 export type userOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   googleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  githubId?: Prisma.SortOrderInput | Prisma.SortOrder
   providerURL?: Prisma.SortOrderInput | Prisma.SortOrder
   refreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -269,6 +280,7 @@ export type userScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"user"> | string
   password?: Prisma.StringNullableWithAggregatesFilter<"user"> | string | null
   googleId?: Prisma.StringNullableWithAggregatesFilter<"user"> | string | null
+  githubId?: Prisma.StringNullableWithAggregatesFilter<"user"> | string | null
   providerURL?: Prisma.StringNullableWithAggregatesFilter<"user"> | string | null
   refreshToken?: Prisma.StringNullableWithAggregatesFilter<"user"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"user"> | Date | string
@@ -281,6 +293,7 @@ export type userCreateInput = {
   email: string
   password?: string | null
   googleId?: string | null
+  githubId?: string | null
   providerURL?: string | null
   refreshToken?: string | null
   createdAt?: Date | string
@@ -294,6 +307,7 @@ export type userUncheckedCreateInput = {
   email: string
   password?: string | null
   googleId?: string | null
+  githubId?: string | null
   providerURL?: string | null
   refreshToken?: string | null
   createdAt?: Date | string
@@ -307,6 +321,7 @@ export type userUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -320,6 +335,7 @@ export type userUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -333,6 +349,7 @@ export type userCreateManyInput = {
   email: string
   password?: string | null
   googleId?: string | null
+  githubId?: string | null
   providerURL?: string | null
   refreshToken?: string | null
   createdAt?: Date | string
@@ -345,6 +362,7 @@ export type userUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -357,6 +375,7 @@ export type userUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -369,6 +388,7 @@ export type userCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   googleId?: Prisma.SortOrder
+  githubId?: Prisma.SortOrder
   providerURL?: Prisma.SortOrder
   refreshToken?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -381,6 +401,7 @@ export type userMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   googleId?: Prisma.SortOrder
+  githubId?: Prisma.SortOrder
   providerURL?: Prisma.SortOrder
   refreshToken?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -393,6 +414,7 @@ export type userMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   googleId?: Prisma.SortOrder
+  githubId?: Prisma.SortOrder
   providerURL?: Prisma.SortOrder
   refreshToken?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -436,6 +458,7 @@ export type userCreateWithoutAnimationsInput = {
   email: string
   password?: string | null
   googleId?: string | null
+  githubId?: string | null
   providerURL?: string | null
   refreshToken?: string | null
   createdAt?: Date | string
@@ -448,6 +471,7 @@ export type userUncheckedCreateWithoutAnimationsInput = {
   email: string
   password?: string | null
   googleId?: string | null
+  githubId?: string | null
   providerURL?: string | null
   refreshToken?: string | null
   createdAt?: Date | string
@@ -476,6 +500,7 @@ export type userUpdateWithoutAnimationsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -488,6 +513,7 @@ export type userUncheckedUpdateWithoutAnimationsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerURL?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -531,6 +557,7 @@ export type userSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   email?: boolean
   password?: boolean
   googleId?: boolean
+  githubId?: boolean
   providerURL?: boolean
   refreshToken?: boolean
   createdAt?: boolean
@@ -545,6 +572,7 @@ export type userSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   password?: boolean
   googleId?: boolean
+  githubId?: boolean
   providerURL?: boolean
   refreshToken?: boolean
   createdAt?: boolean
@@ -557,6 +585,7 @@ export type userSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   password?: boolean
   googleId?: boolean
+  githubId?: boolean
   providerURL?: boolean
   refreshToken?: boolean
   createdAt?: boolean
@@ -569,6 +598,7 @@ export type userSelectScalar = {
   email?: boolean
   password?: boolean
   googleId?: boolean
+  githubId?: boolean
   providerURL?: boolean
   refreshToken?: boolean
   createdAt?: boolean
@@ -576,7 +606,7 @@ export type userSelectScalar = {
   userName?: boolean
 }
 
-export type userOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "googleId" | "providerURL" | "refreshToken" | "createdAt" | "updatedAt" | "userName", ExtArgs["result"]["user"]>
+export type userOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "googleId" | "githubId" | "providerURL" | "refreshToken" | "createdAt" | "updatedAt" | "userName", ExtArgs["result"]["user"]>
 export type userInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   animations?: boolean | Prisma.user$animationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -594,6 +624,7 @@ export type $userPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     email: string
     password: string | null
     googleId: string | null
+    githubId: string | null
     providerURL: string | null
     refreshToken: string | null
     createdAt: Date
@@ -1027,6 +1058,7 @@ export interface userFieldRefs {
   readonly email: Prisma.FieldRef<"user", 'String'>
   readonly password: Prisma.FieldRef<"user", 'String'>
   readonly googleId: Prisma.FieldRef<"user", 'String'>
+  readonly githubId: Prisma.FieldRef<"user", 'String'>
   readonly providerURL: Prisma.FieldRef<"user", 'String'>
   readonly refreshToken: Prisma.FieldRef<"user", 'String'>
   readonly createdAt: Prisma.FieldRef<"user", 'DateTime'>
