@@ -133,10 +133,11 @@ userRouter.get(
 	"/auth/github/callback",
 	passport.authenticate("github", {
 		failureRedirect: `${feURL}/signup`,
+		successRedirect: `${feURL}/chat/new`,
 	}),
-	function (req, res) {
-		res.redirect(`${feURL}/chat/new`);
-	},
+	// function (req, res) {
+	// 	res.redirect(`${feURL}/chat/new`);
+	// },
 );
 
 userRouter.post(

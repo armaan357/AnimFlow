@@ -25,7 +25,7 @@ model animation {
   id                String              @id @default(cuid())
   title             String
   firstPrompt       String
-  isPublic          Boolean             @default(false)
+  isPublic          Boolean             @default(true)
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
   userId            String
