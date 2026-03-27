@@ -17,7 +17,8 @@
 		"BACKEND_ORIGIN",
 		"GITHUB_CLIENT_ID",
 		"GITHUB_CLIENT_SECRET",
-		"GITHUB_CALLBACK_URL"
+		"GITHUB_CALLBACK_URL",
+		"WORKER_URL"
 	],
 	"tasks": {
 		"build": {

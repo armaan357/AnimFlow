@@ -11,6 +11,7 @@ import {
 } from "../zodTypes/index.js";
 
 const generateRouter: Router = express.Router();
+const workerUrl = process.env.WORKER_URL;
 
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
 const ai = new GoogleGenAI({});
@@ -201,7 +202,7 @@ generateRouter.post("/new", verifyUser, async (req: Request, res: Response) => {
 		console.time("pythonGateway");
 
 		const gatewayResp = await axios.post(
-			"http://localhost:8000/job",
+			`${workerUrl}/job`,
 			{
 				id: dbResp.id,
 				prompt: userPrompt,
@@ -476,7 +477,7 @@ Rotate, MoveAlongPath
 			const parsed: { code: string } = JSON.parse(AIResp);
 			const code = parsed.code;
 			const gatewayResp = await axios.post(
-				"http://localhost:8000/job",
+				`${workerUrl}/job`,
 				{
 					id: animationId,
 					prompt: userPrompt,
