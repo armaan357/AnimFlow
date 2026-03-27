@@ -96,6 +96,7 @@ export default function ChatAnimationPage({
 		useState<boolean>(false);
 	const [messageToDisplay, setMessageToDisplay] =
 		useState<MessageType | null>(null);
+	const [loadingMsg, setLoadingMsg] = useState<string | null>(null);
 
 	const currAnimationId = useRef<string>("");
 	const inpRef = useRef<HTMLTextAreaElement>(null);
@@ -170,8 +171,11 @@ export default function ChatAnimationPage({
 					const len = allMsgs?.length;
 					if (allMsgs && len) allMsgs[len - 1] = animationDetails;
 					setMessages(allMsgs);
+					setMessageToDisplay(animationDetails);
 					taskIdRef.current = null;
+					setLoadingMsg(null);
 					setIsPolling(false);
+					// const currentMsgToDisplay  = messages && messages.length > 1 && messages[messages.length - 1] ? messages[messages?.length - 1] : null;
 				}
 			} catch (e: any) {
 				console.log("error: ", e);
@@ -190,6 +194,7 @@ export default function ChatAnimationPage({
 				videoResolution: "l",
 			};
 			try {
+				setLoadingMsg("Generating code from AI...");
 				const resp = await axios.post(
 					`/api/backend/generate/${currAnimationId.current}`,
 					body,
@@ -202,10 +207,15 @@ export default function ChatAnimationPage({
 					allMsg?.push({
 						id: "tempId",
 						prompt: userPrompt,
-						versionNo: messages ? messages?.length + 1 : 1,
+						versionNo:
+							messages &&
+							messages[messages?.length - 1]?.versionNo
+								? messages[messages?.length - 1]?.versionNo!
+								: 1,
 					});
 					console.log("allmsgs = ", allMsg);
 					setMessages(allMsg);
+					setLoadingMsg("Rendering your animation...");
 					setIsPolling(true);
 				}
 			} catch (e: any) {
@@ -233,22 +243,33 @@ export default function ChatAnimationPage({
 				userName={userName}
 				currentAnimationId={currAnimationId.current}
 			/>
-			{checkMobileDevice && (
+			{/* {checkMobileDevice && (
 				<div
 					className="sticky left-0 top-0 bg-[#0c0c0c] active:border-none border-none focus-within:border-none h-15 flex justify-center items-center pl-2.5 pr-1.5"
 					onClick={() => setSideBarVisible(!isSideBarVisible)}
 				>
 					<MenuIcon color="white" />
 				</div>
-			)}
+			)} */}
 			<div className="flex flex-col flex-1 w-full overflow-hidden">
-				<ChatPageHeader />
+				<div className="w-full flex">
+					{checkMobileDevice && (
+						<div
+							className="sticky left-0 top-0 bg-[#0c0c0c] active:border-none border-none focus-within:border-none h-15 flex justify-center items-center pl-2.5 pr-1.5"
+							onClick={() => setSideBarVisible(!isSideBarVisible)}
+						>
+							<MenuIcon color="white" />
+						</div>
+					)}
+					<ChatPageHeader />
+				</div>
+				{/* <ChatPageHeader /> */}
 
 				<div className="flex flex-row flex-1 min-h-0 relative bg-[#121212] transition-transform duration-150 ease-in-out">
 					<div className="w-full flex-1 flex flex-col overflow-hidden transition-transform duration-150 ease-in-out">
 						{/* Messages Area */}
 						<div
-							className={`flex overflow-y-auto pb-2.5 version-scroll-box transition-transform duration-150 ease-in-out h-full ${isVersionTabVisible ? " relative " : ""}`}
+							className={`flex overflow-y-auto pb-2.5 relative version-scroll-box transition-transform duration-150 ease-in-out h-full `}
 						>
 							{/* {!isVersionTabVisible ? (
 								<div
@@ -267,10 +288,11 @@ export default function ChatAnimationPage({
 								messages={messages}
 								setMessageToDisplay={setMessageToDisplay}
 								messageToDisplay={messageToDisplay}
+								checkMobileDevice={checkMobileDevice}
 							/>
 							{/* } */}
-							<div className="flex flex-1 overflow-y-auto scroll-box pb-4 pr-4 md:pb-6 md:pr-6 lg:pb-8 lg:pr-8 pl-0.5 pt-0">
-								<div className="max-w-auto w-[70%] ml-20 flex flex-col gap-8 pb-4 pt-4 md:pt-6 lg:pt-8">
+							<div className="flex flex-1 overflow-y-auto scroll-box pb-4 justify-center md:pb-6 lg:pb-8 pl-0.5 pt-0">
+								<div className="max-w-auto w-[70%] flex flex-col gap-8 pb-4 pt-19">
 									{/* Placeholder welcome message or content */}
 									{!messages ? (
 										<ChatGreeting />
@@ -280,6 +302,7 @@ export default function ChatAnimationPage({
 												<PromptAndResponseContainer
 													// key={mess}
 													m={messageToDisplay}
+													loadingMsg={loadingMsg}
 												/>
 											)}
 											{/* {messages.map((m, index) => (
@@ -353,12 +376,14 @@ const VersionSideBar = ({
 	messages,
 	setMessageToDisplay,
 	messageToDisplay,
+	checkMobileDevice,
 }: {
 	isVersionTabVisible: boolean;
 	onClose: () => void;
 	messages: MessageType[] | null;
 	setMessageToDisplay: Dispatch<SetStateAction<MessageType | null>>;
 	messageToDisplay: MessageType | null;
+	checkMobileDevice: boolean;
 }) => {
 	const scrollToActiveVersion = useRef<HTMLDivElement | null>(null);
 
@@ -372,7 +397,7 @@ const VersionSideBar = ({
 	}, [messageToDisplay, isVersionTabVisible]);
 	return (
 		<div
-			className={`max-h-full h-fit transition-transform duration-200 ease-in-out rounded-tr-lg rounded-br-lg ${isVersionTabVisible && " pb-1.5 "} flex flex-col w-54 bg-[#202020] border border-white/2`}
+			className={`max-h-full h-fit absolute top-0 ${checkMobileDevice ? " left-4 rounded-bl-lg " : " left-0 rounded-tr-lg "} z-30 transition-transform duration-200 ease-in-out  rounded-br-lg ${isVersionTabVisible && " pb-1.5  shadow-2xl "} flex flex-col w-54 bg-[#202020] border border-white/2`}
 		>
 			<div className="flex flex-row justify-between items-center p-2 transition-transform duration-200 ease-in-out">
 				<div
@@ -520,14 +545,18 @@ const VersionSideBar = ({
 
 interface PromptAndResponseContainerProps {
 	m: MessageType;
+	loadingMsg: string | null;
 }
 
-const PromptAndResponseContainer = ({ m }: PromptAndResponseContainerProps) => {
+const PromptAndResponseContainer = ({
+	m,
+	loadingMsg,
+}: PromptAndResponseContainerProps) => {
 	return (
 		<div className="w-full">
 			<div
 				id={m.id}
-				className="px-2 py-3 lg:px-4 lg:py-6 w-full flex flex-col gap-2.5"
+				className="px-2 py-3 lg:px-4 lg:py-6 w-full pt-0 flex flex-col gap-2.5"
 			>
 				<div className="flex w-fit gap-1.5 self-end-safe flex-col bg-transparent msg-container">
 					<div className="px-2 py-1 sm:px-3 sm:py-1.5 w-fit max-w-lg self-end-safe bg-[#212121] border border-white/10 rounded-lg">
@@ -578,7 +607,9 @@ const PromptAndResponseContainer = ({ m }: PromptAndResponseContainerProps) => {
 							)}
 						</div>
 					) : (
-						<p className="text-base text-white/75">Processing...</p>
+						<p className="text-base text-white/75">
+							{loadingMsg ? loadingMsg : "Processing..."}
+						</p>
 					)}
 				</div>
 			</div>

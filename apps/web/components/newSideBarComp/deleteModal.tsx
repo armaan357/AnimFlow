@@ -54,14 +54,14 @@ export function DeleteModal({
 				<div className="flex gap-3 justify-end pt-2 sm:pt-3 md:pt-4">
 					<button
 						onClick={onClose}
-						className="px-4 py-2 rounded-md text-sm font-medium text-[#FAFAFA] bg-[#18181B] hover:bg-[#27272A] transition-colors duration-150"
+						className="px-4 py-2 rounded-md text-sm font-medium text-[#FAFAFA] bg-[#18181B] hover:bg-[#27272A] transition-colors duration-150 cursor-pointer"
 						aria-label="Cancel delete"
 					>
 						Cancel
 					</button>
 					<button
 						onClick={handleConfirm}
-						className="px-4 py-2 rounded-md text-sm font-medium text-white bg-red-700 hover:bg-red-500 transition-colors duration-150"
+						className="px-4 py-2 rounded-md text-sm font-medium text-white bg-red-700 hover:bg-red-500 transition-colors duration-150 cursor-pointer"
 						aria-label="Confirm delete"
 					>
 						Delete

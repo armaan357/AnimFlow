@@ -82,7 +82,7 @@ export function DropdownMenu({
 					onClose();
 				}}
 				onMouseEnter={() => setActiveIndex(0)}
-				className={`w-full text-center px-6 py-2 text-sm transition-colors rounded-lg duration-150 ${
+				className={`w-full text-center px-6 py-2 text-sm transition-colors rounded-lg duration-150 cursor-pointer ${
 					activeIndex === 0
 						? "bg-[#27272A] text-[#FAFAFA]"
 						: "text-[#A1A1AA] hover:bg-[#27272A] hover:text-[#FAFAFA]"
@@ -98,7 +98,7 @@ export function DropdownMenu({
 					onClose();
 				}}
 				onMouseEnter={() => setActiveIndex(1)}
-				className={`w-full px-6 py-2 rounded-lg text-center text-sm transition-colors duration-150 ${
+				className={`w-full px-6 py-2 rounded-lg text-center text-sm transition-colors duration-150 cursor-pointer ${
 					activeIndex === 1
 						? "bg-red-600/20 text-red-400"
 						: "text-red-400/60 hover:bg-red-600/20 hover:text-red-400"
