@@ -40,3 +40,4 @@ yarn-error.log*
 # Renderer
 tmp/
 media/
+__pycache__/
