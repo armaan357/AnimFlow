@@ -275,3 +275,31 @@ a {
 }
 
 */
+.skeleton-content {
+  background-color: #131313;
+  position: relative;
+  z-index: 10000;
+}
+
+.skeleton-content::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 100%;
+  box-shadow: 0 0 80px 20px #fff;
+  animation: skeletonSlide 0.6s infinite ease-in-out;
+  z-index: 10010;
+}
+
+@keyframes skeletonSlide {
+  from {
+    left: -100px;
+  }
+
+  to {
+    left: calc(100% + 100px);
+  }
+}

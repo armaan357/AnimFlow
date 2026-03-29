@@ -86,7 +86,8 @@ export default function ChatAnimationPage({
 	userName: string;
 	checkMobileDevice: boolean;
 }) {
-	const [isSideBarVisible, setSideBarVisible] = useState<boolean>(false);
+	const [isSideBarVisible, setSideBarVisible] =
+		useState<boolean>(!checkMobileDevice);
 	const [chats, setChats] = useState<{ id: string; title: string }[] | null>(
 		null,
 	);
@@ -555,8 +556,8 @@ interface PromptAndResponseContainerProps {
 const PromptAndResponseContainer = ({
 	m,
 	loadingMsg,
-	checkMobileDevice,
 }: PromptAndResponseContainerProps) => {
+	const count = useRef<number>(0);
 	return (
 		<div className="w-full">
 			<div
@@ -585,10 +586,14 @@ const PromptAndResponseContainer = ({
 						<div className=" w-auto">
 							{m?.videoURL && m.taskId ? (
 								<div className={` sm:flex sm:msg-container`}>
-									<div className="border-2 w-full border-white/25 rounded-lg overflow-hidden">
-										<VideoPlayer publicId={m.taskId} />
-									</div>
-									<div className="flex items-center sm:justify-center px-2.5 py-1.5 sm:px-1.5 transition-all duration-150 sm:hidden-buttons">
+									<>
+										<VideoPlayer
+											publicId={m.taskId}
+											versionId={m.versionNo}
+											count={count.current++}
+										/>
+									</>
+									{/* <div className="flex items-center sm:justify-center px-2.5 py-1.5 sm:px-1.5 transition-all duration-150 sm:hidden-buttons">
 										<a
 											href={`${downloadURL}${m.taskId}.mp4`}
 											download={"video"}
@@ -602,7 +607,7 @@ const PromptAndResponseContainer = ({
 												<Download size={20} />
 											</div>
 										</a>
-									</div>
+									</div> */}
 								</div>
 							) : (
 								<p className="test-base">
