@@ -2,10 +2,8 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import { prisma } from "@repo/db";
 import passport from "passport";
-import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { Strategy as GitHubStrategy } from "passport-github2";
-import bcrypt from "bcrypt";
 
 const googleCallbackURL = process.env.GOOGLE_CALLBACK_URL;
 
@@ -15,45 +13,40 @@ passport.use(
 			clientID: process.env.GOOGLE_CLIENT_ID!,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
 			callbackURL: `${googleCallbackURL}`,
-			// passReqToCallback: true,
 		},
 		async (accessToken, refreshToken, profile, done) => {
-			// Perform any additional verification or user lookup here
-			// and return the user object
 			try {
-				// Check if user already exists
-				let user = await prisma.user.findFirst({
-					where: {
-						googleId: profile.id,
-						email: profile.emails[0].value,
-					},
+				const email = profile.emails?.[0]?.value;
+
+				if (!email) {
+					return done(new Error("No email from Google"));
+				}
+
+				let user = await prisma.user.findUnique({
+					where: { email },
 				});
 
-				// If user doesn't exist, create a new one
+				if (user && !user.googleId) {
+					user = await prisma.user.update({
+						where: { email },
+						data: { googleId: profile.id },
+					});
+				}
+
 				if (!user) {
 					user = await prisma.user.create({
 						data: {
-							email: profile.emails[0].value,
+							email,
 							googleId: profile.id,
 							userName: profile.displayName,
 							providerURL: "google",
 						},
 					});
-				} else if (!user.googleId) {
-					user = await prisma.user.update({
-						where: {
-							email: profile.emails[0].value!,
-						},
-						data: {
-							googleId: profile.id,
-						},
-					});
 				}
 
-				// Return the user (existing or newly created)
 				return done(null, user);
 			} catch (error) {
-				return done(error);
+				return done(error as Error);
 			}
 		},
 	),
@@ -73,69 +66,41 @@ passport.use(
 			done: (err: any, user?: any) => void,
 		) {
 			try {
-				// Check if user already exists
-				const email =
+				let email =
 					profile.emails && profile.emails.length > 0
-						? profile.emails[0]?.value
-						: "emailNotExists@email.com";
-				let user = await prisma.user.findFirst({
-					where: {
-						email: email,
-						githubId: profile.id,
-					},
+						? profile.emails[0].value
+						: null;
+
+				// fallback
+				if (!email) {
+					email = `${profile.id}@github.local`;
+				}
+
+				let user = await prisma.user.findUnique({
+					where: { email },
 				});
 
-				// If user doesn't exist, create a new one
+				if (user && !user.githubId) {
+					user = await prisma.user.update({
+						where: { email },
+						data: { githubId: profile.id },
+					});
+				}
+
 				if (!user) {
 					user = await prisma.user.create({
 						data: {
-							email: `tempEmail${profile.id}@email.com`,
+							email,
 							githubId: profile.id,
-							userName: profile.displayName,
+							userName: profile.displayName || profile.username,
 							providerURL: "github",
 						},
 					});
-				} else if (!user.githubId) {
-					user = await prisma.user.update({
-						where: {
-							email: email!,
-						},
-						data: {
-							githubId: profile.id,
-						},
-					});
 				}
 
-				// Return the user (existing or newly created)
 				return done(null, user);
 			} catch (error) {
 				return done(error);
-			}
-		},
-	),
-);
-
-passport.use(
-	new LocalStrategy(
-		{ usernameField: "email" },
-		async (userName, password, done) => {
-			try {
-				const user = await prisma.user.findFirst({
-					where: { email: userName },
-				});
-
-				if (!user || !user.password) {
-					return done(null, false, {
-						message: "User not found. Please register.",
-					});
-				}
-				const comp = await bcrypt.compare(password, user.password);
-				if (!comp) {
-					return done(null, false, { message: "Incorrect Password" });
-				}
-				return done(null, user);
-			} catch (e: any) {
-				return done(e);
 			}
 		},
 	),

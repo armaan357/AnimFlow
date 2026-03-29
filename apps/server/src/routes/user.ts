@@ -28,7 +28,14 @@ userRouter.get("/email-exists", async (req: Request, res: Response) => {
 			where: { email: email! as string },
 		});
 		if (user) {
-			res.json({ exists: true });
+			if (user.password) {
+				res.json({ code: 0, exists: true });
+				return;
+			}
+			const errorMsg = user.googleId
+				? "User already exists. Please login with Google."
+				: "User already exists. Please login with GitHub.";
+			res.json({ code: 1, error: errorMsg, exists: true });
 			return;
 		}
 		res.status(200).json({ exists: false });
@@ -51,60 +58,67 @@ userRouter.post(
 		const { email, password, userName } = parsed.data;
 
 		try {
+			const existingUser = await prisma.user.findUnique({
+				where: { email },
+			});
+			if (existingUser && existingUser.password) {
+				res.status(400).json({
+					code: 0,
+					error: "User already exists. Please login.",
+				});
+				return;
+			}
+			if (existingUser && existingUser.googleId) {
+				res.status(400).json({
+					code: 1,
+					error: "User already exists. Please login with Google.",
+				});
+				return;
+			}
+			if (existingUser && existingUser.githubId) {
+				res.status(400).json({
+					code: 1,
+					error: "User already exists. Please login with GitHub.",
+				});
+				return;
+			}
 			const hashed = await bcrypt.hash(password, 10);
-			// const resp = await prisma.user.create({ data: { userName, password: hashed } });
-			const resp = await prisma.user.create({
+			const dbResp = await prisma.user.create({
 				data: { email, password: hashed, userName },
 			});
-			console.log("signup successful, DBresp = ", resp);
-			// req.login(resp, (err) => {
-			// 	if (err) {
-			// 		return res
-			// 			.status(500)
-			// 			.json({ message: "Auto-login failed." });
-			// 	}
-
-			// 	return res.status(201).json({
-			// 		message: "Registration successful.",
-			// 		user: {
-			// 			id: resp.id,
-			// 			email: resp.email,
-			// 			username: resp.userName,
-			// 		},
-			// 	});
-			// });
-			passport.authenticate(
-				"local",
-				(
-					err: any,
-					user: {
-						id: number;
-						email: string;
-						password: string;
-						userName: string;
-					},
-					info: any,
-				) => {
-					if (err) {
-						return next(err);
-					}
-					// if (!resp) return res.status(400).json(info);
-
-					req.logIn(resp, (err) => {
-						if (err) return next(err);
-						const { id, email, userName } = resp;
-						return res.json({
-							message: "Registration Successful",
-							user: { id, email, userName },
-						});
-					});
+			console.log("signup successful, DBresp = ", dbResp);
+			const token = jwt.sign(
+				{
+					id: dbResp.id,
+					email: dbResp.email,
+					userName: dbResp.userName,
 				},
-			)(req, res, next);
-			// res.status(201).json({ message: "Signed Up Successfully" });
+				process.env.JWT_SECRET!,
+				{ expiresIn: "7d" },
+			);
+			res.cookie("token", token, {
+				httpOnly: true,
+				secure: process.env.NODE_ENV === "production",
+				sameSite:
+					process.env.NODE_ENV === "production" ? "none" : "lax",
+				path: "/",
+				maxAge: 1000 * 60 * 60 * 24 * 7,
+			});
+			res.json({
+				message: "Signed Up",
+				user: {
+					id: dbResp.id,
+					email: dbResp.email,
+					userName: dbResp.userName,
+				},
+			});
 		} catch (e: any) {
 			if (e.code && e.code === "P2002") {
 				console.log("user already exists");
-				res.status(400).json({ error: "User already exists" });
+				res.status(400).json({
+					code: 1,
+					error: "User already exists. Please login",
+				});
 				return;
 			}
 			res.status(500).json({ error: e });
@@ -121,14 +135,9 @@ userRouter.get(
 userRouter.get(
 	"/auth/google/callback",
 	passport.authenticate("google", {
+		session: false,
 		failureRedirect: `${feURL}/signup`,
-		successRedirect: `${feURL}/chat/new`,
 	}),
-);
-
-userRouter.get(
-	"/auth/google/callback",
-	passport.authenticate("google", { session: false }),
 	(req, res) => {
 		const user = req.user as {
 			id: string;
@@ -136,9 +145,13 @@ userRouter.get(
 			userName: string;
 		};
 
-		const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
-			expiresIn: "7d",
-		});
+		const token = jwt.sign(
+			{ id: user.id, email: user.email, userName: user.userName },
+			process.env.JWT_SECRET!,
+			{
+				expiresIn: "7d",
+			},
+		);
 
 		res.cookie("token", token, {
 			httpOnly: true,
@@ -160,12 +173,34 @@ userRouter.get(
 userRouter.get(
 	"/auth/github/callback",
 	passport.authenticate("github", {
+		session: false,
 		failureRedirect: `${feURL}/signup`,
-		successRedirect: `${feURL}/chat/new`,
 	}),
-	// function (req, res) {
-	// 	res.redirect(`${feURL}/chat/new`);
-	// },
+	(req, res) => {
+		const user = req.user as {
+			id: string;
+			email: string;
+			userName: string;
+		};
+
+		const token = jwt.sign(
+			{ id: user.id, email: user.email, userName: user.userName },
+			process.env.JWT_SECRET!,
+			{
+				expiresIn: "7d",
+			},
+		);
+
+		res.cookie("token", token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+			path: "/",
+			maxAge: 1000 * 60 * 60 * 24 * 7,
+		});
+
+		res.redirect(`${feURL}/chat/new`);
+	},
 );
 
 userRouter.post(
@@ -199,7 +234,7 @@ userRouter.post(
 			}
 			const token = jwt.sign(
 				{ id: user.id, email: user.email, userName: user.userName },
-				process.env.USER_SECRET!,
+				process.env.JWT_SECRET!,
 				{ expiresIn: "7d" },
 			);
 			res.cookie("token", token, {
@@ -207,7 +242,7 @@ userRouter.post(
 				secure: process.env.NODE_ENV === "production",
 				sameSite:
 					process.env.NODE_ENV === "production" ? "none" : "lax",
-				path: "/", // important
+				path: "/",
 				maxAge: 1000 * 60 * 60 * 24 * 7,
 			});
 			res.json({ message: "Signed In" });

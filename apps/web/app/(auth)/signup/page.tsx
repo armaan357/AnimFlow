@@ -10,6 +10,7 @@ const checkEmailExists = async (
 	emailRef: RefObject<HTMLInputElement | null>,
 	setPasswordInputVisible: Dispatch<SetStateAction<boolean>>,
 	setErrorMsgVisible: Dispatch<SetStateAction<boolean>>,
+	setErrorMsg: Dispatch<SetStateAction<string | null>>,
 ) => {
 	if (!emailRef.current || emailRef.current.value === "") {
 		return;
@@ -23,6 +24,9 @@ const checkEmailExists = async (
 			return;
 		}
 		if (resp.data.exists) {
+			if (resp.data.code && resp.data.code == 1) {
+				setErrorMsg(resp.data.error);
+			}
 			setErrorMsgVisible(true);
 		} else {
 			setPasswordInputVisible(true);
@@ -45,6 +49,7 @@ export default function SignUp() {
 	const [isPasswordInputVisible, setPasswordInputVisible] =
 		useState<boolean>(false);
 	const [isErrorMsgVisible, setErrorMsgVisible] = useState<boolean>(false);
+	const [errorMsg, setErrorMsg] = useState<string | null>(null);
 	const [isPasswordVisible, setPasswordVisible] = useState<boolean>(false);
 	const [isCnfPasswordVisible, setCnfPasswordVisible] =
 		useState<boolean>(false);
@@ -80,6 +85,13 @@ export default function SignUp() {
 				{ withCredentials: true },
 			);
 			if (!signupResp) return;
+			if (signupResp.data.code) {
+				if (signupResp.data.code == 1) {
+					setErrorMsg(signupResp.data.error);
+				}
+				setErrorMsgVisible(true);
+				return;
+			}
 			navigate.push("/chat/new");
 		} catch (e: any) {
 			console.log("error = ", e);
@@ -198,16 +210,24 @@ export default function SignUp() {
 								</div>
 							)}
 							{isErrorMsgVisible && (
-								<p className="text-white/80 text-base">
-									Account already exists. Please{" "}
-									<Link
-										href={"/signin"}
-										className="text-blue-300 transition-all duration-150 ease-in-out hover:text-blue-500 hover:underline cursor-pointer"
-									>
-										login
-									</Link>{" "}
-									to your account.
-								</p>
+								<>
+									{errorMsg ? (
+										<p className="text-white/80 text-base">
+											{errorMsg}
+										</p>
+									) : (
+										<p>
+											Account already exists. Please{" "}
+											<Link
+												href={"/signin"}
+												className="text-blue-300 transition-all duration-150 ease-in-out hover:text-blue-500 hover:underline cursor-pointer"
+											>
+												login
+											</Link>{" "}
+											to your account.
+										</p>
+									)}
+								</>
 							)}
 							<Button
 								variant="primary"
@@ -225,6 +245,7 @@ export default function SignUp() {
 											emailRef,
 											setPasswordInputVisible,
 											setErrorMsgVisible,
+											setErrorMsg,
 										);
 								}}
 							/>

@@ -10,6 +10,7 @@ const checkEmailExists = async (
 	emailRef: RefObject<HTMLInputElement | null>,
 	setPasswordInputVisible: Dispatch<SetStateAction<boolean>>,
 	setErrorMsgVisible: Dispatch<SetStateAction<boolean>>,
+	setErrorMsg: Dispatch<SetStateAction<string | null>>,
 ) => {
 	if (!emailRef.current || emailRef.current.value === "") {
 		return;
@@ -24,8 +25,11 @@ const checkEmailExists = async (
 			return;
 		}
 
-		if (resp.data.exists) {
+		if (resp.data.exists && resp.data.code == 0) {
 			setPasswordInputVisible(true);
+		} else if (resp.data.exists && resp.data.code == 1) {
+			setErrorMsg(resp.data.error);
+			setErrorMsgVisible(true);
 		} else {
 			setErrorMsgVisible(true);
 		}
@@ -39,6 +43,7 @@ export default function Signin() {
 		useState<boolean>(false);
 	const [isErrorMsgVisible, setErrorMsgVisible] = useState<boolean>(false);
 	const [isPasswordVisible, setPasswordVisible] = useState<boolean>(false);
+	const [errorMsg, setErrorMsg] = useState<string | null>(null);
 	const emailRef = useRef<HTMLInputElement | null>(null);
 	const passwordRef = useRef<HTMLInputElement | null>(null);
 	const navigate = useRouter();
@@ -159,16 +164,22 @@ export default function Signin() {
 								/>
 							)}
 							{isErrorMsgVisible && (
-								<p className="text-white/80 text-base">
-									Account does not exist. Please{" "}
-									<Link
-										href={"/signup"}
-										className="text-blue-300 transition-all duration-150 ease-in-out hover:text-blue-500 hover:underline cursor-pointer"
-									>
-										create
-									</Link>{" "}
-									a new account.
-								</p>
+								<>
+									{errorMsg ? (
+										<p>{errorMsg}</p>
+									) : (
+										<p className="text-white/80 text-base">
+											Account does not exist. Please{" "}
+											<Link
+												href={"/signup"}
+												className="text-blue-300 transition-all duration-150 ease-in-out hover:text-blue-500 hover:underline cursor-pointer"
+											>
+												create
+											</Link>{" "}
+											a new account.
+										</p>
+									)}
+								</>
 							)}
 							<Button
 								variant="primary"
@@ -186,6 +197,7 @@ export default function Signin() {
 											emailRef,
 											setPasswordInputVisible,
 											setErrorMsgVisible,
+											setErrorMsg,
 										);
 								}}
 							/>
