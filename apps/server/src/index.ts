@@ -48,7 +48,7 @@ app.use("/api/v1/generate", generateRouter);
 
 export default app;
 
-// if (process.env.NODE_ENV !== "production") {
-// 	const PORT = process.env.PORT || 3001;
-// 	app.listen(PORT, () => console.log(`Server ready on port ${PORT}.`));
-// }
+if (process.env.NODE_ENV !== "production") {
+	const PORT = process.env.PORT || 3001;
+	app.listen(PORT, () => console.log(`Server ready on port ${PORT}.`));
+}

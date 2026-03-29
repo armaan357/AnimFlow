@@ -86,7 +86,7 @@ export default function ChatAnimationPage({
 	userName: string;
 	checkMobileDevice: boolean;
 }) {
-	const [isSideBarVisible, setSideBarVisible] = useState<boolean>(true);
+	const [isSideBarVisible, setSideBarVisible] = useState<boolean>(false);
 	const [chats, setChats] = useState<{ id: string; title: string }[] | null>(
 		null,
 	);
@@ -292,7 +292,7 @@ export default function ChatAnimationPage({
 							/>
 							{/* } */}
 							<div className="flex flex-1 overflow-y-auto scroll-box pb-4 justify-center md:pb-6 lg:pb-8 pl-0.5 pt-0">
-								<div className="max-w-auto w-[70%] flex flex-col gap-8 pb-4 pt-19">
+								<div className="max-w-auto w-[90%] sm:w-[70%] flex flex-col gap-8 pb-4 pt-19">
 									{/* Placeholder welcome message or content */}
 									{!messages ? (
 										<ChatGreeting />
@@ -303,6 +303,9 @@ export default function ChatAnimationPage({
 													// key={mess}
 													m={messageToDisplay}
 													loadingMsg={loadingMsg}
+													checkMobileDevice={
+														checkMobileDevice
+													}
 												/>
 											)}
 											{/* {messages.map((m, index) => (
@@ -546,11 +549,13 @@ const VersionSideBar = ({
 interface PromptAndResponseContainerProps {
 	m: MessageType;
 	loadingMsg: string | null;
+	checkMobileDevice: boolean;
 }
 
 const PromptAndResponseContainer = ({
 	m,
 	loadingMsg,
+	checkMobileDevice,
 }: PromptAndResponseContainerProps) => {
 	return (
 		<div className="w-full">
@@ -579,18 +584,20 @@ const PromptAndResponseContainer = ({
 					{m.animationId ? (
 						<div className=" w-auto">
 							{m?.videoURL && m.taskId ? (
-								<div className="flex msg-container">
+								<div
+									className={`${checkMobileDevice ? "" : " sm:flex sm:msg-container "}`}
+								>
 									<div className="border-2 w-full border-white/25 rounded-lg overflow-hidden">
 										<VideoPlayer publicId={m.taskId} />
 									</div>
-									<div className="flex items-center justify-center px-1.5 transition-all duration-150 hidden-buttons">
+									<div className="flex items-center sm:justify-center px-2.5 py-1.5 sm:px-1.5 transition-all duration-150 sm:hidden-buttons">
 										<a
 											href={`${downloadURL}${m.taskId}.mp4`}
 											download={"video"}
-											className="container"
+											className="container w-fit"
 										>
 											<div
-												className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#202020] transition-colors cursor-pointer"
+												className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg hover:bg-[#202020] transition-colors cursor-pointer"
 												aria-label="Download Video"
 												data-tooltip="Download"
 											>
