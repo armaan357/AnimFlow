@@ -7,17 +7,15 @@ import passport from "./passport/passportConfig.js";
 import session from "express-session";
 import generateRouter from "./routes/generate.js";
 import userRouter from "./routes/user.js";
+import cookieParser from "cookie-parser";
 
 const app: Express = express();
 const USER_SECRET = process.env.USER_SECRET;
 const feURL = process.env.FE_URL;
 
-const allowedOrigins = [
-	"http://localhost:5173",
-	"http://localhost:3000",
-	"http://localhost:8000",
-	feURL,
-];
+const allowedOrigins = [feURL];
+
+app.use(cookieParser());
 
 app.set("trust proxy", 1);
 
@@ -56,7 +54,7 @@ app.use(
 
 // used to initialize Passport and session
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 app.get("/", async (req, res) => {
 	res.json({ message: "Working Fine!" });

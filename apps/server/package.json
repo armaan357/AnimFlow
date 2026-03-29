@@ -28,6 +28,7 @@
 		"bcrypt": "^6.0.0",
 		"bullmq": "^5.63.2",
 		"celery-ts": "^1.2.3",
+		"cookie-parser": "^1.4.7",
 		"cors": "^2.8.5",
 		"dotenv": "^17.2.3",
 		"dotenv-cli": "^10.0.0",
@@ -45,6 +46,7 @@
 	"devDependencies": {
 		"@repo/typescript-config": "workspace:*",
 		"@types/bcrypt": "^6.0.0",
+		"@types/cookie-parser": "^1.4.10",
 		"@types/cors": "^2.8.19",
 		"@types/express": "^5.0.3",
 		"@types/express-session": "^1.18.2",

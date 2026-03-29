@@ -7,9 +7,11 @@ import bcrypt from "bcrypt";
 import {
 	requiredParams,
 	requiredPollBody,
+	signInSchema,
 	signUpSchema,
 } from "../zodTypes/index.js";
 import { Prisma, prisma } from "@repo/db";
+import jwt from "jsonwebtoken";
 
 const userRouter: Router = express.Router();
 const feURL = process.env.FE_URL;
@@ -125,6 +127,32 @@ userRouter.get(
 );
 
 userRouter.get(
+	"/auth/google/callback",
+	passport.authenticate("google", { session: false }),
+	(req, res) => {
+		const user = req.user as {
+			id: string;
+			email: string;
+			userName: string;
+		};
+
+		const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
+			expiresIn: "7d",
+		});
+
+		res.cookie("token", token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+			path: "/",
+			maxAge: 1000 * 60 * 60 * 24 * 7,
+		});
+
+		res.redirect(`${feURL}/chat/new`);
+	},
+);
+
+userRouter.get(
 	"/auth/github",
 	passport.authenticate("github", { scope: ["user:email"] }),
 );
@@ -143,57 +171,62 @@ userRouter.get(
 userRouter.post(
 	"/signin",
 	async (req: Request, res: Response, next: NextFunction) => {
-		passport.authenticate(
-			"local",
-			(
-				err: any,
-				user: {
-					id: number;
-					email: string;
-					password: string;
-					userName: string;
-				},
-				info: any,
-			) => {
-				if (err) {
-					return next(err);
-				}
-				if (!user) return res.status(400).json(info);
-
-				req.logIn(user, (err) => {
-					if (err) return next(err);
-					const { id, email, userName } = user;
-					return res.json({ user: { id, email, userName } });
+		const requiredSignInBody = signInSchema.safeParse(req.body);
+		if (!requiredSignInBody.success) {
+			res.status(400).json({ error: "Incomplete data" });
+			return;
+		}
+		const { email, password } = requiredSignInBody.data;
+		try {
+			const user = await prisma.user.findUnique({ where: { email } });
+			if (!user) {
+				res.status(401).json({
+					error: "User not found. Please Signup",
 				});
-			},
-		)(req, res, next);
+				return;
+			}
+			const hashPassword = user.password;
+			if (!hashPassword) {
+				res.status(400).json({
+					error: "Account does not exist. Try logging in with google or github",
+				});
+				return;
+			}
+			const comparePwd = await bcrypt.compare(password, hashPassword!);
+			if (!comparePwd) {
+				res.status(401).json({ error: "Incorrect Password" });
+				return;
+			}
+			const token = jwt.sign(
+				{ id: user.id, email: user.email, userName: user.userName },
+				process.env.USER_SECRET!,
+				{ expiresIn: "7d" },
+			);
+			res.cookie("token", token, {
+				httpOnly: true,
+				secure: process.env.NODE_ENV === "production",
+				sameSite:
+					process.env.NODE_ENV === "production" ? "none" : "lax",
+				path: "/", // important
+				maxAge: 1000 * 60 * 60 * 24 * 7,
+			});
+			res.json({ message: "Signed In" });
+			return;
+		} catch {
+			res.status(500);
+		}
 	},
 );
 
 userRouter.get("/logout", (req: Request, res: Response, next: NextFunction) => {
-	req.logout(function (err) {
-		if (err) {
-			return next(err);
-		}
-		res.clearCookie("connect.sid", { path: "/" });
-		res.json({ message: "Logged Out successfully" });
-		// Destroy the session data on the server side
-		// req.session.destroy(function (err) {
-		//   if (err) { return next(err); }
-
-		//   // Clear the session cookie from the client's browser
-		//   // Replace 'connect.sid' with your actual cookie name,
-		//   // and ensure the options match those used when setting the cookie
-		//   res.clearCookie('connect.sid', { path: '/' });
-
-		//   // Send a response or redirect the user
-		//   res.redirect('/');
-		//   // or for a single page app: res.send('Logged out successfully');
-		// });
-	});
+	res.clearCookie("token", { path: "/" });
+	res.json({ message: "Logged out" });
 });
 
 userRouter.get("/chats", verifyUser, async (req: Request, res: Response) => {
+	if (!req.user) {
+		return;
+	}
 	const user = req.user as { id: string; email: string; userName: string };
 
 	try {
