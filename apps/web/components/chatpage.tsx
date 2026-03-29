@@ -584,9 +584,7 @@ const PromptAndResponseContainer = ({
 					{m.animationId ? (
 						<div className=" w-auto">
 							{m?.videoURL && m.taskId ? (
-								<div
-									className={`${checkMobileDevice ? "" : " sm:flex sm:msg-container "}`}
-								>
+								<div className={` sm:flex sm:msg-container`}>
 									<div className="border-2 w-full border-white/25 rounded-lg overflow-hidden">
 										<VideoPlayer publicId={m.taskId} />
 									</div>
