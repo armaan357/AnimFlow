@@ -38,6 +38,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 				// width={380}
 				// height={220}
 				playsInline
+				autoPlay
+				muted
 				className="w-full h-auto max-h-full object-contain transition-all duration-200"
 				onLoadedData={() => setLoading(false)}
 				onError={() => setLoading(false)}

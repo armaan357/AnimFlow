@@ -18,6 +18,7 @@ import VideoPlayer from "./videoPlayer";
 import toast, { Toaster } from "react-hot-toast";
 import { ChatGreeting } from "@repo/ui/chatGreeting";
 import { Sidebar } from "./newSideBarComp/sidebar";
+import { VersionSideBar } from "./versionSideBar";
 
 const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 const downloadURL = `https://res.cloudinary.com/${cloudName}/video/upload/fl_attachment/`;
@@ -121,9 +122,7 @@ export default function ChatAnimationPage({
 				const allChats: { id: string; title: string }[] =
 					await resp.data.dbResp;
 				setChats(allChats);
-			} catch (e: any) {
-				console.log("error: ", e);
-			}
+			} catch (e: any) {}
 		};
 		fetchData();
 	}, []);
@@ -135,22 +134,19 @@ export default function ChatAnimationPage({
 					`/api/backend/user/chats/${currAnimationId.current}`,
 					{ withCredentials: true },
 				);
-				console.log("chat resp = ", resp.data);
 				const allVersions = resp.data.versions;
 				setMessages(allVersions);
 				setMessageToDisplay(resp.data.currentVersion);
 				if (
-					messages &&
-					(messages.at(-1)?.status == undefined ||
-						messages.at(-1)?.status === "PENDING")
+					resp.data.currentVersion &&
+					(resp.data.currentVersion.status == undefined ||
+						resp.data.currentVersion.status === "PENDING")
 				) {
-					taskIdRef.current = allVersions.at(-1);
+					taskIdRef.current = resp.data.currentVersion.taskId;
+					setLoadingMsg("Rendering your animation...");
 					setIsPolling(true);
 				}
-				console.log("messages after first fetch: ", messages);
-			} catch (e: any) {
-				console.log("error: ", e);
-			}
+			} catch (e: any) {}
 		};
 		fetchChat();
 	}, []);
@@ -160,7 +156,7 @@ export default function ChatAnimationPage({
 
 		const fetchStatus = async () => {
 			try {
-				const taskId = taskIdRef.current?.split('"')[1];
+				const taskId = taskIdRef.current;
 				const status = await axios.post(
 					`/api/backend/user/chats/poll`,
 					{ taskId },
@@ -178,9 +174,7 @@ export default function ChatAnimationPage({
 					setIsPolling(false);
 					// const currentMsgToDisplay  = messages && messages.length > 1 && messages[messages.length - 1] ? messages[messages?.length - 1] : null;
 				}
-			} catch (e: any) {
-				console.log("error: ", e);
-			}
+			} catch (e: any) {}
 		};
 		const interval = setInterval(fetchStatus, 5000);
 		return () => clearInterval(interval);
@@ -201,7 +195,6 @@ export default function ChatAnimationPage({
 					body,
 					{ withCredentials: true },
 				);
-				console.log("resp from generate = ", resp.data);
 				if (resp.data.code == 0) {
 					taskIdRef.current = resp.data.taskId;
 					const allMsg = messages;
@@ -214,27 +207,26 @@ export default function ChatAnimationPage({
 								? messages[messages?.length - 1]?.versionNo!
 								: 1,
 					});
-					console.log("allmsgs = ", allMsg);
 					setMessages(allMsg);
+					setMessageToDisplay({
+						id: "tempId",
+						prompt: userPrompt,
+						versionNo:
+							messages &&
+							messages[messages?.length - 1]?.versionNo
+								? messages[messages?.length - 1]?.versionNo! + 1
+								: 1,
+					});
 					setLoadingMsg("Rendering your animation...");
 					setIsPolling(true);
 				}
-			} catch (e: any) {
-				console.log("error: ", e);
-			}
+			} catch (e: any) {}
 		}
 	};
 
 	return (
 		<div className="bg-[#121212] flex w-full h-dvh">
 			<Toaster />
-			{/* <SideBar
-				isSideBarVisible={isSideBarVisible}
-				onClose={() => setSideBarVisible(!isSideBarVisible)}
-				chats={chats}
-				userName={userName}
-				currentAnimationId={currAnimationId.current}
-			/> */}
 			<Sidebar
 				isSideBarVisible={isSideBarVisible}
 				isMobile={checkMobileDevice}
@@ -244,14 +236,6 @@ export default function ChatAnimationPage({
 				userName={userName}
 				currentAnimationId={currAnimationId.current}
 			/>
-			{/* {checkMobileDevice && (
-				<div
-					className="sticky left-0 top-0 bg-[#0c0c0c] active:border-none border-none focus-within:border-none h-15 flex justify-center items-center pl-2.5 pr-1.5"
-					onClick={() => setSideBarVisible(!isSideBarVisible)}
-				>
-					<MenuIcon color="white" />
-				</div>
-			)} */}
 			<div className="flex flex-col flex-1 w-full overflow-hidden">
 				<div className="w-full flex">
 					{checkMobileDevice && (
@@ -272,17 +256,6 @@ export default function ChatAnimationPage({
 						<div
 							className={`flex overflow-y-auto pb-2.5 relative version-scroll-box transition-transform duration-150 ease-in-out h-full `}
 						>
-							{/* {!isVersionTabVisible ? (
-								<div
-									className="transition-transform  ease-in-out max-w-56 w-full h-12.5 cursor-pointer bg-[#181818] border border-white/10 hover:bg-[#232323] flex justify-center items-center px-1.5 py-0 absolute"
-									onClick={() => setVersionTabVisible(true)}
-								>
-									<div className="flex w-full px-3 py-0.5">
-										<p className="text-lg ">Version Tab</p>
-									</div>
-								</div>
-							) :  */}
-
 							<VersionSideBar
 								isVersionTabVisible={isVersionTabVisible}
 								onClose={() => setVersionTabVisible((v) => !v)}
@@ -374,179 +347,6 @@ export default function ChatAnimationPage({
 	);
 }
 
-const VersionSideBar = ({
-	isVersionTabVisible,
-	onClose,
-	messages,
-	setMessageToDisplay,
-	messageToDisplay,
-	checkMobileDevice,
-}: {
-	isVersionTabVisible: boolean;
-	onClose: () => void;
-	messages: MessageType[] | null;
-	setMessageToDisplay: Dispatch<SetStateAction<MessageType | null>>;
-	messageToDisplay: MessageType | null;
-	checkMobileDevice: boolean;
-}) => {
-	const scrollToActiveVersion = useRef<HTMLDivElement | null>(null);
-
-	useEffect(() => {
-		if (scrollToActiveVersion.current == null) return;
-		// const id = `#${scrollToActiveVersion.current}`;
-		scrollToActiveVersion.current.scrollIntoView({
-			behavior: "smooth",
-			block: "center",
-		});
-	}, [messageToDisplay, isVersionTabVisible]);
-	return (
-		<div
-			className={`max-h-full h-fit absolute top-0 ${checkMobileDevice ? " left-4 rounded-bl-lg " : " left-0 rounded-tr-lg "} z-30 transition-transform duration-200 ease-in-out  rounded-br-lg ${isVersionTabVisible && " pb-1.5  shadow-2xl "} flex flex-col w-54 bg-[#202020] border border-white/2`}
-		>
-			<div className="flex flex-row justify-between items-center p-2 transition-transform duration-200 ease-in-out">
-				<div
-					className={`flex items-center w-full px-3 py-0.5 transition-transform duration-200 ease-in-out`}
-				>
-					{!isVersionTabVisible ? (
-						<>
-							{messageToDisplay?.versionNo && (
-								<div className="flex justify-center items-center font-medium">
-									{/* <p className="text-lg">Current Version:</p> */}
-									<p className="text-base text-white/80 tracking-widest cursor-default">
-										v{messageToDisplay?.versionNo}
-									</p>
-								</div>
-							)}
-						</>
-					) : (
-						<div className="flex justify-center items-center font-medium">
-							{/* <p className="text-lg">Current Version:</p> */}
-							<p className="text-base text-white/50 tracking-wide">
-								VERSIONS
-							</p>
-						</div>
-					)}
-				</div>
-				{/* {isVersionTabVisible && ( */}
-				<div className="flex items-center w-fit">
-					<Button
-						variant="icon"
-						size="icon"
-						children={
-							!isVersionTabVisible ? (
-								<ChevronDown />
-							) : (
-								<ChevronUp />
-							)
-						}
-						onClick={() => onClose()}
-					/>
-				</div>
-				{/* )} */}
-			</div>
-			{isVersionTabVisible && (
-				<div className="transition-transform duration-150 ease-in-out w-full border-b border-white/5"></div>
-			)}
-			{isVersionTabVisible && (
-				<div className="transition-transform duration-150 ease-in-out flex flex-col overflow-y-auto items-center w-full p-1 version-scroll-box">
-					<div className="relative w-full left-0 top-0 z-1">
-						{messages &&
-							messages.map((m, index) => (
-								<div
-									key={index}
-									id={m.id}
-									onClick={() => {
-										if (!messages) return;
-										const msg: MessageType | undefined =
-											messages.find(
-												(message) => message.id == m.id,
-											);
-										setMessageToDisplay(msg ?? null);
-									}}
-									ref={
-										messageToDisplay &&
-										m.id === messageToDisplay.id
-											? scrollToActiveVersion
-											: null
-									}
-									className={`flex flex-col justify-center items-center`}
-								>
-									{/* <div className="absolute left-4.25 w-0.75 z-1 border-none bg-white/10 h-full"></div> */}
-									<div
-										className={`flex gap-5 items-center z-100 w-full pt-3 px-1 pb-9 ${messageToDisplay && messageToDisplay.id === m.id ? "bg-[#ffffff07] border-r-2 border-[#488AED]/50 " : " bg-transparent "}  hover:bg-[#272727] rounded-sm cursor-pointer relative`}
-									>
-										{/* <div>
-											{m.status &&
-												m.status === "COMPLETED" && (
-													// <Check size={1} />
-													<div
-														className={`p-0.75 z-100 w-fit h-fit rounded-full bg-green-600`}
-													></div>
-												)}
-											{m.status &&
-												m.status === "ERROR" && (
-													// <X size={1} />
-													<div
-														className={`p-0.75 z-100 w-fit h-fit rounded-full bg-red-600`}
-													></div>
-												)}
-											{m.status &&
-												m.status === "PENDING" && (
-													// <Loader size={1} />
-													<div
-														className={`p-1.5 z-100 w-fit h-fit rounded-full bg-gray-800/40`}
-													></div>
-												)}
-											{!m.status && <Loader size={18} />}
-										</div> */}
-										<div
-											className={`flex gap-3 w-auto overflow-x-hidden justify-center items-center transition-colors duration-150 ease-in-out`}
-										>
-											<div className="flex justify-center w-full overflow-hidden items-center py-3">
-												<div className="flex flex-col w-full overflow-hidden pl-2.5">
-													<div>
-														<p
-															className={`${messageToDisplay && messageToDisplay.id == m.id ? " text-white/90" : "text-white/65"} text-sm font-medium tracking-widest`}
-														>
-															v{m.versionNo}
-														</p>
-													</div>
-													<span
-														className={`${messageToDisplay && messageToDisplay.id == m.id ? " text-white/65" : "text-white/45"} text-base truncate font-normal`}
-													>
-														{m.prompt}
-													</span>
-													{m.status === "ERROR" && (
-														<span className="text-red-300/25 text-xs">
-															Failed
-														</span>
-													)}
-													{m.status === "PENDING" && (
-														<span className="text-white/25 text-xs">
-															Processing...
-														</span>
-													)}
-												</div>
-											</div>
-										</div>
-									</div>
-
-									{messages &&
-										m.id !==
-											messages[messages.length - 1]
-												?.id && (
-											<div className="w-[90%] border-b border-white/5 my-1"></div>
-										)}
-								</div>
-							))}
-					</div>
-					<div className="h-1.5 bg-transparent"></div>
-				</div>
-			)}
-		</div>
-	);
-};
-
 interface PromptAndResponseContainerProps {
 	m: MessageType;
 	loadingMsg: string | null;
@@ -584,37 +384,27 @@ const PromptAndResponseContainer = ({
 				<div className="sm:px-2.5 sm:py-1.5 w-73 md:w-112.5 lg:w-lg self-center sm:self-start bg-transparent border-none">
 					{m.animationId ? (
 						<div className=" w-auto">
-							{m?.videoURL && m.taskId ? (
+							{m?.videoURL && m.taskId && (
 								<div className={` sm:flex sm:msg-container`}>
-									<>
-										<VideoPlayer
-											publicId={m.taskId}
-											versionId={m.versionNo}
-											count={count.current++}
-										/>
-									</>
-									{/* <div className="flex items-center sm:justify-center px-2.5 py-1.5 sm:px-1.5 transition-all duration-150 sm:hidden-buttons">
-										<a
-											href={`${downloadURL}${m.taskId}.mp4`}
-											download={"video"}
-											className="container w-fit"
-										>
-											<div
-												className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg hover:bg-[#202020] transition-colors cursor-pointer"
-												aria-label="Download Video"
-												data-tooltip="Download"
-											>
-												<Download size={20} />
-											</div>
-										</a>
-									</div> */}
+									<VideoPlayer
+										publicId={m.taskId}
+										versionId={m.versionNo}
+										count={count.current++}
+									/>
 								</div>
-							) : (
-								<p className="test-base">
-									Error! {m.errorReason} Please try again
-									later.
+							)}
+							{m.taskId && m.status === "PENDING" && (
+								<p className="text-base text-white/75">
+									{loadingMsg ? loadingMsg : "Processing..."}
 								</p>
 							)}
+							{(!m.taskId || !m.videoURL) &&
+								m.status !== "PENDING" && (
+									<p className="test-base">
+										Error! {m.errorReason} Please try again
+										later.
+									</p>
+								)}
 						</div>
 					) : (
 						<p className="text-base text-white/75">

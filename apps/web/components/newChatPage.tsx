@@ -96,12 +96,10 @@ export default function NewChatAnimationPage({
 						withCredentials: true,
 					},
 				);
-				console.log("resp from generate = ", resp.data);
 				if (resp.data.code == 0) {
 					router.push(`${resp.data.animationId}`);
 				}
 			} catch (e: any) {
-				console.log("error = ", e);
 				setErrorMsg(e.reason ? e.reason : "Internal Server Error");
 			}
 		}
@@ -120,9 +118,7 @@ export default function NewChatAnimationPage({
 				const allChats: { id: string; title: string }[] =
 					await resp.data.dbResp;
 				setChats(allChats);
-			} catch (e: any) {
-				console.log("error: ", e);
-			}
+			} catch (e: any) {}
 		};
 		fetchData();
 	}, []);
