@@ -2,14 +2,7 @@
 import { Button } from "@repo/ui/button";
 import { ChatPageHeader } from "./header";
 import "../app/page.module.css";
-import {
-	ArrowUp,
-	ChevronDown,
-	ChevronUp,
-	Copy,
-	Download,
-	MenuIcon,
-} from "lucide-react";
+import { ArrowUp, Copy, MenuIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
@@ -19,6 +12,21 @@ import toast, { Toaster } from "react-hot-toast";
 import { ChatGreeting } from "@repo/ui/chatGreeting";
 import { Sidebar } from "./newSideBarComp/sidebar";
 import { VersionSideBar } from "./versionSideBar";
+import SelecT, {
+	CSSObjectWithLabel,
+	SingleValue,
+	StylesConfig,
+} from "react-select";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "../@workspace/ui/components/select";
+import { ResolutionSelectComponent } from "./resolutionSelect";
 
 const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 const downloadURL = `https://res.cloudinary.com/${cloudName}/video/upload/fl_attachment/`;
@@ -80,6 +88,11 @@ type MessageType = {
 	durationSeconds?: number;
 };
 
+type ResolutionOptionsType = {
+	value: string;
+	label: string;
+};
+
 export default function ChatAnimationPage({
 	userName,
 	checkMobileDevice,
@@ -99,6 +112,7 @@ export default function ChatAnimationPage({
 	const [messageToDisplay, setMessageToDisplay] =
 		useState<MessageType | null>(null);
 	const [loadingMsg, setLoadingMsg] = useState<string | null>(null);
+	const [selectedResolution, setSelectedResolution] = useState<string>("l");
 
 	const currAnimationId = useRef<string>("");
 	const inpRef = useRef<HTMLTextAreaElement>(null);
@@ -186,7 +200,7 @@ export default function ChatAnimationPage({
 			inpRef.current.value = "";
 			const body = {
 				userPrompt,
-				videoResolution: "l",
+				videoResolution: selectedResolution,
 			};
 			try {
 				setLoadingMsg("Generating code from AI...");
@@ -323,6 +337,11 @@ export default function ChatAnimationPage({
 									<div className="flex justify-between items-center px-4 py-2 bg-[#181818]">
 										<div className="flex gap-2 text-gray-500">
 											{/* Optional tools/buttons could go here */}
+											<ResolutionSelectComponent
+												setSelectedResolution={
+													setSelectedResolution
+												}
+											/>
 										</div>
 										<Button
 											variant="primary"

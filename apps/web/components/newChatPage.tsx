@@ -10,6 +10,7 @@ import { TextAreaComp } from "@repo/ui/textArea";
 import toast, { Toaster } from "react-hot-toast";
 import { ChatGreeting } from "@repo/ui/chatGreeting";
 import { Sidebar } from "./newSideBarComp/sidebar";
+import { ResolutionSelectComponent } from "./resolutionSelect";
 
 const deleteChat = async (chatId: string) => {
 	try {
@@ -68,6 +69,7 @@ export default function NewChatAnimationPage({
 	);
 	const [promptMsg, setPromptMsg] = useState<string | null>(null);
 	const [errorMsg, setErrorMsg] = useState<string | null>(null);
+	const [selectedResolution, setSelectedResolution] = useState<string>("l");
 
 	const animationId = useRef<string>("");
 	const inpRef = useRef<HTMLTextAreaElement>(null);
@@ -85,7 +87,7 @@ export default function NewChatAnimationPage({
 			inpRef.current.value = "";
 			const body = {
 				userPrompt,
-				videoResolution: "l",
+				videoResolution: selectedResolution,
 			};
 			setPromptMsg(userPrompt);
 			try {
@@ -191,6 +193,11 @@ export default function NewChatAnimationPage({
 								<div className="flex justify-between items-center px-4 py-2 bg-[#181818]">
 									<div className="flex gap-2 text-gray-500">
 										{/* Optional tools/buttons could go here */}
+										<ResolutionSelectComponent
+											setSelectedResolution={
+												setSelectedResolution
+											}
+										/>
 									</div>
 									<Button
 										variant="primary"

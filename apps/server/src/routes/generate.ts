@@ -212,7 +212,7 @@ generateRouter.post("/new", verifyUser, async (req: Request, res: Response) => {
 			},
 			{
 				headers: {
-					service_secret: process.env.INTERNAL_SERVICE_SECRET,
+					serviceSecret: process.env.INTERNAL_SERVICE_SECRET,
 				},
 			},
 		);
@@ -487,7 +487,7 @@ Rotate, MoveAlongPath
 				},
 				{
 					headers: {
-						service_secret: process.env.INTERNAL_SERVICE_SECRET,
+						serviceSecret: process.env.INTERNAL_SERVICE_SECRET,
 					},
 				},
 			);
@@ -543,7 +543,7 @@ const verifyInternalService = (
 	next: NextFunction,
 ) => {
 	const internalServiceSecret = process.env.INTERNAL_SERVICE_SECRET!;
-	const pythonSecret = req.headers.service_secret;
+	const pythonSecret = req.headers.serviceSecret;
 
 	if (
 		!pythonSecret ||

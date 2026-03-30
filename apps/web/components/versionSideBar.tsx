@@ -44,7 +44,7 @@ export const VersionSideBar = ({
 	}, [messageToDisplay, isVersionTabVisible]);
 	return (
 		<div
-			className={`max-h-full h-fit absolute top-0 ${checkMobileDevice ? " left-4 rounded-bl-lg " : " left-0 rounded-tr-lg "} z-30 transition-transform duration-200 ease-in-out  rounded-br-lg ${isVersionTabVisible && " pb-1.5  shadow-2xl "} flex flex-col w-54 bg-[#202020] border border-white/2`}
+			className={`max-h-full h-fit absolute top-0 ${checkMobileDevice ? " left-4 rounded-bl-lg " : " left-0 rounded-tr-lg "} z-30 transition-transform duration-200 ease-in-out  rounded-br-lg ${isVersionTabVisible && " pb-1.5 ring-1 ring-white/10"} flex flex-col w-54 bg-[#202020] border-2 border-white/3 `}
 		>
 			<div className="flex flex-row justify-between items-center p-2 transition-transform duration-200 ease-in-out">
 				<div
