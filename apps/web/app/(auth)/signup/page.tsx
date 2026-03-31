@@ -122,7 +122,7 @@ export default function SignUp() {
 					/>
 				</div>
 			</div>
-			<div className="flex mx-auto justify-center items-center px-4">
+			<div className="flex mx-auto justify-center items-center px-4 pt-20">
 				<div className="relative flex flex-col justify-center max-w-87 w-87 sm:max-w-4xl sm:w-92 md:w-97.5">
 					<div className="w-full pt-5 pb-10">
 						<div className="w-auto flex justify-start"></div>
