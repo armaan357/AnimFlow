@@ -2,7 +2,7 @@
 import { Button } from "@repo/ui/button";
 import { ChatPageHeader } from "./header";
 import "../app/page.module.css";
-import { ArrowUp, Copy, MenuIcon } from "lucide-react";
+import { AlertCircleIcon, ArrowUp, Copy, MenuIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
@@ -313,7 +313,7 @@ export default function ChatAnimationPage({
 						<div className="w-full p-4 bg-[#121212] ">
 							<div className="max-w-3xl mx-auto">
 								<form
-									className="relative flex flex-col bg-[#181818] border border-[#ffffff15] rounded-xl overflow-hidden focus-within:border-[#488AED]/15 transition-colors duration-150 ease-in-out"
+									className="relative flex flex-col bg-[#1f1f1f] border border-[#ffffff15] rounded-xl overflow-hidden focus-within:border-[#488AED]/15 transition-colors duration-150 ease-in-out"
 									onSubmit={async (e) => {
 										e.preventDefault();
 										submitPrompt();
@@ -334,7 +334,7 @@ export default function ChatAnimationPage({
 											className="min-h-15 max-h-50 w-full bg-transparent border-none focus:ring-0 resize-none px-3 py-2 text-white placeholder-gray-500"
 										/>
 									</div>
-									<div className="flex justify-between items-center px-4 py-2 bg-[#181818]">
+									<div className="flex justify-between items-center px-4 py-2 bg-[#1f1f1f]">
 										<div className="flex gap-2 text-gray-500">
 											{/* Optional tools/buttons could go here */}
 											<ResolutionSelectComponent
@@ -385,7 +385,9 @@ const PromptAndResponseContainer = ({
 			>
 				<div className="flex w-fit gap-1.5 self-end-safe flex-col bg-transparent msg-container">
 					<div className="px-2 py-1 sm:px-3 sm:py-1.5 w-fit max-w-lg self-end-safe bg-[#212121] border border-white/10 rounded-lg">
-						<p className="text-base">{m.prompt}</p>
+						<p className="text-base text-[#f5f5f5]/90">
+							{m.prompt}
+						</p>
 					</div>
 					<div className="hidden-buttons flex w-full justify-end pr-4 container">
 						<div
@@ -419,9 +421,9 @@ const PromptAndResponseContainer = ({
 							)}
 							{(!m.taskId || !m.videoURL) &&
 								m.status !== "PENDING" && (
-									<p className="test-base">
-										Error! {m.errorReason} Please try again
-										later.
+									<p className="test-base flex gap-1.5 text-[#ebebeb]/70">
+										<AlertCircleIcon /> Error!{" "}
+										{m.errorReason} Please try again later.
 									</p>
 								)}
 						</div>

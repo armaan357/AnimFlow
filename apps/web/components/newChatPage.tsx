@@ -169,7 +169,7 @@ export default function NewChatAnimationPage({
 					<div className="w-full p-4 bg-[#121212] ">
 						<div className="max-w-3xl mx-auto">
 							<form
-								className="relative flex flex-col bg-[#181818] border border-[#ffffff15] rounded-xl overflow-hidden focus-within:border-[#488AED]/15 transition-colors"
+								className="relative flex flex-col bg-[#1f1f1f] border border-[#ffffff15] rounded-xl overflow-hidden focus-within:border-[#488AED]/15 transition-colors"
 								onSubmit={async (e) => {
 									e.preventDefault();
 									submitPrompt();
@@ -190,7 +190,7 @@ export default function NewChatAnimationPage({
 										className="min-h-15 max-h-50 w-full bg-transparent border-none focus:ring-0 resize-none px-3 py-2 text-white placeholder-gray-500"
 									/>
 								</div>
-								<div className="flex justify-between items-center px-4 py-2 bg-[#181818]">
+								<div className="flex justify-between items-center px-4 py-2 bg-[#1f1f1f]">
 									<div className="flex gap-2 text-gray-500">
 										{/* Optional tools/buttons could go here */}
 										<ResolutionSelectComponent
@@ -233,7 +233,9 @@ const NewPromptContainer = ({
 				>
 					<div className="flex w-fit gap-1.5 self-end-safe flex-col bg-transparent msg-container">
 						<div className="px-2.5 py-1 sm:px-4 sm:py-3 w-fit max-w-lg self-end-safe bg-[#343434] border border-white/10 rounded-xl">
-							<p className="text-base">{promptMsg}</p>
+							<p className="text-base text-[#f5f5f5]/90">
+								{promptMsg}
+							</p>
 						</div>
 						<div className="hidden-buttons flex w-full justify-end pr-4">
 							<div

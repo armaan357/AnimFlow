@@ -144,7 +144,7 @@ export default function Signin() {
 								</span>
 							</div>
 						</div>
-						<div className="flex flex-col justify-center text-center gap-3 w-full">
+						<div className="flex flex-col justify-center text-center gap-4 w-full">
 							<InputBox
 								id="email"
 								placeholder="Email"
@@ -181,6 +181,7 @@ export default function Signin() {
 									)}
 								</>
 							)}
+							<div className="w-full h-0"></div>
 							<Button
 								variant="primary"
 								children={"Continue"}
@@ -201,30 +202,10 @@ export default function Signin() {
 										);
 								}}
 							/>
-							{/* <div
-								className={`flex justify-center text-center mt-4 ${isErrorMsgVisible ? " invisible " : ""}`}
-							>
-								<p className="text-white/80 text-base ">
-									Don't have an account?{" "}
-									<Link
-										href={"/signin"}
-										className={`text-blue-300 transition-all duration-150 ease-in-out hover:text-blue-500 hover:underline cursor-pointer`}
-									>
-										Sign Up
-									</Link>{" "}
-								</p>
-							</div> */}
 						</div>
 					</div>
 				</div>
 			</div>
-			{/* <div className="sticky top-0 hidden lg:block h-screen rounded-xl p-4">
-				<div className="bg-black w-full h-full rounded-lg flex justify-center items-center">
-					<p className="text-4xl text-[#ffffff80] font-bold">
-						A Play button logo will appear here!
-					</p>
-				</div>
-			</div> */}
 		</div>
 	);
 }

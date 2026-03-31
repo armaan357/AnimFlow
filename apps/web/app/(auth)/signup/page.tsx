@@ -1,10 +1,11 @@
 "use client";
 import { Button } from "@repo/ui/button";
-import InputBox, { PasswordInputBox } from "@repo/ui/input";
+import InputBox from "@repo/ui/input";
 import axios from "axios";
 import { Dispatch, RefObject, SetStateAction, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import PasswordInput from "@/components/signUpPasswordInput";
 
 const checkEmailExists = async (
 	emailRef: RefObject<HTMLInputElement | null>,
@@ -50,33 +51,29 @@ export default function SignUp() {
 		useState<boolean>(false);
 	const [isErrorMsgVisible, setErrorMsgVisible] = useState<boolean>(false);
 	const [errorMsg, setErrorMsg] = useState<string | null>(null);
-	const [isPasswordVisible, setPasswordVisible] = useState<boolean>(false);
-	const [isCnfPasswordVisible, setCnfPasswordVisible] =
-		useState<boolean>(false);
+	const [password, setPassword] = useState<string | null>(null);
+	const [isPasswordValid, setPasswordValid] = useState<boolean>(false);
+
 	const emailRef = useRef<HTMLInputElement | null>(null);
-	const passwordRef = useRef<HTMLInputElement | null>(null);
-	const cnfPasswordRef = useRef<HTMLInputElement>(null);
 	const userNameRef = useRef<HTMLInputElement | null>(null);
 	const navigate = useRouter();
 
 	const signup = async () => {
+		if (!password) return;
 		const userInfo: {
 			email: string;
 			password: string;
 			userName: string;
-			cnfPassword: string;
 		} = {
 			email: emailRef.current?.value!,
 			userName: userNameRef.current?.value!,
-			password: passwordRef.current?.value!,
-			cnfPassword: cnfPasswordRef.current?.value!,
+			password: password,
 		};
 		try {
 			if (
 				userInfo.email.length === 0 ||
 				userInfo.password.length === 0 ||
-				userInfo.userName.length === 0 ||
-				userInfo.cnfPassword.length === 0
+				userInfo.userName.length === 0
 			)
 				return;
 			const signupResp = await axios.post(
@@ -98,9 +95,14 @@ export default function SignUp() {
 		}
 	};
 
+	const handlePasswordChange = (password: string) => {
+		setPassword(password);
+		// setPasswordValid(true);
+	};
+
 	return (
-		<div className="flex flex-col justify-center items-center h-full w-full min-h-screen bg-black">
-			<div className="h-15 absolute top-0 w-full flex justify-between items-center px-3 sm:px-8 md:px-12">
+		<div className="justify-center h-full w-full min-h-screen bg-black pb-7.5">
+			<div className="h-15 w-full flex justify-between items-center px-3 sm:px-8 md:px-12 ">
 				<div>
 					<Link href={"/"} className="cursor-pointer">
 						<div className="w-fit cursor-pointer">
@@ -120,16 +122,10 @@ export default function SignUp() {
 					/>
 				</div>
 			</div>
-			<div className="flex justify-center items-center px-4">
+			<div className="flex mx-auto justify-center items-center px-4">
 				<div className="relative flex flex-col justify-center max-w-87 w-87 sm:max-w-4xl sm:w-92 md:w-97.5">
 					<div className="w-full pt-5 pb-10">
-						<div className="w-auto flex justify-start">
-							{/* <div className="w-fit">
-								<span className="font-bold text-2xl text-[#e3e3e3]">
-									AnimFlow
-								</span>
-							</div> */}
-						</div>
+						<div className="w-auto flex justify-start"></div>
 						<div className="text-2xl font-bold text-center text-[#ffffff80]">
 							Create Your Account
 						</div>
@@ -169,7 +165,7 @@ export default function SignUp() {
 								</span>
 							</div>
 						</div>
-						<div className="flex flex-col text-center gap-4 w-full">
+						<div className="flex flex-col text-center gap-4 w-full pb-5">
 							<InputBox
 								id="email"
 								placeholder="Email"
@@ -185,27 +181,18 @@ export default function SignUp() {
 										type="text"
 										ref={userNameRef}
 									/>
-									<PasswordInputBox
+									<PasswordInput
 										id="pwd"
+										onChange={(
+											value: string,
+											isValid: boolean,
+										) => {
+											setPasswordValid(isValid);
+											if (isValid) {
+												handlePasswordChange(value);
+											}
+										}}
 										placeholder="Password"
-										ref={passwordRef}
-										isPasswordVisible={isPasswordVisible}
-										setPasswordVisible={() =>
-											setPasswordVisible(
-												!isPasswordVisible,
-											)
-										}
-									/>
-									<PasswordInputBox
-										id="cnf-pwd"
-										placeholder="Confirm Password"
-										ref={cnfPasswordRef}
-										isPasswordVisible={isCnfPasswordVisible}
-										setPasswordVisible={() =>
-											setCnfPasswordVisible(
-												!isCnfPasswordVisible,
-											)
-										}
 									/>
 								</div>
 							)}
@@ -229,15 +216,22 @@ export default function SignUp() {
 									)}
 								</>
 							)}
+							<div className="w-full h-0"></div>
 							<Button
 								variant="primary"
 								children={"Continue"}
 								size="full"
-								disabled={isErrorMsgVisible ? true : false}
+								disabled={
+									isErrorMsgVisible ||
+									(isPasswordInputVisible && !isPasswordValid)
+										? true
+										: false
+								}
 								onClick={() => {
 									if (
 										isPasswordInputVisible &&
-										!isErrorMsgVisible
+										!isErrorMsgVisible &&
+										isPasswordValid
 									)
 										signup();
 									else
@@ -249,31 +243,10 @@ export default function SignUp() {
 										);
 								}}
 							/>
-							{/* <div
-								className={`flex justify-center mt-4 ${isErrorMsgVisible ? " invisible " : ""}`}
-							>
-								<p className="text-white/80 text-base">
-									Already have an account?{" "}
-									<Link
-										href={"/signin"}
-										className={`text-blue-300 transition-all duration-150 ease-in-out hover:text-blue-500 hover:underline cursor-pointer`}
-									>
-										Login
-									</Link>{" "}
-									to your account.
-								</p>
-							</div> */}
 						</div>
 					</div>
 				</div>
 			</div>
-			{/* <div className="sticky top-0 hidden lg:block h-screen rounded-xl p-4">
-				<div className="bg-black w-full h-full rounded-lg flex justify-center items-center">
-					<p className="text-4xl text-[#ffffff80] font-bold">
-						A Play button logo will appear here!
-					</p>
-				</div>
-			</div> */}
 		</div>
 	);
 }
