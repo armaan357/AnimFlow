@@ -30,7 +30,7 @@ def validateOutput(returnCode: int, animationFileAddress: str):
     if not os.path.isfile(animationFileAddress):
         return { "res": False, "reason": "OUTPUT_NOT_FOUND"}
 
-    if not os.path.getsize(animationFileAddress) > 20000:
+    if not os.path.getsize(animationFileAddress) > 5000:
         return { "res": False, "reason": "EMPTY_OR_CORRUPT_OUTPUT"}
 
     
@@ -154,7 +154,7 @@ def generateAnimation(self, newJob: dict):
                 "id": jobId,
                 "animationId": animationId,
                 "status": "FAILED",
-                "Reason": isValidOutput["reason"],
+                "reason": isValidOutput["reason"],
                 "timeStamp": datetime.now().isoformat()
             }
         else:
@@ -177,8 +177,8 @@ def generateAnimation(self, newJob: dict):
                 "id": jobId,
                 "animationId": animationId,
                 "status": "FAILED",
-                "Reason": "TIMEOUT",
-                "Error": t_err.stderr[-500:],
+                "reason": "TIMEOUT",
+                "errorDescription": t_err.stderr[-500:],
                 "timeStamp": datetime.now().isoformat()
             }
         return result
@@ -189,8 +189,8 @@ def generateAnimation(self, newJob: dict):
             "id": jobId,
             "animationId": animationId,
             "status": "FAILED",
-            "Reason": "subprocessError",
-            "Error": err.stderr[-500:],
+            "reason": "subprocessError",
+            "errorDescription": err.stderr[-500:],
             "timeStamp": datetime.now().isoformat()
         }
         num_retries = generateAnimation.request.retries
@@ -203,8 +203,8 @@ def generateAnimation(self, newJob: dict):
             "id": jobId,
             "animationId": animationId,
             "status": "FAILED",
-            "Reason": "OSError",
-            "Error": str(e),
+            "reason": "OSError",
+            "errorDescription": str(e),
             "timeStamp": datetime.now().isoformat()
         }
         print(result)
@@ -218,7 +218,7 @@ def generateAnimation(self, newJob: dict):
         if not internalServiceURL:
             print("Internal Service URL not found")
             return
-        response = requests.post(internalServiceURL, headers={ 'service_secret': serviceSecret},json = result)
+        response = requests.post(internalServiceURL, headers={ 'servicesecret': serviceSecret},json = result)
         if response.status_code == 200:
             pretty_data = json.dumps(response.json(), indent=4, sort_keys=True)
             print("\nPretty printed data:")

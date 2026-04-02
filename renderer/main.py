@@ -1,9 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Header
 from pydantic import BaseModel
 from celery.result import AsyncResult
 from animationWorker import celeryApp
 from animationTasks import generateAnimation
 import ast
+import os
 
 ALLOWED_ROOT_MODULE = "manim"
 FORBIDDEN_CALLS = {
@@ -22,6 +23,8 @@ FORBIDDEN_ATTRS = {
     "remove",
     "unlink"
 }
+
+internalServiceSecret = os.getenv("INTERNAL_SERVICE_SECRET")
 
 class CustomCodeValidator(ast.NodeVisitor):
     def __init__(self):
@@ -129,8 +132,10 @@ def home():
     return {'message': 'hello'}
 
 @app.post("/job")
-def publishJob(newJob: jobReq):
-    
+def publishJob(newJob: jobReq, servicesecret: str = Header(...)):
+    if servicesecret != internalServiceSecret:
+        print("\nInvalid Internal service secret.\n")
+        return
     try:
         code = newJob.code
         parseTree = ast.parse(code)
@@ -150,7 +155,10 @@ def publishJob(newJob: jobReq):
         print(f"SyntaxError: {e}")
 
 @app.get("/task/{task_id}")
-def get_task_status(task_id: str):
+def get_task_status(task_id: str, servicesecret: str = Header(...)):
+    if servicesecret != internalServiceSecret:
+        print("\nInvalid internal service secret\n")
+        return
     """
     Check the status of a Celery task.
     """
@@ -189,7 +197,12 @@ def get_task_status(task_id: str):
     return response
 
 @app.get("/tasks/active")
-def get_active_tasks():
+def get_active_tasks(servicesecret: str = Header(...)):
+    if servicesecret != internalServiceSecret:
+        print("\nInvalid Internal Service Secret\n")
+        return {
+            "error": "Invalid secret"
+        }
     """
     Get list of currently active tasks.
     """
