@@ -114,6 +114,7 @@ export const AnimationVersionScalarFieldEnum = {
   errorReason: 'errorReason',
   createdAt: 'createdAt',
   animationId: 'animationId',
+  hash: 'hash',
   renderTimeMs: 'renderTimeMs',
   fileSizeBytes: 'fileSizeBytes',
   durationSeconds: 'durationSeconds'

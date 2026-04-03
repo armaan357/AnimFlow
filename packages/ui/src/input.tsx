@@ -55,7 +55,7 @@ const InputBox = ({ id, type, placeholder, autoComplete, ref }: InputProps) => {
 	return (
 		<input
 			id={id}
-			className={`bg-white/3 border tracking-wide border-[#d8d6cf]/15 rounded-xl placeholder:text-[#F1F0F761]  focus-visible:outline-none text-[15px] px-3.5 py-3 w-full disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 ease-in-out focus-within:border-[#f5f5f5]/25 `}
+			className={`bg-white/3 border tracking-wide border-[#d8d6cf]/12 rounded-xl placeholder:text-[#F1F0F761]  focus-visible:outline-none text-[15px] px-3.5 py-3 w-full disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 ease-in-out focus-within:border-[#f5f5f5]/25 `}
 			placeholder={placeholder}
 			type={type}
 			autoCapitalize="off"

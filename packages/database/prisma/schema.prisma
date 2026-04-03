@@ -50,11 +50,14 @@ model animationVersion {
   createdAt      DateTime    @default(now())
   animationId    String
   animation      animation   @relation(fields: [animationId], references: [id])
+  hash           String?
   renderTimeMs    Int?
   fileSizeBytes   Int?
   durationSeconds Int?
 
   @@unique([versionNo, animationId])
+  @@unique([animationId, hash])
+  @@index([hash])
   @@index([animationId])
   @@index([taskId])
 }

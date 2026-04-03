@@ -52,7 +52,7 @@ export const Button = ({
 }: ButtonProps & { className?: string }) => {
 	return (
 		<button
-			className={`${buttonVariants[variant]} ${buttonSize[size]} cursor-pointer ease-in-out duration-150 transition-colors ${className || ""}`}
+			className={`${buttonVariants[variant]} ${buttonSize[size]} cursor-pointer focus-visible:outline-none select-none ease-in-out duration-150 transition-colors ${className || ""}`}
 			onClick={
 				onClick
 					? () => onClick()

@@ -52,6 +52,7 @@ export type AnimationVersionMinAggregateOutputType = {
   errorReason: string | null
   createdAt: Date | null
   animationId: string | null
+  hash: string | null
   renderTimeMs: number | null
   fileSizeBytes: number | null
   durationSeconds: number | null
@@ -69,6 +70,7 @@ export type AnimationVersionMaxAggregateOutputType = {
   errorReason: string | null
   createdAt: Date | null
   animationId: string | null
+  hash: string | null
   renderTimeMs: number | null
   fileSizeBytes: number | null
   durationSeconds: number | null
@@ -86,6 +88,7 @@ export type AnimationVersionCountAggregateOutputType = {
   errorReason: number
   createdAt: number
   animationId: number
+  hash: number
   renderTimeMs: number
   fileSizeBytes: number
   durationSeconds: number
@@ -119,6 +122,7 @@ export type AnimationVersionMinAggregateInputType = {
   errorReason?: true
   createdAt?: true
   animationId?: true
+  hash?: true
   renderTimeMs?: true
   fileSizeBytes?: true
   durationSeconds?: true
@@ -136,6 +140,7 @@ export type AnimationVersionMaxAggregateInputType = {
   errorReason?: true
   createdAt?: true
   animationId?: true
+  hash?: true
   renderTimeMs?: true
   fileSizeBytes?: true
   durationSeconds?: true
@@ -153,6 +158,7 @@ export type AnimationVersionCountAggregateInputType = {
   errorReason?: true
   createdAt?: true
   animationId?: true
+  hash?: true
   renderTimeMs?: true
   fileSizeBytes?: true
   durationSeconds?: true
@@ -257,6 +263,7 @@ export type AnimationVersionGroupByOutputType = {
   errorReason: string | null
   createdAt: Date
   animationId: string
+  hash: string | null
   renderTimeMs: number | null
   fileSizeBytes: number | null
   durationSeconds: number | null
@@ -297,6 +304,7 @@ export type animationVersionWhereInput = {
   errorReason?: Prisma.StringNullableFilter<"animationVersion"> | string | null
   createdAt?: Prisma.DateTimeFilter<"animationVersion"> | Date | string
   animationId?: Prisma.StringFilter<"animationVersion"> | string
+  hash?: Prisma.StringNullableFilter<"animationVersion"> | string | null
   renderTimeMs?: Prisma.IntNullableFilter<"animationVersion"> | number | null
   fileSizeBytes?: Prisma.IntNullableFilter<"animationVersion"> | number | null
   durationSeconds?: Prisma.IntNullableFilter<"animationVersion"> | number | null
@@ -315,6 +323,7 @@ export type animationVersionOrderByWithRelationInput = {
   errorReason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   animationId?: Prisma.SortOrder
+  hash?: Prisma.SortOrderInput | Prisma.SortOrder
   renderTimeMs?: Prisma.SortOrderInput | Prisma.SortOrder
   fileSizeBytes?: Prisma.SortOrderInput | Prisma.SortOrder
   durationSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -325,6 +334,7 @@ export type animationVersionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   taskId?: string
   versionNo_animationId?: Prisma.animationVersionVersionNoAnimationIdCompoundUniqueInput
+  animationId_hash?: Prisma.animationVersionAnimationIdHashCompoundUniqueInput
   AND?: Prisma.animationVersionWhereInput | Prisma.animationVersionWhereInput[]
   OR?: Prisma.animationVersionWhereInput[]
   NOT?: Prisma.animationVersionWhereInput | Prisma.animationVersionWhereInput[]
@@ -337,11 +347,12 @@ export type animationVersionWhereUniqueInput = Prisma.AtLeast<{
   errorReason?: Prisma.StringNullableFilter<"animationVersion"> | string | null
   createdAt?: Prisma.DateTimeFilter<"animationVersion"> | Date | string
   animationId?: Prisma.StringFilter<"animationVersion"> | string
+  hash?: Prisma.StringNullableFilter<"animationVersion"> | string | null
   renderTimeMs?: Prisma.IntNullableFilter<"animationVersion"> | number | null
   fileSizeBytes?: Prisma.IntNullableFilter<"animationVersion"> | number | null
   durationSeconds?: Prisma.IntNullableFilter<"animationVersion"> | number | null
   animation?: Prisma.XOR<Prisma.AnimationScalarRelationFilter, Prisma.animationWhereInput>
-}, "id" | "taskId" | "versionNo_animationId">
+}, "id" | "taskId" | "versionNo_animationId" | "animationId_hash">
 
 export type animationVersionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -355,6 +366,7 @@ export type animationVersionOrderByWithAggregationInput = {
   errorReason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   animationId?: Prisma.SortOrder
+  hash?: Prisma.SortOrderInput | Prisma.SortOrder
   renderTimeMs?: Prisma.SortOrderInput | Prisma.SortOrder
   fileSizeBytes?: Prisma.SortOrderInput | Prisma.SortOrder
   durationSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -380,6 +392,7 @@ export type animationVersionScalarWhereWithAggregatesInput = {
   errorReason?: Prisma.StringNullableWithAggregatesFilter<"animationVersion"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"animationVersion"> | Date | string
   animationId?: Prisma.StringWithAggregatesFilter<"animationVersion"> | string
+  hash?: Prisma.StringNullableWithAggregatesFilter<"animationVersion"> | string | null
   renderTimeMs?: Prisma.IntNullableWithAggregatesFilter<"animationVersion"> | number | null
   fileSizeBytes?: Prisma.IntNullableWithAggregatesFilter<"animationVersion"> | number | null
   durationSeconds?: Prisma.IntNullableWithAggregatesFilter<"animationVersion"> | number | null
@@ -396,6 +409,7 @@ export type animationVersionCreateInput = {
   errorMessage?: string | null
   errorReason?: string | null
   createdAt?: Date | string
+  hash?: string | null
   renderTimeMs?: number | null
   fileSizeBytes?: number | null
   durationSeconds?: number | null
@@ -414,6 +428,7 @@ export type animationVersionUncheckedCreateInput = {
   errorReason?: string | null
   createdAt?: Date | string
   animationId: string
+  hash?: string | null
   renderTimeMs?: number | null
   fileSizeBytes?: number | null
   durationSeconds?: number | null
@@ -430,6 +445,7 @@ export type animationVersionUpdateInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   renderTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   fileSizeBytes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -448,6 +464,7 @@ export type animationVersionUncheckedUpdateInput = {
   errorReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   animationId?: Prisma.StringFieldUpdateOperationsInput | string
+  hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   renderTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   fileSizeBytes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -465,6 +482,7 @@ export type animationVersionCreateManyInput = {
   errorReason?: string | null
   createdAt?: Date | string
   animationId: string
+  hash?: string | null
   renderTimeMs?: number | null
   fileSizeBytes?: number | null
   durationSeconds?: number | null
@@ -481,6 +499,7 @@ export type animationVersionUpdateManyMutationInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   renderTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   fileSizeBytes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -498,6 +517,7 @@ export type animationVersionUncheckedUpdateManyInput = {
   errorReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   animationId?: Prisma.StringFieldUpdateOperationsInput | string
+  hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   renderTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   fileSizeBytes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -518,6 +538,11 @@ export type animationVersionVersionNoAnimationIdCompoundUniqueInput = {
   animationId: string
 }
 
+export type animationVersionAnimationIdHashCompoundUniqueInput = {
+  animationId: string
+  hash: string
+}
+
 export type animationVersionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   versionNo?: Prisma.SortOrder
@@ -530,6 +555,7 @@ export type animationVersionCountOrderByAggregateInput = {
   errorReason?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   animationId?: Prisma.SortOrder
+  hash?: Prisma.SortOrder
   renderTimeMs?: Prisma.SortOrder
   fileSizeBytes?: Prisma.SortOrder
   durationSeconds?: Prisma.SortOrder
@@ -554,6 +580,7 @@ export type animationVersionMaxOrderByAggregateInput = {
   errorReason?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   animationId?: Prisma.SortOrder
+  hash?: Prisma.SortOrder
   renderTimeMs?: Prisma.SortOrder
   fileSizeBytes?: Prisma.SortOrder
   durationSeconds?: Prisma.SortOrder
@@ -571,6 +598,7 @@ export type animationVersionMinOrderByAggregateInput = {
   errorReason?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   animationId?: Prisma.SortOrder
+  hash?: Prisma.SortOrder
   renderTimeMs?: Prisma.SortOrder
   fileSizeBytes?: Prisma.SortOrder
   durationSeconds?: Prisma.SortOrder
@@ -656,6 +684,7 @@ export type animationVersionCreateWithoutAnimationInput = {
   errorMessage?: string | null
   errorReason?: string | null
   createdAt?: Date | string
+  hash?: string | null
   renderTimeMs?: number | null
   fileSizeBytes?: number | null
   durationSeconds?: number | null
@@ -672,6 +701,7 @@ export type animationVersionUncheckedCreateWithoutAnimationInput = {
   errorMessage?: string | null
   errorReason?: string | null
   createdAt?: Date | string
+  hash?: string | null
   renderTimeMs?: number | null
   fileSizeBytes?: number | null
   durationSeconds?: number | null
@@ -718,6 +748,7 @@ export type animationVersionScalarWhereInput = {
   errorReason?: Prisma.StringNullableFilter<"animationVersion"> | string | null
   createdAt?: Prisma.DateTimeFilter<"animationVersion"> | Date | string
   animationId?: Prisma.StringFilter<"animationVersion"> | string
+  hash?: Prisma.StringNullableFilter<"animationVersion"> | string | null
   renderTimeMs?: Prisma.IntNullableFilter<"animationVersion"> | number | null
   fileSizeBytes?: Prisma.IntNullableFilter<"animationVersion"> | number | null
   durationSeconds?: Prisma.IntNullableFilter<"animationVersion"> | number | null
@@ -734,6 +765,7 @@ export type animationVersionCreateManyAnimationInput = {
   errorMessage?: string | null
   errorReason?: string | null
   createdAt?: Date | string
+  hash?: string | null
   renderTimeMs?: number | null
   fileSizeBytes?: number | null
   durationSeconds?: number | null
@@ -750,6 +782,7 @@ export type animationVersionUpdateWithoutAnimationInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   renderTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   fileSizeBytes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -766,6 +799,7 @@ export type animationVersionUncheckedUpdateWithoutAnimationInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   renderTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   fileSizeBytes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -782,6 +816,7 @@ export type animationVersionUncheckedUpdateManyWithoutAnimationInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   renderTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   fileSizeBytes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   durationSeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -801,6 +836,7 @@ export type animationVersionSelect<ExtArgs extends runtime.Types.Extensions.Inte
   errorReason?: boolean
   createdAt?: boolean
   animationId?: boolean
+  hash?: boolean
   renderTimeMs?: boolean
   fileSizeBytes?: boolean
   durationSeconds?: boolean
@@ -819,6 +855,7 @@ export type animationVersionSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   errorReason?: boolean
   createdAt?: boolean
   animationId?: boolean
+  hash?: boolean
   renderTimeMs?: boolean
   fileSizeBytes?: boolean
   durationSeconds?: boolean
@@ -837,6 +874,7 @@ export type animationVersionSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   errorReason?: boolean
   createdAt?: boolean
   animationId?: boolean
+  hash?: boolean
   renderTimeMs?: boolean
   fileSizeBytes?: boolean
   durationSeconds?: boolean
@@ -855,12 +893,13 @@ export type animationVersionSelectScalar = {
   errorReason?: boolean
   createdAt?: boolean
   animationId?: boolean
+  hash?: boolean
   renderTimeMs?: boolean
   fileSizeBytes?: boolean
   durationSeconds?: boolean
 }
 
-export type animationVersionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "versionNo" | "prompt" | "code" | "taskId" | "videoURL" | "status" | "errorMessage" | "errorReason" | "createdAt" | "animationId" | "renderTimeMs" | "fileSizeBytes" | "durationSeconds", ExtArgs["result"]["animationVersion"]>
+export type animationVersionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "versionNo" | "prompt" | "code" | "taskId" | "videoURL" | "status" | "errorMessage" | "errorReason" | "createdAt" | "animationId" | "hash" | "renderTimeMs" | "fileSizeBytes" | "durationSeconds", ExtArgs["result"]["animationVersion"]>
 export type animationVersionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   animation?: boolean | Prisma.animationDefaultArgs<ExtArgs>
 }
@@ -888,6 +927,7 @@ export type $animationVersionPayload<ExtArgs extends runtime.Types.Extensions.In
     errorReason: string | null
     createdAt: Date
     animationId: string
+    hash: string | null
     renderTimeMs: number | null
     fileSizeBytes: number | null
     durationSeconds: number | null
@@ -1326,6 +1366,7 @@ export interface animationVersionFieldRefs {
   readonly errorReason: Prisma.FieldRef<"animationVersion", 'String'>
   readonly createdAt: Prisma.FieldRef<"animationVersion", 'DateTime'>
   readonly animationId: Prisma.FieldRef<"animationVersion", 'String'>
+  readonly hash: Prisma.FieldRef<"animationVersion", 'String'>
   readonly renderTimeMs: Prisma.FieldRef<"animationVersion", 'Int'>
   readonly fileSizeBytes: Prisma.FieldRef<"animationVersion", 'Int'>
   readonly durationSeconds: Prisma.FieldRef<"animationVersion", 'Int'>
