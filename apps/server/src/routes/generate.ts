@@ -9,6 +9,7 @@ import {
 	animationGenerateSchema,
 	animationVersionUpdateSchema,
 } from "../zodTypes/index.js";
+import crypto from "crypto";
 
 const generateRouter: Router = express.Router();
 const workerUrl = process.env.WORKER_URL;
@@ -38,6 +39,10 @@ generateRouter.post("/new", verifyUser, async (req: Request, res: Response) => {
 	//     res.status(401).json({ message: 'Please login and try again' });
 	// }
 	let dbResp;
+	const hash = crypto
+		.createHash("sha256")
+		.update(userPrompt + videoResolution)
+		.digest("hex");
 
 	try {
 		const enhancedPrompt = `
@@ -230,6 +235,7 @@ generateRouter.post("/new", verifyUser, async (req: Request, res: Response) => {
 			gatewayResp.data.taskId as string,
 			dbResp.id,
 			1,
+			hash,
 		);
 		res.json({
 			code: 0,
@@ -257,6 +263,7 @@ function createNewAnimationVersion(
 	taskId: string,
 	animationId: string,
 	versionNo: number,
+	hash: string,
 ) {
 	return prisma.$transaction(
 		async (tx: Prisma.TransactionClient) => {
@@ -267,6 +274,7 @@ function createNewAnimationVersion(
 					versionNo,
 					taskId: taskId,
 					animationId: animationId,
+					hash: hash,
 				},
 			});
 
@@ -315,6 +323,22 @@ generateRouter.post(
 				});
 			if (!previousAnimationVersion) {
 				res.json({ error: "Unknown error occured" });
+				return;
+			}
+			const hash = crypto
+				.createHash("sha256")
+				.update(
+					userPrompt +
+						previousAnimationVersion.code +
+						videoResolution,
+				)
+				.digest("hex");
+			if (hash === previousAnimationVersion.hash) {
+				res.json({
+					code: 0,
+					message: "Render completed successfully",
+					previousAnimationVersion,
+				});
 				return;
 			}
 			const enhancedPrompt = `
@@ -503,6 +527,7 @@ Rotate, MoveAlongPath
 				gatewayResp.data.taskId,
 				animationId,
 				previousAnimationVersion.versionNo + 1,
+				hash,
 			);
 
 			res.json({
