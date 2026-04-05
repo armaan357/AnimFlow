@@ -126,7 +126,7 @@ uvicorn main:app --reload
 
 ```bash
 cd renderer
-celery -A celery_app worker --loglevel=info
+celery -A animationWorker worker -l info -P gevent
 ```
 
 ### 5. Start Frontend
