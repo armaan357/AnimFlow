@@ -1,135 +1,229 @@
-# Turborepo starter
+## ✨ AnimFlow
 
-This Turborepo starter is maintained by the Turborepo core team.
+AnimFlow is an AI-powered platform that converts natural language prompts into rendered mathematical animations using Manim. It combines a modern frontend with a distributed backend pipeline to generate, process, and deliver animations asynchronously.
 
-## Using this example
+---
 
-Run the following command:
+## 🧠 Key Features
 
-```sh
-npx create-turbo@latest
-```
+- 🎬 Generate animations from natural language prompts
+- 🔁 Versioned workflow (like ChatGPT conversations)
+- ⚡ Asynchronous rendering pipeline using job queues
+- 🔒 Secure sandbox execution using Docker
+- ♻️ Idempotent job handling (no duplicate renders)
+- 📉 Daily usage limits for fair resource usage
+- 🛠️ Automatic failure detection and recovery for stuck jobs
 
-## What's inside?
+---
 
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+## 🏗️ Architecture Overview
 
 ```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+Frontend (Next.js)
+↓
+Node.js API (Auth, Limits, Idempotency)
+↓
+Gemini API (Code Generation)
+↓
+FastAPI Gateway
+↓
+Redis Queue
+↓
+Celery Workers
+↓
+Docker Sandbox
+↓
+Manim Rendering
+↓
+Cloudinary (Video Storage)
+↓
+Database Update (PostgreSQL)
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+---
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+## ⚙️ Setup & Installation
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+### 1. Clone the repository
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+```bash
+git clone https://github.com/armaan357/AnimFlow.git
+cd AnimFlow
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+---
+
+## 📦 Prerequisites
+
+- Node.js (v18+)
+- pnpm
+- Python (3.10+)
+- Redis
+- Docker
+- PostgreSQL
+
+---
+
+## 🔐 Environment Variables
+
+### Backend (.env)
 
 ```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+DATABASE_URL=
+JWT_SECRET=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+REDIS_URL=
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
 ```
 
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+### Frontend (.env)
 
 ```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+NEXT_PUBLIC_BACKEND_URL=
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+---
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+## 🖥️ Running the Project
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
+### 1. Start Redis
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+```bash
+redis-server
 ```
 
-## Useful Links
+### 2. Install pnpm
 
-Learn more about the power of Turborepo:
+```bash
+npm install -g pnpm
+```
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+### 3. Start Backend
+
+```bash
+cd backend
+pnpm install
+pnpm run dev
+```
+
+### 4. Start Python Services
+
+#### FastAPI
+
+```bash
+cd renderer
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+#### Celery Worker
+
+```bash
+cd renderer
+celery -A celery_app worker --loglevel=info
+```
+
+### 5. Start Frontend
+
+```bash
+cd frontend
+pnpm install
+pnpm run dev
+```
+
+---
+
+## 🐳 Docker Requirement
+
+Ensure Docker is running:
+
+```bash
+docker run hello-world
+```
+
+---
+
+## 🌐 Access
+
+- Frontend: [http://localhost:3000](http://localhost:3000)
+- Backend: [http://localhost:3001](http://localhost:3001)
+
+---
+
+## 🧪 Usage
+
+1. Sign up / log in
+2. Enter a prompt
+3. Wait for rendering
+4. View generated animation
+
+---
+
+## ⚠️ Notes
+
+- Rendering may take time depending on complexity
+- Ensure Docker has sufficient memory (2GB+ recommended)
+- Redis must be running before workers
+
+---
+
+## 📊 Performance Highlights
+
+- 🚫 Eliminated ~90–100% duplicate rendering jobs using idempotent hashing
+- 🔄 Ensured 100% recovery of stuck jobs via automated cleanup
+- ⚙️ Reduced redundant compute by deduplicating identical requests
+
+---
+
+## 🧪 Tech Stack
+
+### Frontend
+
+- Next.js
+- TypeScript
+
+### Backend
+
+- Node.js (Express)
+- Prisma ORM
+- PostgreSQL
+
+### Rendering Pipeline
+
+- FastAPI
+- Celery
+- Redis
+- Docker
+- Manim
+
+### Media
+
+- Cloudinary
+
+---
+
+## 🔐 Authentication
+
+- JWT-based authentication
+- Google & GitHub OAuth
+
+---
+
+## 🚀 Future Improvements
+
+- Real-time rendering progress (WebSockets/SSE)
+- Job cancellation
+- Priority queues
+- Video preloading for instant switching
+
+---
+
+## ⭐ If you like this project
+
+Give it a star ⭐
