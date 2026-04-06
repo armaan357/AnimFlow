@@ -229,7 +229,7 @@ generateRouter.post("/new", verifyUser, async (req: Request, res: Response) => {
 			return;
 		}
 
-		createNewAnimationVersion(
+		const newVersion = await createNewAnimationVersion(
 			userPrompt,
 			code,
 			gatewayResp.data.taskId as string,
@@ -257,7 +257,7 @@ generateRouter.post("/new", verifyUser, async (req: Request, res: Response) => {
 	}
 });
 
-function createNewAnimationVersion(
+async function createNewAnimationVersion(
 	userPrompt: string,
 	code: string,
 	taskId: string,
@@ -265,28 +265,53 @@ function createNewAnimationVersion(
 	versionNo: number,
 	hash: string,
 ) {
-	return prisma.$transaction(
-		async (tx: Prisma.TransactionClient) => {
-			const newAnimationVersion = await tx.animationVersion.create({
-				data: {
-					prompt: userPrompt,
-					code: code,
-					versionNo,
-					taskId: taskId,
-					animationId: animationId,
-					hash: hash,
+	try {
+		return prisma.$transaction(
+			async (tx: Prisma.TransactionClient) => {
+				const newAnimationVersion = await tx.animationVersion.create({
+					data: {
+						prompt: userPrompt,
+						code: code,
+						versionNo,
+						taskId: taskId,
+						animationId: animationId,
+						hash: hash,
+					},
+				});
+
+				await tx.animation.update({
+					where: { id: animationId },
+					data: { currentVersionId: newAnimationVersion.id },
+				});
+				return newAnimationVersion;
+			},
+			{
+				isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+			},
+		);
+	} catch (e: any) {
+		if (
+			e instanceof Prisma.PrismaClientKnownRequestError &&
+			e.code == "P2002"
+		) {
+			const existing = await prisma.animationVersion.findUnique({
+				where: {
+					animationId_hash: {
+						animationId,
+						hash,
+					},
 				},
 			});
-
-			await tx.animation.update({
-				where: { id: animationId },
-				data: { currentVersionId: newAnimationVersion.id },
-			});
-		},
-		{
-			isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
-		},
-	);
+			if (existing) {
+				await prisma.animation.update({
+					where: { id: animationId },
+					data: { currentVersionId: existing.id },
+				});
+			}
+			return existing;
+		}
+		throw e;
+	}
 }
 
 generateRouter.post(
