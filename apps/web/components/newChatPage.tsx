@@ -126,7 +126,7 @@ export default function NewChatAnimationPage({
 	}, []);
 
 	return (
-		<div className="bg-[#121212] flex w-full h-dvh">
+		<div className="bg-[#111111] flex w-full h-dvh">
 			<Toaster />
 			<Sidebar
 				isSideBarVisible={isSideBarVisible}
@@ -139,18 +139,23 @@ export default function NewChatAnimationPage({
 			<div className="flex flex-col flex-1 w-full overflow-hidden">
 				<div className="w-full flex">
 					{checkMobileDevice && (
-						<div
-							className="sticky left-0 top-0 bg-[#0c0c0c] active:border-none border-none focus-within:border-none h-15 flex justify-center items-center pl-2.5 pr-1.5"
-							onClick={() => setSideBarVisible(!isSideBarVisible)}
-						>
-							<MenuIcon color="white" />
+						<div className="sticky left-0 top-0 bg-[#0a0a0a] active:border-none border-none focus-within:border-none h-15 flex justify-center items-center p-4">
+							<button
+								onClick={() => {
+									setSideBarVisible(!isSideBarVisible);
+								}}
+								className="p-1.5 hover:bg-[#1f1f1f] rounded-md transition-colors duration-150 cursor-pointer"
+								aria-label="Open sidebar"
+							>
+								<MenuIcon color="#a1a1aa" size={20} />
+							</button>
 						</div>
 					)}
 					<ChatPageHeader />
 				</div>
 
 				{/* Main Content - Chat Interface */}
-				<div className="flex flex-col flex-1 min-h-0 relative bg-[#121212]">
+				<div className="flex flex-col flex-1 min-h-0 relative ">
 					<div className="flex-1 overflow-y-auto scroll-box p-4 sm:p-8">
 						<div className="max-w-3xl mx-auto flex flex-col gap-8 py-4">
 							{!promptMsg ? (
@@ -166,10 +171,10 @@ export default function NewChatAnimationPage({
 					</div>
 
 					{/* Input Area */}
-					<div className="w-full p-4 bg-[#121212] ">
+					<div className="w-full p-4 ">
 						<div className="max-w-3xl mx-auto">
 							<form
-								className="relative flex flex-col bg-[#1f1f1f] border border-[#ffffff15] rounded-xl overflow-hidden focus-within:border-[#488AED]/15 transition-colors"
+								className="relative flex flex-col bg-[#202020] border border-[#ffffff15] rounded-xl overflow-hidden focus-within:border-[#488AED]/15 transition-colors"
 								onSubmit={async (e) => {
 									e.preventDefault();
 									submitPrompt();
@@ -232,7 +237,7 @@ const NewPromptContainer = ({
 					className="px-4 py-6 w-full flex flex-col gap-2.5"
 				>
 					<div className="flex w-fit gap-1.5 self-end-safe flex-col bg-transparent msg-container">
-						<div className="px-2.5 py-1 sm:px-4 sm:py-3 w-fit max-w-lg self-end-safe bg-[#343434] border border-white/10 rounded-xl">
+						<div className="px-3.5 py-2 sm:px-4 sm:py-2.5 w-fit max-w-lg self-end-safe bg-[#202020] rounded-xl">
 							<p className="text-base text-[#f5f5f5]/90">
 								{promptMsg}
 							</p>

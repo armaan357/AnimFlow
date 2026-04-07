@@ -269,7 +269,7 @@ export default function ChatAnimationPage({
 				</div>
 				{/* <ChatPageHeader /> */}
 
-				<div className="flex flex-row flex-1 min-h-0 relative bg-[#111111] transition-transform duration-150 ease-in-out">
+				<div className="flex flex-row flex-1 min-h-0 relative transition-transform duration-150 ease-in-out">
 					<div className="w-full flex-1 flex flex-col overflow-hidden transition-transform duration-150 ease-in-out">
 						{/* Messages Area */}
 						<div
@@ -315,7 +315,7 @@ export default function ChatAnimationPage({
 						</div>
 
 						{/* Input Area */}
-						<div className="w-full p-4 bg-[#111111] ">
+						<div className="w-full p-4 ">
 							<div className="max-w-3xl mx-auto">
 								<form
 									className="relative flex flex-col bg-[#202020] border border-[#ffffff15] rounded-xl overflow-hidden focus-within:border-[#488AED]/15 transition-colors duration-150 ease-in-out"
@@ -389,7 +389,7 @@ const PromptAndResponseContainer = ({
 				className="px-2 py-3 lg:px-4 lg:py-6 w-full pt-0 flex flex-col gap-2.5"
 			>
 				<div className="flex w-fit gap-1.5 self-end-safe flex-col bg-transparent msg-container">
-					<div className="px-3.5 py-2 sm:px-4 sm:py-2.5 w-fit max-w-lg self-end-safe bg-[#202020] border-white/6 rounded-xl">
+					<div className="px-3.5 py-2 sm:px-4 sm:py-2.5 w-fit max-w-lg self-end-safe bg-[#202020] rounded-xl">
 						<p className="text-base text-[#f5f5f5]/90">
 							{m.prompt}
 						</p>
