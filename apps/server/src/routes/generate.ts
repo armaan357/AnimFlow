@@ -549,7 +549,7 @@ Rotate, MoveAlongPath
 			createNewAnimationVersion(
 				userPrompt,
 				code,
-				gatewayResp.data.taskId,
+				gatewayResp.data.taskId as string,
 				animationId,
 				previousAnimationVersion.versionNo + 1,
 				hash,
@@ -558,7 +558,7 @@ Rotate, MoveAlongPath
 			res.json({
 				code: 0,
 				message: "Task submitted successfully!",
-				taskId: JSON.stringify(gatewayResp.data.taskId),
+				taskId: gatewayResp.data.taskId,
 			});
 		} catch (e: any) {
 			res.json({ error: e });
