@@ -31,7 +31,7 @@ const buttonVariants: VairantType = {
 	secondary:
 		"bg-[#181818] hover:bg-[#fefefe0d] border border-[#ffffff25] text-white flex justify-center items-center disabled:cursor-not-allowed disabled:bg-[#fefefe0d]",
 	danger: "bg-transparent text-red-500 hover:bg-red-300 border-0 flex justify-center items-center disabled:cursor-not-allowed",
-	icon: "bg-transparent border-0 text-[#ffffff90] flex justify-center items-center disabled:cursor-not-allowed hover:bg-[#252525]",
+	icon: "bg-transparent border-0 text-[#ffffff90] flex justify-center items-center disabled:cursor-not-allowed hover:bg-[#2c2c2c]",
 };
 
 const buttonSize: ButtonSizeType = {

@@ -6,6 +6,7 @@ import { ChatItem } from "./chatItems";
 import { DropdownMenu } from "./dropdownMenu";
 import { DeleteModal } from "./deleteModal";
 import toast from "react-hot-toast";
+import { MenuIcon } from "lucide-react";
 
 interface Chat {
 	id: string;
@@ -295,7 +296,7 @@ function SidebarContent({
 	return (
 		<div className="flex flex-col h-full">
 			{/* Top Section */}
-			<div className="flex items-center justify-between p-4 border-none">
+			<div className="flex items-center justify-between p-4 border-none h-15">
 				{/* <h1 className="text-lg font-semibold text-[#FAFAFA]">
 					AnimFlow
 				</h1> */}
@@ -303,23 +304,10 @@ function SidebarContent({
 					onClick={() => {
 						onClose();
 					}}
-					className="p-1.5 hover:bg-[#ffffff]/10 rounded-md transition-colors duration-150"
+					className="p-1.5 hover:bg-[#1f1f1f] rounded-md transition-colors duration-150 cursor-pointer"
 					aria-label="Close sidebar"
 				>
-					<svg
-						className="w-5 h-5 text-[#A1A1AA]"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24"
-						aria-hidden="true"
-					>
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							strokeWidth={2}
-							d="M4 6h16M4 12h16M4 18h16"
-						/>
-					</svg>
+					<MenuIcon color="#a1a1aa" size={20} />
 				</button>
 			</div>
 
@@ -328,7 +316,7 @@ function SidebarContent({
 				{/* New Chat Button */}
 				<Link
 					href="new"
-					className="flex items-center justify-center gap-2 px-4 py-3 bg-transparent text-[#FAFAFA] rounded-md hover:bg-[#ffffff]/10 transition-colors duration-150 font-medium text-sm"
+					className="flex items-center justify-center gap-2 px-4 py-3 bg-transparent text-[#FAFAFA] rounded-md hover:bg-[#1f1f1f] transition-colors duration-150 font-medium text-sm"
 				>
 					<svg
 						className="w-4 h-4"

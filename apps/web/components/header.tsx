@@ -8,7 +8,7 @@ import { SignUpButtonAndModal } from "./signUpModal";
 
 export const Header = () => {
 	return (
-		<header className="h-15 w-full sticky top-0 z-100 backdrop-blur-sm px-3 sm:px-8 md:px-12 bg-[#0c0c0c] justify-between flex items-center">
+		<header className="h-15 w-full sticky top-0 z-100 backdrop-blur-sm px-3 sm:px-8 md:px-12 bg-[#0a0a0a] justify-between flex items-center">
 			<div className="flex items-center">
 				<Link href={"/"} className="cursor-pointer">
 					<div className="w-fit cursor-pointer">
@@ -43,7 +43,7 @@ export const ChatPageHeader = () => {
 	};
 
 	return (
-		<header className="h-15 w-full sticky top-0 z-100 backdrop-blur-sm lg:backdrop-blur-none px-3 bg-[#0c0c0c] sm:px-8 md:px-12 justify-between flex items-center">
+		<header className="h-15 w-full sticky top-0 z-100 backdrop-blur-sm lg:backdrop-blur-none px-3 bg-[#0a0a0a] sm:px-8 md:px-12 justify-between flex items-center">
 			<div className="z-100 flex items-center gap-4">
 				<Link href={"/"} className="cursor-pointer">
 					<div className="w-fit cursor-pointer">
@@ -69,7 +69,7 @@ export const ChatPageHeader = () => {
 
 export const PublicChatPageHeader = () => {
 	return (
-		<header className="h-15 w-full sticky top-0 z-100 backdrop-blur-sm lg:backdrop-blur-none px-3 bg-[#0c0c0c] sm:px-8 md:px-12 justify-between flex items-center">
+		<header className="h-15 w-full sticky top-0 z-100 backdrop-blur-sm lg:backdrop-blur-none px-3 bg-[#0a0a0a] sm:px-8 md:px-12 justify-between flex items-center">
 			<div className="z-100 flex items-center gap-4">
 				<Link href={"/"} className="cursor-pointer">
 					<div className="w-fit cursor-pointer">

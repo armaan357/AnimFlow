@@ -36,8 +36,8 @@ export function ChatItem({
 	return (
 		<Link href={`/chat/${id}`}>
 			<div
-				className={`group relative flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#18181b] transition-colors duration-150 ${
-					isActive ? " bg-[#131315] " : ""
+				className={`group relative flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#1f1f1f] transition-colors duration-150 ${
+					isActive ? " bg-[#1c1c1c] " : ""
 				}`}
 			>
 				<div className="flex-1 min-w-0">
@@ -55,7 +55,7 @@ export function ChatItem({
 				<button
 					ref={moreButtonRef}
 					onClick={handleMenuClick}
-					className={`${isMobile ? " " : " opacity-0 group-hover:opacity-100 "} transition-opacity duration-150 p-1.5 hover:bg-[#27272A] rounded-md shrink-0`}
+					className={`${isMobile ? " " : " opacity-0 group-hover:opacity-100 "} transition-opacity duration-150 p-1.5 hover:bg-[#2A2A2A] rounded-md shrink-0`}
 					aria-label="Chat options"
 					aria-haspopup="true"
 				>

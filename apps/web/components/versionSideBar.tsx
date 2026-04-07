@@ -112,7 +112,7 @@ export const VersionSideBar = ({
 									className={`flex flex-col justify-center items-center`}
 								>
 									<div
-										className={`flex gap-5 items-center z-100 w-full pt-3 px-1 pb-9 ${messageToDisplay && messageToDisplay.id === m.id ? "bg-[#ffffff07] border-r-2 border-[#488AED]/50 " : " bg-transparent "}  hover:bg-[#272727] rounded-sm cursor-pointer relative`}
+										className={`flex gap-5 items-center z-100 w-full pt-3 px-1 pb-9 ${messageToDisplay && messageToDisplay.id === m.id ? "bg-[#282828] border-r-2 border-[#488AED]/50 " : " bg-transparent "}  hover:bg-[#2c2c2c] rounded-sm cursor-pointer relative`}
 									>
 										<div
 											className={`flex gap-3 w-auto overflow-x-hidden justify-center items-center transition-colors duration-150 ease-in-out`}

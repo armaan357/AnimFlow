@@ -239,7 +239,7 @@ export default function ChatAnimationPage({
 	};
 
 	return (
-		<div className="bg-[#121212] flex w-full h-dvh">
+		<div className="bg-[#111111] flex w-full h-dvh">
 			<Toaster />
 			<Sidebar
 				isSideBarVisible={isSideBarVisible}
@@ -253,18 +253,23 @@ export default function ChatAnimationPage({
 			<div className="flex flex-col flex-1 w-full overflow-hidden">
 				<div className="w-full flex">
 					{checkMobileDevice && (
-						<div
-							className="sticky left-0 top-0 bg-[#0c0c0c] active:border-none border-none focus-within:border-none h-15 flex justify-center items-center pl-2.5 pr-1.5"
-							onClick={() => setSideBarVisible(!isSideBarVisible)}
-						>
-							<MenuIcon color="white" />
+						<div className="sticky left-0 top-0 bg-[#0a0a0a] active:border-none border-none focus-within:border-none h-15 flex justify-center items-center p-4">
+							<button
+								onClick={() => {
+									setSideBarVisible(!isSideBarVisible);
+								}}
+								className="p-1.5 hover:bg-[#1f1f1f] rounded-md transition-colors duration-150 cursor-pointer"
+								aria-label="Open sidebar"
+							>
+								<MenuIcon color="#a1a1aa" size={20} />
+							</button>
 						</div>
 					)}
 					<ChatPageHeader />
 				</div>
 				{/* <ChatPageHeader /> */}
 
-				<div className="flex flex-row flex-1 min-h-0 relative bg-[#121212] transition-transform duration-150 ease-in-out">
+				<div className="flex flex-row flex-1 min-h-0 relative bg-[#111111] transition-transform duration-150 ease-in-out">
 					<div className="w-full flex-1 flex flex-col overflow-hidden transition-transform duration-150 ease-in-out">
 						{/* Messages Area */}
 						<div
@@ -310,10 +315,10 @@ export default function ChatAnimationPage({
 						</div>
 
 						{/* Input Area */}
-						<div className="w-full p-4 bg-[#121212] ">
+						<div className="w-full p-4 bg-[#111111] ">
 							<div className="max-w-3xl mx-auto">
 								<form
-									className="relative flex flex-col bg-[#1f1f1f] border border-[#ffffff15] rounded-xl overflow-hidden focus-within:border-[#488AED]/15 transition-colors duration-150 ease-in-out"
+									className="relative flex flex-col bg-[#202020] border border-[#ffffff15] rounded-xl overflow-hidden focus-within:border-[#488AED]/15 transition-colors duration-150 ease-in-out"
 									onSubmit={async (e) => {
 										e.preventDefault();
 										submitPrompt();
@@ -334,7 +339,7 @@ export default function ChatAnimationPage({
 											className="min-h-15 max-h-50 w-full bg-transparent border-none focus:ring-0 resize-none px-3 py-2 text-white placeholder-gray-500"
 										/>
 									</div>
-									<div className="flex justify-between items-center px-4 py-2 bg-[#1f1f1f]">
+									<div className="flex justify-between items-center px-4 py-2 bg-[#202020]">
 										<div className="flex gap-2 text-gray-500">
 											{/* Optional tools/buttons could go here */}
 											<ResolutionSelectComponent
@@ -384,7 +389,7 @@ const PromptAndResponseContainer = ({
 				className="px-2 py-3 lg:px-4 lg:py-6 w-full pt-0 flex flex-col gap-2.5"
 			>
 				<div className="flex w-fit gap-1.5 self-end-safe flex-col bg-transparent msg-container">
-					<div className="px-2 py-1 sm:px-3 sm:py-1.5 w-fit max-w-lg self-end-safe bg-[#212121] border border-white/10 rounded-lg">
+					<div className="px-3.5 py-2 sm:px-4 sm:py-2.5 w-fit max-w-lg self-end-safe bg-[#202020] border-white/6 rounded-xl">
 						<p className="text-base text-[#f5f5f5]/90">
 							{m.prompt}
 						</p>

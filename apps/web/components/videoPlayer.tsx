@@ -1,6 +1,4 @@
 "use client"; // Required for client-side components in App Router
-
-import "next-cloudinary/dist/cld-video-player.css"; // Import the necessary CSS
 import React, { useEffect, useState } from "react";
 import "./../app/page.module.css";
 
