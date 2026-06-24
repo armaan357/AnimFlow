@@ -9,6 +9,7 @@ import json
 from dotenv import load_dotenv
 import cloudinary
 import cloudinary.uploader
+from celery.schedules import crontab
 
 load_dotenv()
 
@@ -236,3 +237,7 @@ def storeAnimation():
     result= {"status": "completed", "task": "stored animation"}
 
     return result
+
+@celeryApp.task(name="animationCleanUp")
+def cleanAnimationRecords():
+    print("1 hour old PENDING jobs changed to failed")
