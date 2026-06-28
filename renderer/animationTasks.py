@@ -9,7 +9,12 @@ import json
 from dotenv import load_dotenv
 import cloudinary
 import cloudinary.uploader
-from celery.schedules import crontab
+from celery import Celery
+from database import SessionLocal
+from models import AnimationVersion, Status
+from sqlalchemy import update
+from datetime import timedelta, datetime
+import logging
 
 load_dotenv()
 
@@ -21,6 +26,36 @@ cloudinary.config(
     api_key = os.getenv('API_KEY'),
     api_secret = os.getenv('API_SECRET')
 )
+
+#stale task cleanup cron job
+@celeryApp.on_after_configure.connect
+def setupPeriodicTasks(sender: Celery, **kwargs):
+    sender.add_periodic_task(600.0, cleanupDB.s(), name='cleanup every 10 min')
+
+@celeryApp.task()
+def cleanupDB():
+    session = SessionLocal()
+    try:
+        with session.begin():
+            oneHourAgo = datetime.now() - timedelta(hours=1)
+
+            stmt = (
+                update(AnimationVersion)
+                .where(AnimationVersion.createdAt < oneHourAgo, AnimationVersion.status == Status.PENDING)
+                .values(status = Status.ERROR, errorReason = "Render timed out before execution.")
+                .returning(AnimationVersion.id)
+            )
+
+            resp = session.execute(stmt).scalars().all()
+            for version in resp:
+                print(f"version = {version}, now = {datetime.now()}")
+                print("\n")
+    except Exception as e:
+        logging.exception(f"Database batch update failed: {e}")
+    finally:
+        session.close()
+
+
 
 videoQualityToResolution = { "l": "480p15", "m": "720p30", "h": "1080p60" }
 

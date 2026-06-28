@@ -1,8 +1,4 @@
-from fastapi import FastAPI, Header, Depends, HTTPException
-from sqlalchemy.orm import Session
-import models
-from sqlalchemy import Table
-from database import SessionLocal, engine, metadata
+from fastapi import FastAPI, Header
 from pydantic import BaseModel
 from celery.result import AsyncResult
 from animationWorker import celeryApp
@@ -129,30 +125,7 @@ class jobReq(BaseModel) :
     fps: int
     resolution: str
 
-try:
-    with engine.connect() as connection:
-        # Reflect only the specific table you need
-        animationVersion_table = Table("animationVersion", metadata, autoload_with=engine)
-except Exception as e:
-    print(f"Error reflecting table: {e}")
-
 app = FastAPI()
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-@app.get("/db")
-def getData(db: Session = Depends(get_db)):
-    query = animationVersion_table.select().where(animationVersion_table.c.status == 'PENDING')
-    result = db.execute(query).mappings().all()
-    if result is None:
-        raise HTTPException(status_code=404, detail="animations not found")
-    
-    return result
 
 @app.get("/")
 def home():

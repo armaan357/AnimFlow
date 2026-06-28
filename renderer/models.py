@@ -107,3 +107,14 @@ class AnimationVersion(Base):
     hash: Mapped[Optional[str]] = mapped_column(Text)
 
     animation: Mapped['Animation'] = relationship('Animation', back_populates='animationVersion')
+
+    def __repr__(self):
+        return (
+            f"AnimationVersion("
+            f"id={self.id}, "
+            f"versionNo={self.versionNo}, "
+            f"status={self.status}, "
+            f"createdAt={self.createdAt}), "
+            f"type of datetime={type(self.createdAt)}, "
+            f"tzinfo={self.createdAt.tzinfo}"
+        )
