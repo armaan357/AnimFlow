@@ -41,3 +41,4 @@ yarn-error.log*
 tmp/
 media/
 __pycache__/
+renderer/venv
