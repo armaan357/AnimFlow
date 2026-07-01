@@ -181,6 +181,8 @@ generateRouter.post("/new", verifyUser, async (req: Request, res: Response) => {
 		const codeResp = await fetchCodeFromAI(enhancedPrompt);
 		console.timeEnd("fetchCodeFromAi");
 
+		console.log("code response from gemini = ", codeResp);
+
 		if (!codeResp) {
 			res.status(500).json({ error: "Please try again" });
 			return;

@@ -8,10 +8,14 @@ export default async function Home() {
 	let returnCode;
 	try {
 		const cookie = await cookies();
-		const authenticatedUser = await axios.get(`/api/backend/user/auth-me`, {
-			headers: { Cookie: cookie.toString() },
-			withCredentials: true,
-		});
+		const backendURL = process.env.BACKEND_ORIGIN;
+		const authenticatedUser = await axios.get(
+			`${backendURL}/api/v1/user/auth-me`,
+			{
+				headers: { Cookie: cookie.toString() },
+				withCredentials: true,
+			},
+		);
 		returnCode = authenticatedUser.data.code;
 		if (returnCode == 1) {
 			return (

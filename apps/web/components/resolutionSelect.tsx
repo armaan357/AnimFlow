@@ -19,7 +19,7 @@ export const ResolutionSelectComponent = ({
 			defaultValue="l"
 			onValueChange={(s) => setSelectedResolution(s)}
 		>
-			<SelectTrigger className="w-40 sm:w-45 text-[#f5f5f5] border-white/5 bg-[#262626]">
+			<SelectTrigger className="w-40 sm:w-45 rounded-lg text-[#f5f5f5] border-white/5 bg-[#262626]">
 				<SelectValue
 					className="text-[#f5f5f5]"
 					placeholder="Select video resolution"

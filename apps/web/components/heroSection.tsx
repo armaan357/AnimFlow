@@ -77,6 +77,13 @@ export const HeroSection = () => {
 							/>
 						</div>
 					</form>
+					<div className="py-2 text-center w-full">
+						<p className="text-xs text-[#ffffff80]">
+							AnimFlow prefers short, focused prompts. Complex
+							scenes or multi-concept prompts may fail as the
+							model is still being improved.
+						</p>
+					</div>
 				</div>
 			</div>
 			<Modal

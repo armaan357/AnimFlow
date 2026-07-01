@@ -15,6 +15,7 @@ from models import AnimationVersion, Status
 from sqlalchemy import update
 from datetime import timedelta, datetime
 import logging
+import platform
 
 load_dotenv()
 
@@ -151,15 +152,17 @@ def generateAnimation(self, newJob: dict):
         with open(filePath, "w") as f:
             f.write(newJob.get("code"))
 
-        normalizedCwd = folderPath.replace('\\', '/').replace(':', '')  #might not be required after deploying
+        if platform.system() == "Windows":
+            normalizedCwd = folderPath.replace('\\', '/').replace(':', '')
 
-        if not normalizedCwd.startswith('/'):
-            normalizedCwd = '/' + normalizedCwd
+            if not normalizedCwd.startswith('/'):
+                normalizedCwd = '/' + normalizedCwd
+        else:
+            normalizedCwd = folderPath
 
         videoQuality = newJob.get('resolution') if newJob.get('resolution') else 'l'
 
         videoResolution = videoQualityToResolution.get(videoQuality, '480p15')
-        # videoResolution = '480p15'
         
         command = ['docker', 
                   'run',

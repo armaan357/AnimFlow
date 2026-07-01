@@ -362,6 +362,18 @@ export default function ChatAnimationPage({
 										/>
 									</div>
 								</form>
+								{!checkMobileDevice ? (
+									<div className="pt-2 text-center w-full">
+										<p className="text-xs text-[#ffffff80]">
+											AnimFlow prefers short, focused
+											prompts. Complex scenes or
+											multi-concept prompts may fail as
+											the model is still being improved.
+										</p>
+									</div>
+								) : (
+									<div></div>
+								)}
 							</div>
 						</div>
 					</div>

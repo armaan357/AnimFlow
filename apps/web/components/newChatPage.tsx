@@ -70,6 +70,7 @@ export default function NewChatAnimationPage({
 	const [promptMsg, setPromptMsg] = useState<string | null>(null);
 	const [errorMsg, setErrorMsg] = useState<string | null>(null);
 	const [selectedResolution, setSelectedResolution] = useState<string>("l");
+	const [showSuggestions, setShowSuggestions] = useState<boolean>(true);
 
 	const animationId = useRef<string>("");
 	const inpRef = useRef<HTMLTextAreaElement>(null);
@@ -125,6 +126,15 @@ export default function NewChatAnimationPage({
 		fetchData();
 	}, []);
 
+	const handleSuggestionClick = (str: string) => {
+		if (!inpRef.current) return;
+
+		inpRef.current.value = str;
+		inpRef.current.focus();
+		inpRef.current.setSelectionRange(str.length, str.length);
+		setShowSuggestions(false);
+	};
+
 	return (
 		<div className="bg-[#111111] flex w-full h-dvh">
 			<Toaster />
@@ -159,7 +169,7 @@ export default function NewChatAnimationPage({
 					<div className="flex-1 overflow-y-auto scroll-box p-4 sm:p-8">
 						<div className="max-w-3xl mx-auto flex flex-col gap-8 py-4">
 							{!promptMsg ? (
-								<ChatGreeting />
+								!checkMobileDevice && <ChatGreeting />
 							) : (
 								<NewPromptContainer
 									promptMsg={promptMsg}
@@ -173,8 +183,49 @@ export default function NewChatAnimationPage({
 					{/* Input Area */}
 					<div className="w-full p-4 ">
 						<div className="max-w-3xl mx-auto">
+							{showSuggestions && (
+								<div className="flex flex-col">
+									<div className="pb-1 px-2 md:px-6">
+										<p className="text-sm text-[#faf9fb]/60">
+											Suggestions:
+										</p>
+									</div>
+									<div className="flex flex-col md:flex-row gap-2.5 justify-center items-start md:items-center pt-2 pb-6 transition-all duration-300 ease-in-out">
+										<div
+											className="px-4 py-2.5 rounded-2xl border border-[#ffffff26] h-10 flex items-center justify-center text-[#f9fafb]/70 transition-colors hover:bg-[#414141]/50 cursor-pointer "
+											onClick={() =>
+												handleSuggestionClick(
+													"Bouncing ball animation ",
+												)
+											}
+										>
+											Bouncing ball animation
+										</div>
+										<div
+											className="px-4 py-2.5 rounded-2xl border border-[#ffffff26] h-10 flex items-center justify-center text-[#f9fafb]/70 transition-colors hover:bg-[#414141]/50 cursor-pointer "
+											onClick={(e) =>
+												handleSuggestionClick(
+													"Shape shifting animation ",
+												)
+											}
+										>
+											Shape shifting animation
+										</div>
+										<div
+											className="px-4 py-2.5 rounded-2xl border border-[#ffffff26] h-10 flex items-center justify-center text-[#f9fafb]/70 transition-colors hover:bg-[#414141]/50 cursor-pointer "
+											onClick={() =>
+												handleSuggestionClick(
+													"Random animation ",
+												)
+											}
+										>
+											Random animation
+										</div>
+									</div>
+								</div>
+							)}
 							<form
-								className="relative flex flex-col bg-[#202020] border border-[#ffffff15] rounded-xl overflow-hidden focus-within:border-[#488AED]/15 transition-colors"
+								className="relative flex flex-col bg-[#202020] border border-[#ffffff15] rounded-3xl overflow-hidden focus-within:border-[#488AED]/15 transition-colors"
 								onSubmit={async (e) => {
 									e.preventDefault();
 									submitPrompt();
@@ -195,7 +246,7 @@ export default function NewChatAnimationPage({
 										className="min-h-15 max-h-50 w-full bg-transparent border-none focus:ring-0 resize-none px-3 py-2 text-white placeholder-gray-500"
 									/>
 								</div>
-								<div className="flex justify-between items-center px-4 py-2 bg-[#202020]">
+								<div className="flex justify-between items-center px-4 pt-2 pb-3.5 bg-[#202020]">
 									<div className="flex gap-2 text-gray-500">
 										{/* Optional tools/buttons could go here */}
 										<ResolutionSelectComponent
@@ -214,6 +265,18 @@ export default function NewChatAnimationPage({
 									/>
 								</div>
 							</form>
+							{!checkMobileDevice ? (
+								<div className="pt-2 text-center w-full">
+									<p className="text-xs text-[#ffffff80]">
+										AnimFlow prefers short, focused prompts.
+										Complex scenes or multi-concept prompts
+										may fail as the model is still being
+										improved.
+									</p>
+								</div>
+							) : (
+								<div></div>
+							)}
 						</div>
 					</div>
 				</div>
