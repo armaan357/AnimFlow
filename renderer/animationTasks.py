@@ -18,6 +18,8 @@ import logging
 
 load_dotenv()
 
+logger = logging.getLogger(__name__)
+
 serviceSecret = os.getenv("INTERNAL_SERVICE_SECRET")
 internalServiceURL = os.getenv("INTERNAL_SERVICE_URL")
 
@@ -51,7 +53,7 @@ def cleanupDB():
                 print(f"version = {version}, now = {datetime.now()}")
                 print("\n")
     except Exception as e:
-        logging.exception(f"Database batch update failed: {e}")
+        logger.exception(f"Database batch update failed: {e}")
     finally:
         session.close()
 
@@ -127,6 +129,11 @@ def generateAnimation(self, newJob: dict):
     try:
         jobId = self.request.id
         print(f"[{jobId}] Job started")
+        logger.info(
+            "[Animation %s | Task %s] Worker received task",
+            animationId,
+            jobId,
+        )
         if not newJob.get("code"):
             result = { 
                 "id": jobId,
@@ -174,7 +181,12 @@ def generateAnimation(self, newJob: dict):
         # command uses a throwaway docker container and renders a cleaner animation in the same directory as the code, but maybe only works on windows and might not work on linux devices
 
         print(f"[{jobId}] Starting docker render...")
-        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding='utf-8', timeout=240)
+        logger.info(
+            "[Animation %s | Task %s] Starting Docker render",
+            animationId,
+            jobId,
+        )
+        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding='utf-8', timeout=240, check=True)
         if result.stderr:
             print(f"\n\n\nError:\n\n {result.stderr}")
         print(f"[{jobId}] Docker finished | exit={result.returncode}")
@@ -195,7 +207,12 @@ def generateAnimation(self, newJob: dict):
             }
         else:
             upload_res = upload_video(animationFileAddress, f"{jobId}")
-            print(f"\n\n\nupload response = {upload_res}\n\n\n")
+            # print(f"\n\n\nupload response = {upload_res}\n\n\n")
+            logger.info(
+                "[Animation %s | Task %s] Upload completed",
+                animationId,
+                jobId,
+            )
             result= {
                 "id": jobId,
                 "animationId": animationId,

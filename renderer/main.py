@@ -5,6 +5,7 @@ from animationWorker import celeryApp
 from animationTasks import generateAnimation
 import ast
 import os
+import logging
 
 ALLOWED_ROOT_MODULE = "manim"
 FORBIDDEN_CALLS = {
@@ -127,6 +128,9 @@ class jobReq(BaseModel) :
 
 app = FastAPI()
 
+logger = logging.getLogger(__name__)
+# logging.basicConfig(level=logging.INFO)
+
 @app.get("/")
 def home():
     return {'message': 'hello'}
@@ -136,14 +140,23 @@ def publishJob(newJob: jobReq, servicesecret: str = Header(...)):
     if servicesecret != internalServiceSecret:
         print("\nInvalid Internal service secret.\n")
         return
+    logger.info(
+        "[Animation %s] Received render request",
+        newJob.id,
+    )
     try:
         code = newJob.code
         parseTree = ast.parse(code)
         validator = CustomCodeValidator()
 
         validator.visit(parseTree)
-        task = generateAnimation.delay(newJob.dict())
-        print(f"task =\n\n{task}")
+        task = generateAnimation.delay(newJob.model_dump())
+        logger.info(
+            "[Animation %s] Published Celery task %s",
+            newJob.id,
+            task.id,
+        )
+        # print(f"task =\n\n{task}")
 
         return {
             "taskId": task.id,
@@ -153,6 +166,10 @@ def publishJob(newJob: jobReq, servicesecret: str = Header(...)):
 
     except SyntaxError as e:
         print(f"SyntaxError: {e}")
+        logger.exception(
+            "[%s] Failed to publish task",
+            newJob.id,
+        )
 
 @app.get("/task/{task_id}")
 def get_task_status(task_id: str, servicesecret: str = Header(...)):

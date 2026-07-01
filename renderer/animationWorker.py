@@ -17,7 +17,9 @@ celeryApp.conf.update(
     result_expires=3600,  # 1 hour
     task_acks_late=True,
     worker_prefetch_multiplier=1,
-    task_reject_on_worker_lost=True
+    task_reject_on_worker_lost=True,
+    broker_connection_retry=True,
+    broker_connection_retry_on_startup=True,
 )
 
 # Import tasks to register them with the Celery app
