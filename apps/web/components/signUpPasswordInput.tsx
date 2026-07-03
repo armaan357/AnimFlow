@@ -1,14 +1,7 @@
 "use client";
 
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import {
-	useState,
-	useEffect,
-	useCallback,
-	useRef,
-	JSX,
-	RefObject,
-} from "react";
+import { useState, useEffect, useCallback, useRef, JSX } from "react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

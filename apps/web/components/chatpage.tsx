@@ -3,7 +3,7 @@ import { Button } from "@repo/ui/button";
 import { ChatPageHeader } from "./header";
 import "../app/page.module.css";
 import { AlertCircleIcon, ArrowUp, Copy, MenuIcon } from "lucide-react";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { TextAreaComp } from "@repo/ui/textArea";
@@ -12,20 +12,6 @@ import toast, { Toaster } from "react-hot-toast";
 import { ChatGreeting } from "@repo/ui/chatGreeting";
 import { Sidebar } from "./newSideBarComp/sidebar";
 import { VersionSideBar } from "./versionSideBar";
-import SelecT, {
-	CSSObjectWithLabel,
-	SingleValue,
-	StylesConfig,
-} from "react-select";
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectTrigger,
-	SelectValue,
-} from "../@workspace/ui/components/select";
 import { ResolutionSelectComponent } from "./resolutionSelect";
 
 const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;

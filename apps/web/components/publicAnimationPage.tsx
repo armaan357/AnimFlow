@@ -1,9 +1,8 @@
 "use client";
-import { Button } from "@repo/ui/button";
 import { PublicChatPageHeader } from "./header";
 import "../app/page.module.css";
-import { ChevronDown, ChevronUp, Copy, Download } from "lucide-react";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Copy } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import VideoPlayer from "./videoPlayer";
@@ -11,8 +10,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { PublicChatGreeting } from "@repo/ui/chatGreeting";
 import { VersionSideBar } from "./versionSideBar";
 
-const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-const downloadURL = `https://res.cloudinary.com/${cloudName}/video/upload/fl_attachment/`;
+// const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+// const downloadURL = `https://res.cloudinary.com/${cloudName}/video/upload/fl_attachment/`;
 
 type MessageType = {
 	id: string;
