@@ -66,19 +66,33 @@ cd AnimFlow
 
 ## 🔐 Environment Variables
 
-### Backend (.env)
+### Node.js Backend (.env)
 
 ```
 DATABASE_URL=
+DIRECT_URL=
+FE_URL=
 JWT_SECRET=
+GEMINI_APIKEY=
+GOOGLE_CALLBACK_URL=
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
+GITHUB_CALLBACK_URL=
 GITHUB_CLIENT_ID=
 GITHUB_CLIENT_SECRET=
-REDIS_URL=
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
+INTERNAL_SERVICE_SECRET=
+WORKER_URL=
+```
+
+### FastAPI Backend (.env)
+
+```
+INTERNAL_SERVICE_SECRET=
+INTERNAL_SERVICE_URL=
+CLOUD_NAME=
+API_KEY=
+CLOUDINARY_URL=
+DB_URL=
 ```
 
 ### Frontend (.env)
@@ -86,6 +100,7 @@ CLOUDINARY_API_SECRET=
 ```
 NEXT_PUBLIC_BACKEND_URL=
 NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
+BACKEND_ORIGIN=
 ```
 
 ---
@@ -129,6 +144,13 @@ cd renderer
 celery -A animationWorker worker -l info -P gevent
 ```
 
+#### Celery Beat
+
+```bash
+cd renderer
+celery -A animationWorker beat
+```
+
 ### 5. Start Frontend
 
 ```bash
@@ -152,8 +174,9 @@ docker run hello-world
 ## 🌐 Access
 
 - Frontend: [http://localhost:3000](http://localhost:3000)
-- Backend: [http://localhost:3001](http://localhost:3001)
-
+- Node.js Backend: [http://localhost:3001](http://localhost:3001)
+- FastAPI Backend: [http://localhost:8000](http://localhost:8000)
+  
 ---
 
 ## 🧪 Usage
@@ -217,6 +240,7 @@ docker run hello-world
 
 ## 🚀 Future Improvements
 
+- RAG Pipeline
 - Real-time rendering progress (WebSockets/SSE)
 - Job cancellation
 - Priority queues
